@@ -53,7 +53,6 @@ public class TeamService {
 
     public void updateStatementForMatch(MatchData matchData, MemberStatement updatedMemberStatement) {
         matchRepository.updateStatementForMatch(matchData, updatedMemberStatement);
-        
     }
 
 }

@@ -1,26 +1,203 @@
 package hu.kits.team.infrastructure.web.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasElement;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.page.Viewport;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.flow.server.ErrorHandler;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.PageConfigurator;
+import com.vaadin.flow.server.VaadinSession;
+
+import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
+import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
+import hu.kits.team.infrastructure.web.ui.component.navigation.drawer.NaviDrawer;
+import hu.kits.team.infrastructure.web.ui.component.navigation.drawer.NaviMenu;
+import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
+import hu.kits.team.infrastructure.web.ui.component.util.css.FlexDirection;
+import hu.kits.team.infrastructure.web.ui.component.util.css.Overflow;
+import hu.kits.team.infrastructure.web.ui.view.AdminView;
+import hu.kits.team.infrastructure.web.ui.view.MatchesView;
+import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
 
 @HtmlImport("frontend://styles/shared-styles.html")
-@PWA(name = "KITS Purchases", shortName = "KITS P", startPath="/purchase")
+@PWA(name = "Lúzer FC", shortName = "Lúzer FC", startPath="/match")
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
-public class MainLayout extends Div implements RouterLayout, PageConfigurator {
+public class MainLayout extends FlexBoxLayout implements RouterLayout, PageConfigurator, AfterNavigationObserver {
+
+    private static final Logger log = LoggerFactory.getLogger(MainLayout.class);
+    private static final String CLASS_NAME = "root";
+
+    private Div appHeaderOuter;
+
+    private FlexBoxLayout row;
+    private NaviDrawer naviDrawer;
+    private FlexBoxLayout column;
+
+    private Div appHeaderInner;
+    private FlexBoxLayout viewContainer;
+    private Div appFooterInner;
+
+    private Div appFooterOuter;
+
+    private AppBar appBar;
 
     public MainLayout() {
-        addClassName("main-layout");
+        VaadinSession.getCurrent()
+            .setErrorHandler((ErrorHandler) errorEvent -> {
+                log.error("Uncaught UI exception", errorEvent.getThrowable());
+                Notification.show("We are sorry, but an internal error occurred");
+            });
+
+        addClassName(CLASS_NAME);
+        setBackgroundColor(LumoStyles.Color.Contrast._5);
+        setFlexDirection(FlexDirection.COLUMN);
+        setSizeFull();
+
+        // Initialise the UI building blocks
+        initStructure();
+
+        // Populate the navigation drawer
+        initNaviItems();
+
+        // Configure the headers and footers (optional)
+        initHeadersAndFooters();
     }
-    
+
+    /**
+     * Initialise the required components and containers.
+     */
+    private void initStructure() {
+        naviDrawer = new NaviDrawer();
+
+        viewContainer = new FlexBoxLayout();
+        viewContainer.addClassName(CLASS_NAME + "__view-container");
+        viewContainer.setOverflow(Overflow.HIDDEN);
+
+        column = new FlexBoxLayout(viewContainer);
+        column.addClassName(CLASS_NAME + "__column");
+        column.setFlexDirection(FlexDirection.COLUMN);
+        column.setFlexGrow(1, viewContainer);
+        column.setOverflow(Overflow.HIDDEN);
+
+        row = new FlexBoxLayout(naviDrawer, column);
+        row.addClassName(CLASS_NAME + "__row");
+        row.setFlexGrow(1, column);
+        row.setOverflow(Overflow.HIDDEN);
+        add(row);
+        setFlexGrow(1, row);
+    }
+
+    /**
+     * Initialise the navigation items.
+     */
+    private void initNaviItems() {
+        NaviMenu menu = naviDrawer.getMenu();
+        menu.addNaviItem(VaadinIcon.USER_CHECK, "Következő meccs", MatchView.class);
+        menu.addNaviItem(VaadinIcon.CALENDAR_CLOCK, "Meccsek", MatchesView.class);
+        menu.addNaviItem(VaadinIcon.COG, "Admin", AdminView.class);
+    }
+
+    /**
+     * Configure the app's inner and outer headers and footers.
+     */
+    private void initHeadersAndFooters() {
+        // With tabs:
+        // the title, avatar and menu button (small screens) go into the TabBar
+        // Without:
+        // all of them go into the AppBar
+
+        setAppHeaderOuter();
+        setAppFooterOuter();
+
+        appBar = new AppBar("");
+
+        setAppHeaderInner(appBar);
+    }
+
+    private void setAppHeaderOuter(Component... components) {
+        if (appHeaderOuter == null) {
+            appHeaderOuter = new Div();
+            appHeaderOuter.addClassName("app-header-outer");
+            getElement().insertChild(0, appHeaderOuter.getElement());
+        }
+        appHeaderOuter.removeAll();
+        appHeaderOuter.add(components);
+    }
+
+    private void setAppHeaderInner(Component... components) {
+        if (appHeaderInner == null) {
+            appHeaderInner = new Div();
+            appHeaderInner.addClassName("app-header-inner");
+            column.getElement().insertChild(0, appHeaderInner.getElement());
+        }
+        appHeaderInner.removeAll();
+        appHeaderInner.add(components);
+    }
+
+    private void setAppFooterInner(Component... components) {
+        if (appFooterInner == null) {
+            appFooterInner = new Div();
+            appFooterInner.addClassName("app-footer-inner");
+            column.getElement().insertChild(column.getElement().getChildCount(),
+                    appFooterInner.getElement());
+        }
+        appFooterInner.removeAll();
+        appFooterInner.add(components);
+    }
+
+    private void setAppFooterOuter(Component... components) {
+        if (appFooterOuter == null) {
+            appFooterOuter = new Div();
+            appFooterOuter.addClassName("app-footer-outer");
+            getElement().insertChild(getElement().getChildCount(),
+                    appFooterOuter.getElement());
+        }
+        appFooterOuter.removeAll();
+        appFooterOuter.add(components);
+    }
+
     @Override
     public void configurePage(InitialPageSettings settings) {
         settings.addMetaTag("apple-mobile-web-app-capable", "yes");
         settings.addMetaTag("apple-mobile-web-app-status-bar-style", "black");
+
+        settings.addFavIcon("icon", "frontend/styles/favicons/favicon.ico",
+                "256x256");
+    }
+
+    @Override
+    public void showRouterLayoutContent(HasElement content) {
+        this.viewContainer.getElement().appendChild(content.getElement());
+    }
+
+    public NaviDrawer getNaviDrawer() {
+        return naviDrawer;
+    }
+
+    public static MainLayout get() {
+        return (MainLayout) UI.getCurrent().getChildren()
+                .filter(component -> component.getClass() == MainLayout.class)
+                .findFirst().get();
+    }
+
+    public AppBar getAppBar() {
+        return appBar;
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event) {
     }
 
 }

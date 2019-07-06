@@ -8,7 +8,8 @@ import java.util.Locale;
 public class Formatters {
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy. MMMM dd. HH:mm");
+    private static final DateTimeFormatter DATE_TIME_FORMAT_WITHOUT_YEAR = DateTimeFormatter.ofPattern("MMMM d. HH:mm");
     
     public static final Locale HU_LOCALE = new Locale("HU");
     
@@ -17,8 +18,7 @@ public class Formatters {
     }
     
     public static String formatDateTime(LocalDateTime date) {
-        return DATE_TIME_FORMAT.format(date);
+        return (Clock.today().getYear() == date.getYear() ? DATE_TIME_FORMAT_WITHOUT_YEAR : DATE_TIME_FORMAT).format(date);
     }
-    
     
 }

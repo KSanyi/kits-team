@@ -18,7 +18,7 @@ public class Members {
     }
     
     public List<Member> entries() {
-        return entries.stream().sorted(comparing(m -> m.name)).collect(toList());
+        return entries.stream().sorted(comparing(m -> m.id)).collect(toList());
     }
     
 }

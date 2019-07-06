@@ -1,13 +1,14 @@
-package hu.kits.team.infrastructure.web.ui;
+package hu.kits.team.infrastructure.web.ui.view.match;
 
 import java.util.Optional;
 
+import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
 
 public class MemberStatementRow {
 
-    private final Member member;
+    public final Member member;
     
     private final Optional<MemberStatement> memberstatement;
 
@@ -16,11 +17,8 @@ public class MemberStatementRow {
         this.memberstatement = memberstatement;
     }
     
-    public String name() {
-        return member.name;
+    public Optional<Mark> mark() {
+        return memberstatement.map(s -> s.mark);
     }
-    
-    public String mark() {
-        return memberstatement.map(s -> s.mark.label).orElse("?");
-    }
+
 }
