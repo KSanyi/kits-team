@@ -40,8 +40,8 @@ public class NaviTabs extends Tabs {
     /**
      * Creates a regular tab without any click listeners.
      */
-    public FilterTab addTab(StatementFilter filter, int count) {
-        FilterTab tab = new FilterTab(filter, count);
+    public FilterTab addTab(StatementFilter caption, int count) {
+        FilterTab tab = new FilterTab(caption, count);
         add(tab);
         return tab;
     }

@@ -139,11 +139,11 @@ public class TeamServiceTest {
         
         assertEquals(Mark.COMING, match.statementFor(sanyi).get().mark);
         
-        teamService.updateStatementForMatch(matchData, new MemberStatement(sanyi, Mark.DONT_KNOW_YET, LocalDateTime.of(2019,8,5, 9,0), ""));
+        teamService.updateStatementForMatch(matchData, new MemberStatement(sanyi, Mark.NOT_COMING, LocalDateTime.of(2019,8,5, 9,0), ""));
         
         match = teamService.loadAllMatches().entries().get(0);
         
-        assertEquals(Mark.DONT_KNOW_YET, match.statementFor(sanyi).get().mark);
+        assertEquals(Mark.NOT_COMING, match.statementFor(sanyi).get().mark);
     }
     
 }

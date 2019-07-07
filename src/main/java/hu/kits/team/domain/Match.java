@@ -37,10 +37,6 @@ public class Match {
         return membersWithMark(Mark.NOT_COMING);
     }
     
-    public List<Member> dontKnow() {
-        return membersWithMark(Mark.DONT_KNOW_YET);
-    }
-    
     private List<Member> membersWithMark(Mark mark) {
         return memberStatements().stream()
                 .filter(m -> m.mark == mark)

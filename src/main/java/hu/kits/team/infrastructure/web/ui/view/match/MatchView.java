@@ -140,7 +140,9 @@ public class MatchView extends SplitViewFrame implements HasUrlParameter<Long>, 
     }
     
     private void setupButtons() {
-        if(myStatement.isPresent()) {
+        if(Clock.now().isBefore(match.matchData.time)) {
+            setViewFooter(createButtonBar());
+        } if(myStatement.isPresent()) {
             if(myStatement.get().mark == Mark.COMING) {
                 comingButton.setVisible(false);
                 notComingButton.setText("Mégsem jövök");

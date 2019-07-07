@@ -1,6 +1,7 @@
 package hu.kits.team.domain;
 
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,17 +16,21 @@ public class Matches {
     }
     
     public Optional<Match> find(long matchId) {
-        return entries.stream().filter(e -> e.matchData.id == matchId).findFirst();
+        return entries.stream()
+            .filter(e -> e.matchData.id == matchId)
+            .findFirst();
     }
     
     public List<Match> entries() {
-        return List.copyOf(entries);
+        return entries.stream()
+            .sorted(comparing(m -> m.matchData.time))
+            .collect(toList());
     }
 
     public Match findNext(LocalDateTime time) {
         return entries.stream().filter(e -> e.matchData.time.isAfter(time))
-                .sorted(comparing(e -> e.matchData.time))
-                .findFirst().orElseGet(() -> findLast(time));
+            .sorted(comparing(e -> e.matchData.time))
+            .findFirst().orElseGet(() -> findLast(time));
     }
     
     private Match findLast(LocalDateTime time) {
