@@ -28,8 +28,8 @@ import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.css.FlexDirection;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Overflow;
 import hu.kits.team.infrastructure.web.ui.view.AdminView;
-import hu.kits.team.infrastructure.web.ui.view.MatchesView;
 import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
+import hu.kits.team.infrastructure.web.ui.view.matches.MatchesView;
 
 @HtmlImport("frontend://styles/shared-styles.html")
 @PWA(name = "Lúzer FC", shortName = "Lúzer FC", startPath="/match")

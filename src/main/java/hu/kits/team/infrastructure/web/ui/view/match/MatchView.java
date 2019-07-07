@@ -88,11 +88,13 @@ public class MatchView extends SplitViewFrame implements HasUrlParameter<Long>, 
     
     private void initAppBar() {
         AppBar appBar = MainLayout.get().getAppBar();
-        appBar.setTitle("BEAC - "  + Formatters.formatDateTime(match.matchData.time) + " vs " + match.matchData.opponent);
+        appBar.setTitle(Formatters.formatDateTime(match.matchData.time) + " vs " + match.matchData.opponent);
         
         List<Optional<Mark>> statements = new ArrayList<>();
-        match.notComing().stream().forEach(s -> statements.add(Optional.empty()));
+        match.noStatements(Main.teamService.members()).stream().forEach(s -> statements.add(Optional.empty()));
         match.memberStatements().stream().forEach(s -> statements.add(Optional.of(s.mark)));
+        
+        appBar.removeAllTabs();
         
         for(StatementFilter filter : StatementFilter.values()) {
             int count = (int)statements.stream().filter(filter.filter::test).count();
@@ -132,6 +134,9 @@ public class MatchView extends SplitViewFrame implements HasUrlParameter<Long>, 
         timeLabel.setText(Formatters.formatDateTime(match.matchData.time));
         opponentLabel.setText("vs " + match.matchData.opponent);
         setupButtons();
+        try {
+            initAppBar();
+        }catch(Exception e) {}
     }
     
     private void setupButtons() {
