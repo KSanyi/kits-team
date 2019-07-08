@@ -160,6 +160,7 @@ public class MatchView extends SplitViewFrame implements HasUrlParameter<Long>, 
             event.forwardTo(LoginView.class);
         } else {
             init();
+            log.info(VaadinSession.getCurrent().getAttribute("current-user") + " navigated to " + match.matchData);
         }
     }
     

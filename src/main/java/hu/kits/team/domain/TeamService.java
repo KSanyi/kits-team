@@ -3,10 +3,16 @@ package hu.kits.team.domain;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TeamService {
 
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    
     private final Members members;
     
     private final ChampionshipRepository championshipRepository;
@@ -27,8 +33,7 @@ public class TeamService {
     }
 
     public Championship createChampionship(String name) {
-        championshipRepository.save(name);
-        return null;
+        return championshipRepository.save(name);
     }
     
     public void updateChampionship(Championship championship) {

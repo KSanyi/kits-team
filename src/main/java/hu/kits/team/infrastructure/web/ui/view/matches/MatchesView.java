@@ -55,6 +55,7 @@ public class MatchesView extends SplitViewFrame implements BeforeEnterObserver {
             event.forwardTo(LoginView.class);
         } else {
             init();
+            log.info(VaadinSession.getCurrent().getAttribute("current-user") + " navigated to matches");
         }
     }
 

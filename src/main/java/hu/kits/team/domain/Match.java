@@ -6,6 +6,9 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class Match {
 
     public final MatchData matchData;
@@ -50,6 +53,10 @@ public class Match {
     
     public List<Member> noStatements(Members members) {
         return members.entries().stream().filter(m -> !withStatement().contains(m)).collect(toList());
+    }
+    
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
     
 }

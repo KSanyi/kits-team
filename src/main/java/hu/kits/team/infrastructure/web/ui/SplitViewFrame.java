@@ -1,5 +1,10 @@
 package hu.kits.team.infrastructure.web.ui;
 
+import java.lang.invoke.MethodHandles;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
@@ -21,6 +26,8 @@ import hu.kits.team.infrastructure.web.ui.component.util.css.FlexDirection;
  */
 public class SplitViewFrame extends Composite<Div> implements HasStyle {
 
+    protected static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    
     private final String CLASS_NAME = "view-frame";
 
     private final Div header = new Div();

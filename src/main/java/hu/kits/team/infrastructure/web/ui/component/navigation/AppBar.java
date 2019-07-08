@@ -1,5 +1,10 @@
 package hu.kits.team.infrastructure.web.ui.component.navigation;
 
+import java.lang.invoke.MethodHandles;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Composite;
@@ -28,6 +33,8 @@ import hu.kits.team.infrastructure.web.ui.view.match.StatementFilter;
 
 public class AppBar extends Composite<FlexLayout> {
 
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    
     private String CLASS_NAME = "app-bar";
 
     private FlexBoxLayout container;
@@ -107,6 +114,7 @@ public class AppBar extends Composite<FlexLayout> {
             contextMenu.addItem("Kijelentkezés", e -> {
                 VaadinSession.getCurrent().getSession().invalidate();
                 UI.getCurrent().getPage().reload();
+                log.info(VaadinSession.getCurrent().getAttribute("current-user") + " logged out");
             });
         }
         

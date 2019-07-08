@@ -1,5 +1,10 @@
 package hu.kits.team.infrastructure.web.ui.view;
 
+import java.lang.invoke.MethodHandles;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -17,6 +22,8 @@ import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
 @PageTitle("Login")
 public class LoginView extends VerticalLayout {
 
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    
     private final ComboBox<Member> memberCombo = new ComboBox<>("Felhasználó");
     private final PasswordField passwordField = new PasswordField("Jelszó");
     private final Button loginButton = new Button("Log in", click -> login());
@@ -43,7 +50,8 @@ public class LoginView extends VerticalLayout {
     
     private void login() {
         VaadinSession.getCurrent().setAttribute("current-user", memberCombo.getValue());
-        getUI().ifPresent(ui -> ui.navigate(MatchView.class)); 
+        getUI().ifPresent(ui -> ui.navigate(MatchView.class));
+        log.info(memberCombo.getValue() + " logged in");
     }
 
 }
