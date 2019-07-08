@@ -73,6 +73,7 @@ public class MatchView extends SplitViewFrame implements HasUrlParameter<Long>, 
         buttonBar.setHeight("60px");
         comingButton.addClickListener(click -> coming());
         notComingButton.addClickListener(click -> notComing());
+        
         return buttonBar;
     }
 
@@ -126,6 +127,11 @@ public class MatchView extends SplitViewFrame implements HasUrlParameter<Long>, 
     }
     
     private void init() {
+        
+        if(match == null) {
+            match = Main.teamService.loadAllMatches().findNext(Clock.now());
+        }
+        
         List<MemberStatementRow> items = Main.teamService.members().entries().stream()
                 .map(m1 -> new MemberStatementRow(m1, match.memberStatements().stream().filter(m2 -> m2.member.id.equals(m1.id)).findFirst())).collect(toList());
         

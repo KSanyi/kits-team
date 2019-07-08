@@ -4,6 +4,7 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
+import java.util.Optional;
 
 public class Members {
 
@@ -14,7 +15,11 @@ public class Members {
     }
 
     public Member forId(String id) {
-        return entries.stream().filter(e -> e.id.equals(id)).findAny().get();
+        return findById(id).get();
+    }
+    
+    public Optional<Member> findById(String id) {
+        return entries.stream().filter(e -> e.id.equals(id)).findAny();
     }
     
     public List<Member> entries() {

@@ -24,6 +24,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.server.VaadinSession;
 
 import hu.kits.team.domain.Member;
+import hu.kits.team.infrastructure.web.ui.CookieUtil;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
@@ -113,6 +114,7 @@ public class AppBar extends Composite<FlexLayout> {
             contextMenu.addItem("Beállítások", e -> Notification.show("Not implemented yet.", 3000, Notification.Position.BOTTOM_CENTER));
             contextMenu.addItem("Kijelentkezés", e -> {
                 VaadinSession.getCurrent().getSession().invalidate();
+                CookieUtil.deleteUserCookie();
                 UI.getCurrent().getPage().reload();
                 log.info(VaadinSession.getCurrent().getAttribute("current-user") + " logged out");
             });
