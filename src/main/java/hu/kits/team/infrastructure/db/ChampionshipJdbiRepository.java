@@ -23,6 +23,7 @@ public class ChampionshipJdbiRepository implements ChampionshipRepository {
     private static final String TABLE_CHAMPIONSHIP = "CHAMPIONSHIP";
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_NAME = "NAME";
+    private static final String COLUMN_NUM_OF_PLAYERS = "NUM_OF_PLAYERS";
     
     private final Jdbi jdbi;
 
@@ -46,7 +47,7 @@ public class ChampionshipJdbiRepository implements ChampionshipRepository {
     
     private static Championship mapToChampionship(ResultSet rs) throws SQLException {
         
-        return new Championship(rs.getLong(COLUMN_ID), rs.getString(COLUMN_NAME));
+        return new Championship(rs.getLong(COLUMN_ID), rs.getString(COLUMN_NAME), rs.getInt(COLUMN_NUM_OF_PLAYERS));
     }
 
     public void delete(long id) {
@@ -54,13 +55,15 @@ public class ChampionshipJdbiRepository implements ChampionshipRepository {
         log.info("Championship with id {} deleted", id);
     }
 
-    public Championship save(String name) {
-        Map<String, Object> values = Map.of(COLUMN_NAME, name);
+    public Championship save(String name, int numberOfPlayers) {
+        Map<String, Object> values = Map.of(
+                COLUMN_NAME, name,
+                COLUMN_NUM_OF_PLAYERS, numberOfPlayers);
         
         long id = jdbi.withHandle(handle -> JdbiUtil.createInsert(handle, TABLE_CHAMPIONSHIP, values)
                 .executeAndReturnGeneratedKeys(COLUMN_ID).mapTo(Long.class).findOnly());
         
-        Championship championship = new Championship(id, name);
+        Championship championship = new Championship(id, name, numberOfPlayers);
         
         log.info("Championship saved: {}", championship);
         
@@ -70,6 +73,7 @@ public class ChampionshipJdbiRepository implements ChampionshipRepository {
     private static Map<String, Object> createValuesMap(Championship championship) {
         Map<String, Object> valuesMap = new HashMap<>();
         valuesMap.put(COLUMN_NAME, championship.name);
+        valuesMap.put(COLUMN_NUM_OF_PLAYERS, championship.numberOfPlayers);
         
         return valuesMap;
     }

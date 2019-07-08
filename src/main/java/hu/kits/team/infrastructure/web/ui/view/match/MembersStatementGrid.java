@@ -35,7 +35,7 @@ public class MembersStatementGrid extends Grid<MemberStatementRow> {
     private Component createMemberInfo(MemberStatementRow row) {
         Member member = row.member;
         
-        ListItem item = new ListItem(UIUtils.createInitials(member.getInitials()), member.nickName(), member.email);
+        ListItem item = new ListItem(UIUtils.createRoundBadge(member.getInitials()), member.nickName(), member.email);
         
         if(currentUser.id.equals(member.id)) {
             //item.setSuffix(UIUtils.createInitials("X"));

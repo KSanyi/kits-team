@@ -8,10 +8,13 @@ public class Championship {
     public final long id;
     
     public final String name;
+    
+    public final int numberOfPlayers;
 
-    public Championship(long id, String name) {
+    public Championship(long id, String name, int numberOfPlayers) {
         this.id = id;
         this.name = name;
+        this.numberOfPlayers = numberOfPlayers;
     }
     
     public String toString() {

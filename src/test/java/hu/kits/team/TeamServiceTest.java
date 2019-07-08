@@ -29,7 +29,7 @@ public class TeamServiceTest {
         DataSource dataSource = InMemoryDataSourceFactory.createDataSource(
                 "INSERT INTO MEMBER VALUES('sanyi', 'Kócsó Sándor', 'kocso.sandor.gabor@gmail.com')",
                 "INSERT INTO MEMBER VALUES('zolika', 'Wéber Zoltán', 'weberzoli@gmail.com')",
-                "INSERT INTO CHAMPIONSHIP VALUES (null, 'Üzleti Liga ÁBL 2019')");
+                "INSERT INTO CHAMPIONSHIP VALUES (null, 'Üzleti Liga ÁBL 2019', 6)");
         
         teamService = TeamServiceFactory.create(dataSource);
     }
@@ -49,19 +49,21 @@ public class TeamServiceTest {
     
     @Test
     public void championships() {
-        teamService.createChampionship("BEAC nyár");
+        teamService.createChampionship("BEAC nyár", 6);
         
         List<Championship> championships = teamService.loadChampionships();
         
         assertEquals(2, championships.size());
         assertEquals("BEAC nyár", championships.get(1).name);
+        assertEquals(6, championships.get(1).numberOfPlayers);
         
-        teamService.updateChampionship(new Championship(championships.get(1).id, "BEAC nyár 2019"));
+        teamService.updateChampionship(new Championship(championships.get(1).id, "BEAC nyár 2019", 5));
         
         championships = teamService.loadChampionships();
         
         assertEquals(2, championships.size());
         assertEquals("BEAC nyár 2019", championships.get(1).name);
+        assertEquals(5, championships.get(1).numberOfPlayers);
     }
     
     @Test

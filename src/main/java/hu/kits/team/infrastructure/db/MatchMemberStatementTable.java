@@ -63,7 +63,7 @@ class MatchMemberStatementTable {
     void deleteForMatch(long matchId) {
         jdbi.withHandle(handle -> handle.execute(String.format("DELETE FROM %s WHERE %s = ?", TABLE_MEMBER_STATEMENT, COLUMN_MATCH_ID),
                 matchId));
-        log.info("MemberStatements deletedfor match {}", matchId);
+        log.info("MemberStatements deleted for match {}", matchId);
     }
 
     void saveNew(MatchMemberStatement matchMemberStatement) {

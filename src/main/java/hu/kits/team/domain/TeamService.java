@@ -32,8 +32,8 @@ public class TeamService {
         return championshipRepository.loadAll().stream().sorted(comparing(c -> c.id)).collect(toList());
     }
 
-    public Championship createChampionship(String name) {
-        return championshipRepository.save(name);
+    public Championship createChampionship(String name, int numberOfPlayers) {
+        return championshipRepository.save(name, numberOfPlayers);
     }
     
     public void updateChampionship(Championship championship) {

@@ -8,7 +8,7 @@ public interface ChampionshipRepository {
     
     void delete(long id);
     
-    Championship save(String name);
+    Championship save(String name, int numberOfPlayers);
     
     void update(Championship championship);
     

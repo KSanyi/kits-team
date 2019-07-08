@@ -58,5 +58,10 @@ public class Match {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+
+    public int status() {
+        int coming = coming().size();
+        return coming - matchData.championship.numberOfPlayers;
+    }
     
 }

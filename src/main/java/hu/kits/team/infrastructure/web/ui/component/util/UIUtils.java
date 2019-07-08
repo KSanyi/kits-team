@@ -271,8 +271,8 @@ public class UIUtils {
 
     /* === MISC === */
 
-    public static FlexBoxLayout createInitials(String initials) {
-        FlexBoxLayout layout = new FlexBoxLayout(new Text(initials));
+    public static FlexBoxLayout createRoundBadge(String text) {
+        FlexBoxLayout layout = new FlexBoxLayout(new Text(text));
         setFontSize(FontSize.S, layout);
         layout.addClassName("initials");
 
