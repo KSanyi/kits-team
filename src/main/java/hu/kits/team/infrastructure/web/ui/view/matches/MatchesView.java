@@ -15,6 +15,8 @@ import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.SplitViewFrame;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
 import hu.kits.team.infrastructure.web.ui.view.LoginView;
+import hu.kits.team.infrastructure.web.ui.view.match.StatementFilter;
+import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 
 @Route(value = "matches", layout = MainLayout.class)
 @PageTitle("Meccsek")
@@ -45,6 +47,22 @@ public class MatchesView extends SplitViewFrame implements BeforeEnterObserver {
         appBar.setPreTabComponent(new Div());
         
         appBar.removeAllTabs();
+        for(MatchDateFilter filter : MatchDateFilter.values()) {
+            appBar.addTab(filter.label, filter);
+        }
+        
+        appBar.addTabSelectionListener(e -> {
+            filter();
+            //detailsDrawer.hide();
+        });
+        appBar.centerTabs();
+    }
+    
+    private void filter() {
+        TabWithData selectedTab = (TabWithData)MainLayout.get().getAppBar().getSelectedTab();
+        if (selectedTab != null) {
+            matchGrid.filter((MatchDateFilter)selectedTab.data);
+        }
     }
     
     private void init() {

@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 
 import hu.kits.team.common.Clock;
 
-public enum MatchDateFiler {
+public enum MatchDateFilter {
 
     ALL("Össz", m -> true),
     UPCOMING("Köv", d -> d.isAfter(Clock.now())),
@@ -15,7 +15,7 @@ public enum MatchDateFiler {
     
     public final Predicate<LocalDateTime> filter;
 
-    private MatchDateFiler(String label, Predicate<LocalDateTime> filter) {
+    private MatchDateFilter(String label, Predicate<LocalDateTime> filter) {
         this.label = label;
         this.filter = filter;
     }

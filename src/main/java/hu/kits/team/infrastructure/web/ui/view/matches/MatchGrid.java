@@ -1,5 +1,7 @@
 package hu.kits.team.infrastructure.web.ui.view.matches;
 
+import static java.util.stream.Collectors.toList;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -59,6 +61,12 @@ public class MatchGrid extends Grid<Match> {
         selectionEvent.getFirstSelectedItem().ifPresent(match -> getUI().ifPresent(ui -> ui.navigate(MatchView.class, match.matchData.id)));
     }
     
+    public void filter(MatchDateFilter filter) {
+        setItems(items.stream()
+                .filter(match -> filter.filter.test(match.matchData.time))
+                .collect(toList()));
+    }
+
     public void setRows(List<Match> items) {
         this.items = items;
         setItems(items);
