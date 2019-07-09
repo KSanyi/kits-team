@@ -6,15 +6,6 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.html.Div;
 
-/**
- * A view frame that establishes app design guidelines. It consists of three
- * parts:
- * <ul>
- * <li>Topmost {@link #setViewHeader(Component...) header}</li>
- * <li>Center {@link #setViewContent(Component...) content}</li>
- * <li>Bottom {@link #setViewFooter(Component...) footer}</li>
- * </ul>
- */
 public class ViewFrame extends Composite<Div> implements HasStyle {
 
     private final String CLASS_NAME = "view-frame";
@@ -33,25 +24,16 @@ public class ViewFrame extends Composite<Div> implements HasStyle {
         getContent().add(header, content, footer);
     }
 
-    /**
-     * Sets the header slot's components.
-     */
     public void setViewHeader(Component... components) {
         header.removeAll();
         header.add(components);
     }
 
-    /**
-     * Sets the content slot's components.
-     */
     public void setViewContent(Component... components) {
         content.removeAll();
         content.add(components);
     }
 
-    /**
-     * Sets the footer slot's components.
-     */
     public void setViewFooter(Component... components) {
         footer.removeAll();
         footer.add(components);

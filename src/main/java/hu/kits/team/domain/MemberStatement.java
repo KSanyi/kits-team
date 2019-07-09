@@ -2,9 +2,6 @@ package hu.kits.team.domain;
 
 import java.time.LocalDateTime;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 public class MemberStatement {
 
     public final Member member;
@@ -23,7 +20,7 @@ public class MemberStatement {
     }
     
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return member + ": " + mark.label;
     }
     
 }

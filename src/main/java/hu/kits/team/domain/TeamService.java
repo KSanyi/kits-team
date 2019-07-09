@@ -54,10 +54,12 @@ public class TeamService {
 
     public void saveStatementForMatch(MatchData matchData, MemberStatement memberStatement) {
         matchRepository.saveStatementForMatch(matchData, memberStatement);
+        log.info("Match statement saved: {} {}", matchData, memberStatement);
     }
 
     public void updateStatementForMatch(MatchData matchData, MemberStatement updatedMemberStatement) {
         matchRepository.updateStatementForMatch(matchData, updatedMemberStatement);
+        log.info("Match statement updated: {} {}", matchData, updatedMemberStatement);
     }
 
 }

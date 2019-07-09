@@ -2,8 +2,7 @@ package hu.kits.team.domain;
 
 import java.time.LocalDateTime;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import hu.kits.team.common.Formatters;
 
 public class MatchData {
 
@@ -30,7 +29,7 @@ public class MatchData {
     }
     
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return Formatters.formatDateTime(time) + " (" + opponent + ")";
     }
     
 }

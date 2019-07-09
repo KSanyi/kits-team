@@ -57,13 +57,13 @@ class MatchMemberStatementTable {
     private void delete(long matchId, String memberId) {
         jdbi.withHandle(handle -> handle.execute(String.format("DELETE FROM %s WHERE %s = ? AND %s = ?", TABLE_MEMBER_STATEMENT, COLUMN_MATCH_ID, COLUMN_MEMBER_ID),
                 matchId, memberId));
-        log.info("MemberStatement deleted for {} for match {}", memberId, matchId);
+        log.debug("MemberStatement deleted for {} for match {}", memberId, matchId);
     }
     
     void deleteForMatch(long matchId) {
         jdbi.withHandle(handle -> handle.execute(String.format("DELETE FROM %s WHERE %s = ?", TABLE_MEMBER_STATEMENT, COLUMN_MATCH_ID),
                 matchId));
-        log.info("MemberStatements deleted for match {}", matchId);
+        log.debug("MemberStatements deleted for match {}", matchId);
     }
 
     void saveNew(MatchMemberStatement matchMemberStatement) {
@@ -71,7 +71,7 @@ class MatchMemberStatementTable {
         
         jdbi.withHandle(handle -> JdbiUtil.createInsert(handle, TABLE_MEMBER_STATEMENT, values).execute());
         
-        log.info("MatchMemberStatement saved: {}", matchMemberStatement);
+        log.debug("MatchMemberStatement saved: {}", matchMemberStatement);
     }
     
     private static Map<String, Object> createValuesMap(MatchMemberStatement matchMemberStatement) {

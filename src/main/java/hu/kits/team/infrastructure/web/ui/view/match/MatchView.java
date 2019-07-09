@@ -1,7 +1,5 @@
 package hu.kits.team.infrastructure.web.ui.view.match;
 
-import static java.util.stream.Collectors.toList;
-
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -33,6 +28,7 @@ import hu.kits.team.common.Clock;
 import hu.kits.team.common.Formatters;
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Match;
+import hu.kits.team.domain.Matches;
 import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
@@ -47,16 +43,12 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
 
     protected static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     
+    private Member currentMember;
+    private Long matchId;
     private Match match;
-    
-    private final H2 timeLabel = new H2();
-    private final H6 opponentLabel = new H6();
     
     private final Button comingButton = UIUtils.createSuccessPrimaryButton("Jövök", VaadinIcon.CHECK);
     private final Button notComingButton = UIUtils.createErrorButton("Nem jövök", VaadinIcon.CLOSE);
-    private final Button testButton = new Button("TEST", click -> System.err.println("XXX"));
-    
-    private Member currentUser;
     
     private Optional<MemberStatement> myStatement;
     
@@ -65,32 +57,10 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
-        initAppBar();
         setViewContent(createView());
-        filter();
-    }
-    
-    private Component createButtonBar() {
-        comingButton.setSizeFull();
-        notComingButton.setSizeFull();
-        HorizontalLayout buttonBar = new HorizontalLayout(comingButton, notComingButton);
-        buttonBar.setSpacing(false);
-        buttonBar.setSizeFull();
-        buttonBar.setHeight("60px");
-        comingButton.addClickListener(click -> coming());
-        notComingButton.addClickListener(click -> notComing());
-        
-        return buttonBar;
-    }
-
-    private Component createView() {
-        
-        membersStatementGrid.setHeight("100%");
-        
-        Div content = new Div(membersStatementGrid);
-        content.addClassName("grid-view");
-        
-        return content;
+        setViewFooter(createButtonBar());
+        init();
+        initAppBar();
     }
     
     private void initAppBar() {
@@ -115,6 +85,24 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         appBar.centerTabs();
     }
     
+    private Component createView() {
+        membersStatementGrid.setHeight("100%");
+        return membersStatementGrid;
+    }
+    
+    private Component createButtonBar() {
+        comingButton.setSizeFull();
+        notComingButton.setSizeFull();
+        HorizontalLayout buttonBar = new HorizontalLayout(comingButton, notComingButton);
+        buttonBar.setSpacing(false);
+        buttonBar.setSizeFull();
+        buttonBar.setHeight("60px");
+        comingButton.addClickListener(click -> coming());
+        notComingButton.addClickListener(click -> notComing());
+        
+        return buttonBar;
+    }
+    
     private void filter() {
         FilterTab selectedTab = (FilterTab)MainLayout.get().getAppBar().getSelectedTab();
         if (selectedTab != null) {
@@ -122,53 +110,60 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         }
     }
     
-    @Override
-    public void setParameter(BeforeEvent event, @OptionalParameter Long parameter) {
-        if(parameter != null) {
-            long matchId = parameter;
-            match = Main.teamService.loadAllMatches().find(matchId).orElseThrow(() -> new IllegalArgumentException("Unknown match id: " + matchId));
-        }
-    }
-    
-    private void init() {
-        
-        match = Main.teamService.loadAllMatches().findNext(Clock.now());
-        
-        List<MemberStatementRow> items = Main.teamService.members().entries().stream()
-                .map(m1 -> new MemberStatementRow(m1, match.memberStatements().stream().filter(m2 -> m2.member.id.equals(m1.id)).findFirst())).collect(toList());
-        
-        myStatement = match.statementFor(currentUser);
-        membersStatementGrid.setRows(items, currentUser);
-        timeLabel.setText(Formatters.formatDateTime(match.matchData.time));
-        opponentLabel.setText("vs " + match.matchData.opponent);
-        setupButtons();
-        try {
-            initAppBar();
-        }catch(Exception e) {}
-    }
-    
-    private void setupButtons() {
+    private void initButtons() {
         if(Clock.now().isBefore(match.matchData.time)) {
-            setViewFooter(createButtonBar());
-        } if(myStatement.isPresent()) {
-            if(myStatement.get().mark == Mark.COMING) {
-                comingButton.setVisible(false);
-                notComingButton.setText("Mégsem jövök");
-            } else if(myStatement.get().mark == Mark.NOT_COMING) {
-                notComingButton.setVisible(false);
-                comingButton.setText("Mégis jövök");
-            }
+            if(myStatement.isPresent()) {
+                if(myStatement.get().mark == Mark.COMING) {
+                    comingButton.setVisible(false);
+                    notComingButton.setVisible(true);
+                    notComingButton.setText("Mégsem jövök");
+                } else if(myStatement.get().mark == Mark.NOT_COMING) {
+                    notComingButton.setVisible(false);
+                    comingButton.setVisible(true);
+                    comingButton.setText("Mégis jövök");
+                }
+            } 
+        } else {
+            setViewFooter(new Div());
         }
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        currentUser = (Member)VaadinSession.getCurrent().getAttribute("current-user");
-        if(currentUser == null) {
+        currentMember = (Member)VaadinSession.getCurrent().getAttribute("current-user");
+        if(currentMember == null) {
             event.forwardTo(LoginView.class);
         } else {
-            init();
-            log.info(VaadinSession.getCurrent().getAttribute("current-user") + " navigated to " + match.matchData);
+            log.info(VaadinSession.getCurrent().getAttribute("current-user") + " navigated to MatchView");
+        }
+    }
+    
+    @Override
+    public void setParameter(BeforeEvent event, @OptionalParameter Long parameter) {
+        matchId = parameter;
+    }
+    
+    private void init() {
+        
+        match = loadMatch();
+        myStatement = match.statementFor(currentMember);
+        
+        membersStatementGrid.setRows(MemberStatementRow.createForMatch(Main.teamService.members(), match), currentMember);
+        filter();
+        initButtons();
+        
+        try {
+            // TODO
+            initAppBar();
+        }catch(Exception e) {}
+    }
+    
+    private Match loadMatch() {
+        Matches matches = Main.teamService.loadAllMatches();
+        if(matchId != null) {
+            return matches.find(matchId).orElseThrow(() -> new IllegalArgumentException("Unknown match id: " + matchId));
+        } else {
+            return matches.findNext(Clock.now());
         }
     }
     
@@ -182,11 +177,11 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     private void saveStatement(Mark mark) {
         if(myStatement.isEmpty()) {
-            Main.teamService.saveStatementForMatch(match.matchData, new MemberStatement(currentUser, mark, Clock.now(), ""));
+            Main.teamService.saveStatementForMatch(match.matchData, new MemberStatement(currentMember, mark, Clock.now(), ""));
         } else {
-            Main.teamService.updateStatementForMatch(match.matchData, new MemberStatement(currentUser, mark, Clock.now(), ""));
+            Main.teamService.updateStatementForMatch(match.matchData, new MemberStatement(currentMember, mark, Clock.now(), ""));
         }
-        UI.getCurrent().getPage().reload();
+        init();
     }
 
 }
