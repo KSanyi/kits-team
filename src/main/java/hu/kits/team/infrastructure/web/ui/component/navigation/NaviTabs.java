@@ -8,9 +8,8 @@ import com.vaadin.flow.component.tabs.Tabs;
 
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Overflow;
-import hu.kits.team.infrastructure.web.ui.view.match.FilterTab;
 import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
-import hu.kits.team.infrastructure.web.ui.view.match.StatementFilter;
+import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 
 /**
  * NaviTabs supports tabs that can be closed, and that can navigate to a
@@ -40,8 +39,8 @@ public class NaviTabs extends Tabs {
     /**
      * Creates a regular tab without any click listeners.
      */
-    public FilterTab addTab(StatementFilter caption, int count) {
-        FilterTab tab = new FilterTab(caption, count);
+    public TabWithData addTab(String caption, Object data) {
+        TabWithData tab = new TabWithData(caption, data);
         add(tab);
         return tab;
     }

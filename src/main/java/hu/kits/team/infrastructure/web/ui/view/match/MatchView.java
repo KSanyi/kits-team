@@ -78,7 +78,8 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         appBar.removeAllTabs();
         for(StatementFilter filter : StatementFilter.values()) {
             int count = (int)statements.stream().filter(filter.filter::test).count();
-            appBar.addTab(filter, count);
+            String caption = filter.label + "(" + count + ")";
+            appBar.addTab(caption, filter);
         }
         
         appBar.addTabSelectionListener(e -> {
@@ -122,9 +123,9 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     }
     
     private void filter() {
-        FilterTab selectedTab = (FilterTab)MainLayout.get().getAppBar().getSelectedTab();
+        TabWithData selectedTab = (TabWithData)MainLayout.get().getAppBar().getSelectedTab();
         if (selectedTab != null) {
-            membersStatementGrid.filter(selectedTab.filter);
+            membersStatementGrid.filter((StatementFilter)selectedTab.data);
         }
     }
     

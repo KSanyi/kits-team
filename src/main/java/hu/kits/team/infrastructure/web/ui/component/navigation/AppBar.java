@@ -1,6 +1,8 @@
 package hu.kits.team.infrastructure.web.ui.component.navigation;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.shared.Registration;
 
 import hu.kits.team.domain.Member;
 import hu.kits.team.infrastructure.web.ui.CookieUtil;
@@ -30,8 +33,7 @@ import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
-import hu.kits.team.infrastructure.web.ui.view.match.FilterTab;
-import hu.kits.team.infrastructure.web.ui.view.match.StatementFilter;
+import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 
 public class AppBar extends Composite<FlexLayout> {
 
@@ -52,6 +54,7 @@ public class AppBar extends Composite<FlexLayout> {
     private NaviTabs tabs;
     private Button addTab;
     private Div preTabContainer = new Div();
+    private List<Registration> tabEventRegistrations = new ArrayList<>();
 
     public enum NaviMode {
         MENU, CONTEXTUAL
@@ -211,8 +214,8 @@ public class AppBar extends Composite<FlexLayout> {
         updateTabsVisibility();
     }
 
-    public FilterTab addTab(StatementFilter filter, int count) {
-        FilterTab tab = tabs.addTab(filter, count);
+    public TabWithData addTab(String caption, Object data) {
+        TabWithData tab = tabs.addTab(caption, data);
         configureTab(tab);
         return tab;
     }
@@ -240,7 +243,7 @@ public class AppBar extends Composite<FlexLayout> {
     }
 
     public void addTabSelectionListener(ComponentEventListener<Tabs.SelectedChangeEvent> listener) {
-        tabs.addSelectedChangeListener(listener);
+        tabEventRegistrations.add(tabs.addSelectedChangeListener(listener));
     }
 
     public int getTabCount() {
@@ -249,6 +252,8 @@ public class AppBar extends Composite<FlexLayout> {
 
     public void removeAllTabs() {
         tabs.removeAll();
+        tabEventRegistrations.forEach(Registration::remove);
+        tabEventRegistrations.clear();
         updateTabsVisibility();
     }
 
