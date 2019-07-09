@@ -42,6 +42,9 @@ public class MatchesView extends SplitViewFrame implements BeforeEnterObserver {
     private void initAppBar() {
         AppBar appBar = MainLayout.get().getAppBar();
         appBar.setTitle("Meccsek");
+        appBar.setPreTabComponent(new Div());
+        
+        appBar.removeAllTabs();
     }
     
     private void init() {
