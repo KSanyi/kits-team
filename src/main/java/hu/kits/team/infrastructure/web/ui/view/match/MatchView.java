@@ -2,9 +2,13 @@ package hu.kits.team.infrastructure.web.ui.view.match;
 
 import static java.util.stream.Collectors.toList;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
@@ -32,15 +36,17 @@ import hu.kits.team.domain.Match;
 import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
-import hu.kits.team.infrastructure.web.ui.SplitViewFrame;
+import hu.kits.team.infrastructure.web.ui.ViewFrame;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
 import hu.kits.team.infrastructure.web.ui.view.LoginView;
 
 @Route(value = "match", layout = MainLayout.class)
 @PageTitle("Meccs")
-public class MatchView extends SplitViewFrame implements HasUrlParameter<Long>, BeforeEnterObserver {
+public class MatchView extends ViewFrame implements HasUrlParameter<Long>, BeforeEnterObserver {
 
+    protected static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    
     private Match match;
     
     private final H2 timeLabel = new H2();
@@ -48,6 +54,7 @@ public class MatchView extends SplitViewFrame implements HasUrlParameter<Long>, 
     
     private final Button comingButton = UIUtils.createSuccessPrimaryButton("Jövök", VaadinIcon.CHECK);
     private final Button notComingButton = UIUtils.createErrorButton("Nem jövök", VaadinIcon.CLOSE);
+    private final Button testButton = new Button("TEST", click -> System.err.println("XXX"));
     
     private Member currentUser;
     
@@ -60,7 +67,6 @@ public class MatchView extends SplitViewFrame implements HasUrlParameter<Long>, 
         super.onAttach(attachEvent);
         initAppBar();
         setViewContent(createView());
-        setViewFooter(createButtonBar());
         filter();
     }
     
@@ -121,16 +127,12 @@ public class MatchView extends SplitViewFrame implements HasUrlParameter<Long>, 
         if(parameter != null) {
             long matchId = parameter;
             match = Main.teamService.loadAllMatches().find(matchId).orElseThrow(() -> new IllegalArgumentException("Unknown match id: " + matchId));
-        } else {
-            match = Main.teamService.loadAllMatches().findNext(Clock.now());
         }
     }
     
     private void init() {
         
-        if(match == null) {
-            match = Main.teamService.loadAllMatches().findNext(Clock.now());
-        }
+        match = Main.teamService.loadAllMatches().findNext(Clock.now());
         
         List<MemberStatementRow> items = Main.teamService.members().entries().stream()
                 .map(m1 -> new MemberStatementRow(m1, match.memberStatements().stream().filter(m2 -> m2.member.id.equals(m1.id)).findFirst())).collect(toList());

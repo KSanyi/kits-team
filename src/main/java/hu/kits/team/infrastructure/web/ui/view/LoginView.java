@@ -80,7 +80,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         
         VaadinSession.getCurrent().setAttribute("current-user", member);
         
-        event.rerouteTo(MatchView.class);
+        event.forwardTo(MatchView.class);
     }
     
 
