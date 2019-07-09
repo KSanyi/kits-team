@@ -12,6 +12,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
@@ -50,6 +51,7 @@ public class AppBar extends Composite<FlexLayout> {
     private FlexBoxLayout tabContainer;
     private NaviTabs tabs;
     private Button addTab;
+    private Div preTabContainer = new Div();
 
     public enum NaviMode {
         MENU, CONTEXTUAL
@@ -146,7 +148,7 @@ public class AppBar extends Composite<FlexLayout> {
             configureTab(tab);
         }
 
-        tabContainer = new FlexBoxLayout(this.tabs, addTab);
+        tabContainer = new FlexBoxLayout(preTabContainer, this.tabs, addTab);
         tabContainer.addClassName(CLASS_NAME + "__tab-container");
         tabContainer.setAlignItems(FlexComponent.Alignment.CENTER);
         getContent().add(tabContainer);
@@ -277,5 +279,10 @@ public class AppBar extends Composite<FlexLayout> {
 
     public Image getAvatar() {
         return avatar;
+    }
+
+    public void setPreTabComponent(Component createRoundBadge) {
+        preTabContainer.removeAll();
+        preTabContainer.add(createRoundBadge);
     }
 }

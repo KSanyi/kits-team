@@ -36,14 +36,8 @@ public class MatchGrid extends Grid<Match> {
     private Component createRow(Match match) {
         MatchData matchData = match.matchData;
         
-        String statusString = createStatusValue(match.status()); 
-        
-        ListItem item = new ListItem(matchData.opponent, matchData.championship.name, UIUtils.createRoundBadge(statusString));
+        ListItem item = new ListItem(matchData.opponent, matchData.championship.name, UIUtils.createRoundBadge(match.statusString()));
         return item;
-    }
-    
-    private static String createStatusValue(int status) {
-        return (status > 0 ? "+" : "") + status;
     }
     
     private Component createTime(Match match) {

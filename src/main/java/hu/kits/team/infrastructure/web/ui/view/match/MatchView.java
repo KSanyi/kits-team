@@ -33,7 +33,9 @@ import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.ViewFrame;
+import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
+import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
 import hu.kits.team.infrastructure.web.ui.view.LoginView;
 
@@ -66,13 +68,14 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     private void initAppBar() {
         AppBar appBar = MainLayout.get().getAppBar();
         appBar.setTitle(Formatters.formatDateTime(match.matchData.time) + " vs " + match.matchData.opponent);
+
+        appBar.setPreTabComponent(createStatusBadge());
         
         List<Optional<Mark>> statements = new ArrayList<>();
         match.noStatements(Main.teamService.members()).stream().forEach(s -> statements.add(Optional.empty()));
         match.memberStatements().stream().forEach(s -> statements.add(Optional.of(s.mark)));
         
         appBar.removeAllTabs();
-        
         for(StatementFilter filter : StatementFilter.values()) {
             int count = (int)statements.stream().filter(filter.filter::test).count();
             appBar.addTab(filter, count);
@@ -83,6 +86,21 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
             //detailsDrawer.hide();
         });
         appBar.centerTabs();
+    }
+    
+    private Component createStatusBadge() {
+        String statusString = match.statusString();
+        FlexBoxLayout badge = UIUtils.createRoundBadge(statusString);
+        
+        if(statusString.startsWith("+")) {
+            badge.setBackgroundColor(LumoStyles.Color.Success._100);
+        } else if(statusString.startsWith("-")) {
+            badge.setBackgroundColor(LumoStyles.Color.Error._100);
+        } else {
+            badge.setBackgroundColor(LumoStyles.Color.Contrast._50);
+        }
+        
+        return badge;
     }
     
     private Component createView() {

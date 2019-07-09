@@ -64,4 +64,9 @@ public class Match {
         return coming - matchData.championship.numberOfPlayers;
     }
     
+    public String statusString() {
+        int status = status();
+        return (status > 0 ? "+" : "") + status;
+    }
+    
 }
