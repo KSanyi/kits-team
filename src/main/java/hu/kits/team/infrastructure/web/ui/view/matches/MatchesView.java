@@ -7,15 +7,14 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 
 import hu.kits.team.Main;
 import hu.kits.team.domain.Member;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.SplitViewFrame;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
+import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.LoginView;
-import hu.kits.team.infrastructure.web.ui.view.match.StatementFilter;
 import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 
 @Route(value = "matches", layout = MainLayout.class)
@@ -71,12 +70,12 @@ public class MatchesView extends SplitViewFrame implements BeforeEnterObserver {
     
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        Member currentUser = (Member)VaadinSession.getCurrent().getAttribute("current-user");
+        Member currentUser = Session.currentMember();
         if(currentUser == null) {
             event.forwardTo(LoginView.class);
         } else {
             init();
-            log.info(VaadinSession.getCurrent().getAttribute("current-user") + " navigated to matches");
+            log.info(Session.currentMember() + " navigated to matches");
         }
     }
 

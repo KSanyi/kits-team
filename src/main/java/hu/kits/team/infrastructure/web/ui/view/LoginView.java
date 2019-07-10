@@ -15,11 +15,11 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 
 import hu.kits.team.Main;
 import hu.kits.team.domain.Member;
-import hu.kits.team.infrastructure.web.ui.CookieUtil;
+import hu.kits.team.infrastructure.web.ui.vaadin.CookieUtil;
+import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
 
 @Route(value = "login")
@@ -53,7 +53,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     }
     
     private void login(Member member) {
-        VaadinSession.getCurrent().setAttribute("current-user", member);
+        Session.setMember(member);
         getUI().ifPresent(ui -> ui.navigate(MatchView.class));
         log.info(member + " logged in");
         CookieUtil.createUserCookie(member.id);
@@ -61,7 +61,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        Member member = (Member)VaadinSession.getCurrent().getAttribute("current-user");
+        Member member = Session.currentMember();
         if(member == null) {
             Optional<String> userFromCookie = CookieUtil.findUserFromCookie();
             if(userFromCookie.isPresent()) {
@@ -70,18 +70,19 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
                     member = memberFromCookie.get();
                     log.info(member + " logged in from cookie");
                 } else {
+                    // unknown user id in cookie
                     log.info("Unknown user found in cookie: {}", userFromCookie.get());
                     return;
                 }
             } else {
+                // no user in cookie
                 return;
             }
         }
         
-        VaadinSession.getCurrent().setAttribute("current-user", member);
+        Session.setMember(member);
         
         event.forwardTo(MatchView.class);
     }
-    
 
 }

@@ -1,4 +1,4 @@
-package hu.kits.team.infrastructure.web.ui;
+package hu.kits.team.infrastructure.web.ui.vaadin;
 
 import static java.util.stream.Collectors.joining;
 

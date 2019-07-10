@@ -21,7 +21,6 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 
 import hu.kits.team.Main;
 import hu.kits.team.common.Clock;
@@ -37,6 +36,7 @@ import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
+import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.LoginView;
 
 @Route(value = "match", layout = MainLayout.class)
@@ -54,7 +54,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     private Optional<MemberStatement> myStatement;
     
-    private final MembersStatementGrid membersStatementGrid = new MembersStatementGrid();
+    private final MembersStatementGrid membersStatementGrid = new MembersStatementGrid(this);
     
     @Override
     protected void onAttach(AttachEvent attachEvent) {
@@ -116,8 +116,8 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         buttonBar.setSpacing(false);
         buttonBar.setSizeFull();
         buttonBar.setHeight("60px");
-        comingButton.addClickListener(click -> coming());
-        notComingButton.addClickListener(click -> notComing());
+        comingButton.addClickListener(click -> coming(currentMember));
+        notComingButton.addClickListener(click -> notComing(currentMember));
         
         return buttonBar;
     }
@@ -149,11 +149,11 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        currentMember = (Member)VaadinSession.getCurrent().getAttribute("current-user");
+        currentMember = Session.currentMember();
         if(currentMember == null) {
             event.forwardTo(LoginView.class);
         } else {
-            log.info(VaadinSession.getCurrent().getAttribute("current-user") + " navigated to MatchView");
+            log.info(Session.currentMember() + " navigated to MatchView");
         }
     }
     
@@ -186,19 +186,19 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         }
     }
     
-    private void coming() {
-        saveStatement(Mark.COMING);
+    void coming(Member member) {
+        saveStatement(member, Mark.COMING);
     }
     
-    private void notComing() {
-        saveStatement(Mark.NOT_COMING);
+    void notComing(Member member) {
+        saveStatement(member, Mark.NOT_COMING);
     }
     
-    private void saveStatement(Mark mark) {
+    private void saveStatement(Member member, Mark mark) {
         if(myStatement.isEmpty()) {
-            Main.teamService.saveStatementForMatch(match.matchData, new MemberStatement(currentMember, mark, Clock.now(), ""));
+            Main.teamService.saveStatementForMatch(match.matchData, new MemberStatement(member, mark, Clock.now(), ""));
         } else {
-            Main.teamService.updateStatementForMatch(match.matchData, new MemberStatement(currentMember, mark, Clock.now(), ""));
+            Main.teamService.updateStatementForMatch(match.matchData, new MemberStatement(member, mark, Clock.now(), ""));
         }
         init();
     }

@@ -28,11 +28,12 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.shared.Registration;
 
 import hu.kits.team.domain.Member;
-import hu.kits.team.infrastructure.web.ui.CookieUtil;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
+import hu.kits.team.infrastructure.web.ui.vaadin.CookieUtil;
+import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 
 public class AppBar extends Composite<FlexLayout> {
@@ -108,7 +109,7 @@ public class AppBar extends Composite<FlexLayout> {
         avatar = new Image();
         avatar.setClassName(CLASS_NAME + "__avatar");
         
-        Member currentUser = (Member)VaadinSession.getCurrent().getAttribute("current-user");
+        Member currentUser = Session.currentMember();
         if(currentUser != null) {
             ContextMenu contextMenu = new ContextMenu(avatar);
             contextMenu.setOpenOnClick(true);
@@ -121,7 +122,7 @@ public class AppBar extends Composite<FlexLayout> {
                 VaadinSession.getCurrent().getSession().invalidate();
                 CookieUtil.deleteUserCookie();
                 UI.getCurrent().getPage().reload();
-                log.info(VaadinSession.getCurrent().getAttribute("current-user") + " logged out");
+                log.info(Session.currentMember() + " logged out");
             });
         }
         

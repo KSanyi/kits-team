@@ -7,12 +7,12 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
 
 import hu.kits.team.domain.Member;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.SplitViewFrame;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
+import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 
 @Route(value = "admin", layout = MainLayout.class)
 @PageTitle("Admin")
@@ -46,7 +46,7 @@ public class AdminView extends SplitViewFrame implements BeforeEnterObserver {
     
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        currentUser = (Member)VaadinSession.getCurrent().getAttribute("current-user");
+        currentUser = Session.currentMember();
         if(currentUser == null) {
             event.forwardTo(LoginView.class);
         } else {
