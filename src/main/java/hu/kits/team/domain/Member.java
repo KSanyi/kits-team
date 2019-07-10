@@ -11,11 +11,14 @@ public class Member {
     public final String name;
     
     public final String email;
+    
+    public boolean isAdmin;
 
-    public Member(String id, String name, String email) {
+    public Member(String id, String name, String email, boolean isAdmin) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.isAdmin = isAdmin;
     }
     
     @Override
