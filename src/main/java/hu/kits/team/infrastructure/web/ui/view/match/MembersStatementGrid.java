@@ -54,11 +54,12 @@ public class MembersStatementGrid extends Grid<MemberStatementRow> {
     private Icon createComingIcon(MemberStatementRow row) {
         Icon icon = createIcon(row);
         
-        ContextMenu contextMenu = new ContextMenu(icon);
-        contextMenu.addItem(Mark.COMING.label, c -> matchView.coming(row.member));
-        contextMenu.addItem(Mark.NOT_COMING.label, c -> matchView.notComing(row.member));
+        if(Session.currentMember().isAdmin) {
+            ContextMenu contextMenu = new ContextMenu(icon);
+            contextMenu.addItem(Mark.COMING.label, c -> matchView.coming(row.member));
+            contextMenu.addItem(Mark.NOT_COMING.label, c -> matchView.notComing(row.member));
+        }
         
-        contextMenu.setEnabled(Session.currentMember().isAdmin);
         return icon;
     }
     
