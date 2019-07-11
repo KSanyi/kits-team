@@ -28,6 +28,7 @@ public class MatchesView extends SplitViewFrame implements BeforeEnterObserver {
         super.onAttach(attachEvent);
         setViewContent(createView());
         initAppBar();
+        init();
     }
     
     private Component createView() {
@@ -66,6 +67,7 @@ public class MatchesView extends SplitViewFrame implements BeforeEnterObserver {
     
     private void init() {
         matchGrid.setRows(Main.teamService.loadAllMatches().entries());
+        filter();
     }
     
     @Override
@@ -74,7 +76,6 @@ public class MatchesView extends SplitViewFrame implements BeforeEnterObserver {
         if(currentUser == null) {
             event.forwardTo(LoginView.class);
         } else {
-            init();
             log.info(Session.currentMember() + " navigated to matches");
         }
     }

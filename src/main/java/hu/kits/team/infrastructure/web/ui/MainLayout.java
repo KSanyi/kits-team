@@ -27,7 +27,6 @@ import hu.kits.team.infrastructure.web.ui.component.navigation.drawer.NaviMenu;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.css.FlexDirection;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Overflow;
-import hu.kits.team.infrastructure.web.ui.view.AdminView;
 import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
 import hu.kits.team.infrastructure.web.ui.view.matches.MatchesView;
 
@@ -106,7 +105,7 @@ public class MainLayout extends FlexBoxLayout implements RouterLayout, PageConfi
         NaviMenu menu = naviDrawer.getMenu();
         menu.addNaviItem(VaadinIcon.USER_CHECK, "Következő meccs", MatchView.class);
         menu.addNaviItem(VaadinIcon.CALENDAR_CLOCK, "Meccsek", MatchesView.class);
-        menu.addNaviItem(VaadinIcon.COG, "Admin", AdminView.class);
+        //menu.addNaviItem(VaadinIcon.COG, "Admin", AdminView.class);
     }
 
     /**

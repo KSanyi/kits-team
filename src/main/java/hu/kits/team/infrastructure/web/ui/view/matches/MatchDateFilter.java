@@ -7,9 +7,9 @@ import hu.kits.team.common.Clock;
 
 public enum MatchDateFilter {
 
-    ALL("Össz", m -> true),
     UPCOMING("Köv", d -> d.isAfter(Clock.now())),
-    PAST("Elmúlt", d -> d.isBefore(Clock.now()));
+    PAST("Elmúlt", d -> d.isBefore(Clock.now())),
+    ALL("Össz", m -> true);
     
     public final String label;
     

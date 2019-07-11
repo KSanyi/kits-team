@@ -56,13 +56,15 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     private final MembersStatementGrid membersStatementGrid = new MembersStatementGrid(this);
     
+    private boolean isAttached = false;
+    
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
         setViewContent(createView());
         setViewFooter(createButtonBar());
         init();
-        initAppBar();
+        isAttached = true;
     }
     
     private void initAppBar() {
@@ -82,10 +84,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
             appBar.addTab(caption, filter);
         }
         
-        appBar.addTabSelectionListener(e -> {
-            filter();
-            //detailsDrawer.hide();
-        });
+        appBar.addTabSelectionListener(e -> filter());
         appBar.centerTabs();
     }
     
@@ -154,6 +153,9 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
             event.forwardTo(LoginView.class);
         } else {
             log.info(Session.currentMember() + " navigated to MatchView");
+            if(isAttached) {
+                init();
+            }
         }
     }
     
@@ -170,11 +172,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         membersStatementGrid.setRows(MemberStatementRow.createForMatch(Main.teamService.members(), match), currentMember);
         filter();
         initButtons();
-        
-        try {
-            // TODO
-            initAppBar();
-        }catch(Exception e) {}
+        initAppBar();
     }
     
     private Match loadMatch() {
