@@ -18,6 +18,7 @@ import com.vaadin.flow.router.Route;
 
 import hu.kits.team.Main;
 import hu.kits.team.domain.Member;
+import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
 import hu.kits.team.infrastructure.web.ui.vaadin.CookieUtil;
 import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
@@ -30,7 +31,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     
     private final ComboBox<Member> memberCombo = new ComboBox<>("Felhasználó");
     private final PasswordField passwordField = new PasswordField("Jelszó");
-    private final Button loginButton = new Button("Log in", click -> login(memberCombo.getValue()));
+    private final Button loginButton = new Button("Log in", click -> login());
     
     public LoginView() {
         
@@ -52,11 +53,19 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         setMaxWidth("600px");
     }
     
-    private void login(Member member) {
-        Session.setMember(member);
-        getUI().ifPresent(ui -> ui.navigate(MatchView.class));
-        log.info(member + " logged in");
-        CookieUtil.createUserCookie(member.id);
+    private void login() {
+        
+        Member member = memberCombo.getValue();
+        String password = passwordField.getValue();
+        if(member.passwordHash.equals(password)) {
+            Session.setMember(member);
+            getUI().ifPresent(ui -> ui.navigate(MatchView.class));
+            log.info(member + " logged in");
+            CookieUtil.createUserCookie(member.id);
+        } else {
+            UIUtils.showErrorNotification("Hibás jelszó");
+            log.warn("Failed authentication for member {} with password {}", member, password);
+        }
     }
 
     @Override

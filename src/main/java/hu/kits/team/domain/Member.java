@@ -12,12 +12,15 @@ public class Member {
     
     public final String email;
     
+    public final String passwordHash;
+    
     public boolean isAdmin;
 
-    public Member(String id, String name, String email, boolean isAdmin) {
+    public Member(String id, String name, String email, String passwordHash, boolean isAdmin) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.passwordHash = passwordHash;
         this.isAdmin = isAdmin;
     }
     

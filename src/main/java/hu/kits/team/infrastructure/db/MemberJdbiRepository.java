@@ -17,6 +17,7 @@ public class MemberJdbiRepository implements MemberRepository {
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_NAME = "NAME";
     private static final String COLUMN_EMAIL = "EMAIL";
+    private static final String COLUMN_PASSWORD_HASH = "PASSWORD_HASH";
     private static final String COLUMN_IS_ADMIN = "IS_ADMIN";
     
     private final Jdbi jdbi;
@@ -37,6 +38,7 @@ public class MemberJdbiRepository implements MemberRepository {
                 rs.getString(COLUMN_ID),
                 rs.getString(COLUMN_NAME),
                 rs.getString(COLUMN_EMAIL),
+                rs.getString(COLUMN_PASSWORD_HASH),
                 rs.getBoolean(COLUMN_IS_ADMIN));
     }
     
