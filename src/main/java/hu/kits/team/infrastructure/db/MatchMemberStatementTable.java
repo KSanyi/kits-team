@@ -1,6 +1,5 @@
 package hu.kits.team.infrastructure.db;
 
-import java.lang.invoke.MethodHandles;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -10,8 +9,6 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.jdbi.v3.core.Jdbi;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.MemberStatement;
@@ -19,8 +16,6 @@ import hu.kits.team.domain.Members;
 
 class MatchMemberStatementTable {
 
-    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    
     private static final String TABLE_MEMBER_STATEMENT = "MEMBER_STATEMENT";
     private static final String COLUMN_MATCH_ID = "MATCH_ID";
     private static final String COLUMN_MEMBER_ID = "MEMBER_ID";
@@ -57,21 +52,17 @@ class MatchMemberStatementTable {
     private void delete(long matchId, String memberId) {
         jdbi.withHandle(handle -> handle.execute(String.format("DELETE FROM %s WHERE %s = ? AND %s = ?", TABLE_MEMBER_STATEMENT, COLUMN_MATCH_ID, COLUMN_MEMBER_ID),
                 matchId, memberId));
-        log.debug("MemberStatement deleted for {} for match {}", memberId, matchId);
     }
     
     void deleteForMatch(long matchId) {
         jdbi.withHandle(handle -> handle.execute(String.format("DELETE FROM %s WHERE %s = ?", TABLE_MEMBER_STATEMENT, COLUMN_MATCH_ID),
                 matchId));
-        log.debug("MemberStatements deleted for match {}", matchId);
     }
 
     void saveNew(MatchMemberStatement matchMemberStatement) {
         Map<String, Object> values = createValuesMap(matchMemberStatement);
         
         jdbi.withHandle(handle -> JdbiUtil.createInsert(handle, TABLE_MEMBER_STATEMENT, values).execute());
-        
-        log.debug("MatchMemberStatement saved: {}", matchMemberStatement);
     }
     
     private static Map<String, Object> createValuesMap(MatchMemberStatement matchMemberStatement) {

@@ -56,6 +56,7 @@ public class JdbiUtil {
         return handle.createUpdate(updateSql).bindMap(paramMap);
     }
     
+    @SuppressWarnings("null")
     private static boolean compare(Object a, Object b) {
         if(a == null && b == null) return true;
         if(a != null && b == null || a == null && b != null) return false;

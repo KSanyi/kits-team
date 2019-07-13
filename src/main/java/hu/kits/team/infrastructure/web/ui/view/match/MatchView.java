@@ -152,7 +152,6 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         if(currentMember == null) {
             event.forwardTo(LoginView.class);
         } else {
-            log.info(Session.currentMember() + " navigated to MatchView");
             if(isAttached) {
                 init();
             }
@@ -173,6 +172,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         filter();
         initButtons();
         initAppBar();
+        log.info(Session.currentMember() + " navigated to match view: {}", match.matchData);
     }
     
     private Match loadMatch() {

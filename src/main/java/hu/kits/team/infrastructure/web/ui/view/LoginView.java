@@ -59,10 +59,9 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         Member member = memberCombo.getValue();
         String password = passwordField.getValue();
         if(member.passwordHash.equals(password)) {
-            Session.setMember(member);
-            getUI().ifPresent(ui -> ui.navigate(MatchView.class));
             log.info(member + " logged in");
-            CookieUtil.createUserCookie(member.id);
+            loggedIn(member);
+            getUI().ifPresent(ui -> ui.navigate(MatchView.class));
         } else {
             UIUtils.showErrorNotification("Hibás jelszó");
             log.warn("Failed authentication for member {} with password {}", member, password);
@@ -79,6 +78,8 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
                 if(memberFromCookie.isPresent()) {
                     member = memberFromCookie.get();
                     log.info(member + " logged in from cookie");
+                    loggedIn(member);
+                    event.forwardTo(MatchView.class);
                 } else {
                     // unknown user id in cookie
                     log.info("Unknown user found in cookie: {}", userFromCookie.get());
@@ -88,12 +89,18 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
                 // no user in cookie
                 return;
             }
+        } else {
+            event.forwardTo(MatchView.class);
         }
+    }
+    
+    private static void loggedIn(Member member) {
         
         Session.setMember(member);
         VaadinSession.getCurrent().getSession().setMaxInactiveInterval(60 * 60 * 24);
         
-        event.forwardTo(MatchView.class);
+        CookieUtil.createUserCookie(member.id);
+        log.info(member + " using " + VaadinSession.getCurrent().getBrowser().getBrowserApplication());
     }
 
 }
