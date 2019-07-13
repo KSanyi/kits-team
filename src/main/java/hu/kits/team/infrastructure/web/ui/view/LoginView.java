@@ -15,6 +15,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 
 import hu.kits.team.Main;
 import hu.kits.team.domain.Member;
@@ -90,6 +91,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         }
         
         Session.setMember(member);
+        VaadinSession.getCurrent().getSession().setMaxInactiveInterval(60 * 60 * 24);
         
         event.forwardTo(MatchView.class);
     }
