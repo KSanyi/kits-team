@@ -27,8 +27,8 @@ public class TeamServiceTest {
     @BeforeEach
     private void init() throws Exception {
         DataSource dataSource = InMemoryDataSourceFactory.createDataSource(
-                "INSERT INTO MEMBER VALUES('sanyi', 'Kócsó Sándor', 'kocso.sandor.gabor@gmail.com')",
-                "INSERT INTO MEMBER VALUES('zolika', 'Wéber Zoltán', 'weberzoli@gmail.com')",
+                "INSERT INTO MEMBER VALUES('sanyi', 'Kócsó Sándor', 'kocso.sandor.gabor@gmail.com', 1, 'abcd')",
+                "INSERT INTO MEMBER VALUES('zolika', 'Wéber Zoltán', 'weberzoli@gmail.com', 1, 'abcd')",
                 "INSERT INTO CHAMPIONSHIP VALUES (null, 'Üzleti Liga ÁBL 2019', 6)");
         
         teamService = TeamServiceFactory.create(dataSource);
