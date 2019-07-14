@@ -32,7 +32,6 @@ import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.ViewFrame;
-import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
@@ -90,17 +89,14 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     private Component createStatusBadge() {
         String statusString = match.statusString();
-        FlexBoxLayout badge = UIUtils.createRoundBadge(statusString);
         
         if(statusString.startsWith("+")) {
-            badge.setBackgroundColor(LumoStyles.Color.Success._100);
+            return UIUtils.createRoundBadge(statusString, LumoStyles.Color.Success._100);
         } else if(statusString.startsWith("-")) {
-            badge.setBackgroundColor(LumoStyles.Color.Error._100);
+            return UIUtils.createRoundBadge(statusString, LumoStyles.Color.Error._100);
         } else {
-            badge.setBackgroundColor(LumoStyles.Color.Contrast._50);
+            return UIUtils.createRoundBadge(statusString, LumoStyles.Color.Contrast._50);
         }
-        
-        return badge;
     }
     
     private Component createView() {

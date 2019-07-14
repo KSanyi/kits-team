@@ -4,11 +4,9 @@ import static java.util.stream.Collectors.joining;
 
 import java.util.stream.Stream;
 
-public class Member {
+public class Member extends Player {
 
     public final String id;
-    
-    public final String name;
     
     public final String email;
     
@@ -17,8 +15,8 @@ public class Member {
     public boolean isAdmin;
 
     public Member(String id, String name, String email, String passwordHash, boolean isAdmin) {
+        super(name);
         this.id = id;
-        this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
         this.isAdmin = isAdmin;

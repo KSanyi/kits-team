@@ -7,6 +7,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import hu.kits.team.domain.ChampionshipRepository;
+import hu.kits.team.domain.Guest;
 import hu.kits.team.domain.Match;
 import hu.kits.team.domain.MatchData;
 import hu.kits.team.domain.MatchRepository;
@@ -19,10 +20,13 @@ public class MatchJdbiRepository implements MatchRepository {
     private final MatchDataTable matchDataTable;
     
     private final MatchMemberStatementTable memberStatementTable;
+    
+    private final GuestForMatchTable guestForMatchTable;
 
     public MatchJdbiRepository(DataSource dataSource, ChampionshipRepository championshipRepository, Members members) {
         matchDataTable = new MatchDataTable(dataSource, championshipRepository);
         memberStatementTable = new MatchMemberStatementTable(dataSource, members);
+        guestForMatchTable = new GuestForMatchTable(dataSource);
     }
 
     @Override
@@ -55,14 +59,26 @@ public class MatchJdbiRepository implements MatchRepository {
     public Matches loadAllMatches() {
         List<MatchData> matchDatas = matchDataTable.loadAll();
         List<MatchMemberStatement> memberStatements = memberStatementTable.loadAll();
+        List<GuestForMatch> guestForMatchEntries = guestForMatchTable.loadAll();
         
-        return new Matches(matchDatas.stream().map(matchData -> new Match(matchData, findStatementsForMatch(matchData.id, memberStatements))).collect(toList()));
+        return new Matches(matchDatas.stream().map(matchData -> new Match(
+                    matchData, 
+                    findStatementsForMatch(matchData.id, memberStatements),
+                    findGuestsForMatch(matchData.id, guestForMatchEntries)))
+                .collect(toList()));
     }
 
     private static List<MemberStatement> findStatementsForMatch(long matchId, List<MatchMemberStatement> memberStatements) {
         return memberStatements.stream()
                 .filter(m -> m.matchId == matchId)
                 .map(m -> m.memberStatement)
+                .collect(toList());
+    }
+    
+    private static List<Guest> findGuestsForMatch(long matchId, List<GuestForMatch> guestForMatchEntries) {
+        return guestForMatchEntries.stream()
+                .filter(m -> m.matchId == matchId)
+                .map(m -> m.guest)
                 .collect(toList());
     }
     

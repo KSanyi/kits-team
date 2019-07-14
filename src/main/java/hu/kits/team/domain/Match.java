@@ -9,15 +9,20 @@ import java.util.Optional;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import hu.kits.team.common.CollectionsUtil;
+
 public class Match {
 
     public final MatchData matchData;
     
     private final List<MemberStatement> memberStatements;
     
-    public Match(MatchData matchData, List<MemberStatement> memberStatements) {
+    private final List<Guest> guests;
+    
+    public Match(MatchData matchData, List<MemberStatement> memberStatements, List<Guest> guests) {
         this.matchData = matchData;
         this.memberStatements = memberStatements;
+        this.guests = guests;
     }
     
     public List<MemberStatement> memberStatements() {
@@ -32,8 +37,8 @@ public class Match {
                 .findFirst();
     }
     
-    public List<Member> coming() {
-        return membersWithMark(Mark.COMING);
+    public List<Player> coming() {
+        return CollectionsUtil.concat(membersWithMark(Mark.COMING), guests);
     }
     
     public List<Member> notComing() {
@@ -55,10 +60,10 @@ public class Match {
         return members.entries().stream().filter(m -> !withStatement().contains(m)).collect(toList());
     }
     
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    public List<Guest> guests() {
+        return List.copyOf(guests);
     }
-
+    
     public int status() {
         int coming = coming().size();
         return coming - matchData.championship.numberOfPlayers;
@@ -69,4 +74,8 @@ public class Match {
         return (status > 0 ? "+" : "") + status;
     }
     
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
 }

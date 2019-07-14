@@ -273,6 +273,10 @@ public class UIUtils {
     /* === MISC === */
 
     public static FlexBoxLayout createRoundBadge(String text) {
+        return createRoundBadge(text, null);
+    }
+    
+    public static FlexBoxLayout createRoundBadge(String text, String color) {
         FlexBoxLayout layout = new FlexBoxLayout(new Text(text));
         setFontSize(FontSize.S, layout);
         layout.addClassName("initials");
@@ -283,6 +287,8 @@ public class UIUtils {
 
         layout.setHeight(LumoStyles.Size.M);
         layout.setWidth(LumoStyles.Size.M);
+        
+        layout.setBackgroundColor(color);
         return layout;
     }
 
