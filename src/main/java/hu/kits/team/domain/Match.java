@@ -71,7 +71,7 @@ public class Match {
     
     public String statusString() {
         int status = status();
-        return (status > 0 ? "+" : "") + status;
+        return (status > 0 ? "+" : "") + status + "/" + withStatement().size();
     }
     
     public String toString() {
