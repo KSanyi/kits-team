@@ -13,6 +13,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
+import hu.kits.team.domain.Guest;
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Member;
 import hu.kits.team.domain.Player;
@@ -62,10 +63,14 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
     private Icon createComingIcon(MemberStatementRow row) {
         Icon icon = createIcon(row);
         
-        if(Session.currentMember().isAdmin && row.player instanceof Member) {
+        if(Session.currentMember().isAdmin) {
             ContextMenu contextMenu = new ContextMenu(icon);
-            contextMenu.addItem(Mark.COMING.label, c -> matchView.coming((Member)row.player));
-            contextMenu.addItem(Mark.NOT_COMING.label, c -> matchView.notComing((Member)row.player));
+            if(row.player instanceof Member) {
+                contextMenu.addItem(Mark.COMING.label, c -> matchView.coming((Member)row.player));
+                contextMenu.addItem(Mark.NOT_COMING.label, c -> matchView.notComing((Member)row.player));
+            } else if(row.player instanceof Guest) {
+                contextMenu.addItem(Mark.NOT_COMING.label, c -> matchView.notComing((Guest)row.player));
+            }
         }
         
         return icon;

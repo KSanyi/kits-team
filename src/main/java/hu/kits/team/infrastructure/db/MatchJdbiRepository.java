@@ -82,4 +82,13 @@ public class MatchJdbiRepository implements MatchRepository {
                 .collect(toList());
     }
     
+    public void addGuestForMatch(long matchId, Guest guest) {
+        guestForMatchTable.saveNew(new GuestForMatch(matchId, guest));
+    }
+
+    @Override
+    public void removeGuestForMatch(long id, Guest guest) {
+        guestForMatchTable.delete(id, guest.name);
+    }
+    
 }

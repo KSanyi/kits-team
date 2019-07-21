@@ -61,5 +61,16 @@ public class TeamService {
         matchRepository.updateStatementForMatch(matchData, updatedMemberStatement);
         log.info("Match statement updated: {} {}", matchData, updatedMemberStatement);
     }
+    
+    public void addGuestForMatch(MatchData matchData, Guest guest) {
+        matchRepository.addGuestForMatch(matchData.id, guest);
+        log.info("Guest added for match {}: {}", matchData, guest);
+    }
+
+    public void removeGuestForMatch(MatchData matchData, Guest guest) {
+        matchRepository.removeGuestForMatch(matchData.id, guest);
+        log.info("Guest removed for match {}: {}", matchData, guest);
+        
+    }
 
 }

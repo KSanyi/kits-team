@@ -6,6 +6,10 @@ public interface MatchRepository {
     
     void updateStatementForMatch(MatchData matchData, MemberStatement updatedMemberStatement);
     
+    void addGuestForMatch(long matchId, Guest guest);
+    
+    void removeGuestForMatch(long id, Guest guest);
+    
     MatchData saveMatchData(MatchData matchData);
     
     void deleteMatchData(long id);
@@ -13,5 +17,5 @@ public interface MatchRepository {
     void updateMatchData(MatchData matchData);
     
     Matches loadAllMatches();
-    
+
 }

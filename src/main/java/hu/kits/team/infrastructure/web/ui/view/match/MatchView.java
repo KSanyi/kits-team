@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -25,6 +27,7 @@ import com.vaadin.flow.router.Route;
 import hu.kits.team.Main;
 import hu.kits.team.common.Clock;
 import hu.kits.team.common.Formatters;
+import hu.kits.team.domain.Guest;
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Match;
 import hu.kits.team.domain.Matches;
@@ -70,7 +73,12 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         AppBar appBar = MainLayout.get().getAppBar();
         appBar.setTitle(Formatters.formatDateTime(match.matchData.time) + " vs " + match.matchData.opponent);
 
-        appBar.setPreTabComponent(createStatusBadge());
+        Component statusBadge = createStatusBadge();
+        
+        ContextMenu contextMenu = new ContextMenu(statusBadge);
+        contextMenu.addItem("Vendég hozzádása", click -> openGuestWindow());
+        
+        appBar.setPreTabComponent(statusBadge);
         
         List<Optional<Mark>> statements = new ArrayList<>();
         match.noStatements(Main.teamService.members()).stream().forEach(s -> statements.add(Optional.empty()));
@@ -85,6 +93,17 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         
         appBar.addTabSelectionListener(e -> filter());
         appBar.centerTabs();
+    }
+    
+    private void openGuestWindow() {
+        
+        Consumer<String> callback = guestName -> {
+            Main.teamService.addGuestForMatch(match.matchData, new Guest(guestName));
+            UIUtils.showNotification(guestName + " hozzáadva");
+            init();
+        };
+        
+        new GuestWindow(callback).open();
     }
     
     private Component createStatusBadge() {
@@ -186,6 +205,12 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     void notComing(Member member) {
         saveStatement(member, Mark.NOT_COMING);
+    }
+    
+    void notComing(Guest guest) {
+        Main.teamService.removeGuestForMatch(match.matchData, guest);
+        UIUtils.showNotification(guest.name + " eltávolítva");
+        init();
     }
     
     private void saveStatement(Member member, Mark mark) {
