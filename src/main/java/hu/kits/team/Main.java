@@ -15,11 +15,17 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import hu.kits.team.domain.TeamService;
+import hu.kits.team.domain.email.EmailSender;
+import hu.kits.team.infrastructure.email.SendGridEmailSender;
+import hu.kits.team.infrastructure.scheduler.MorningJob;
+import hu.kits.team.infrastructure.scheduler.Scheduler;
 import hu.kits.team.infrastructure.web.HttpServer;
 
 public class Main {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    
+    public static final String URL = "https://luzer.herokuapp.com";
     
     static {
         LogManager.getLogManager().reset();
@@ -33,7 +39,8 @@ public class Main {
         try {
             URI dbUri = getDatabaseUri();
             DataSource dataSource = createDataSource(dbUri);
-            teamService = TeamServiceFactory.create(dataSource);
+            EmailSender emailSender = createEmaiSender();
+            teamService = TeamServiceFactory.create(dataSource, emailSender);
         } catch(Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -42,6 +49,9 @@ public class Main {
     public static void main(String[] args) throws Exception {
         int port = getPort();
 
+        Scheduler scheduler = new Scheduler();
+        scheduler.addJob(new MorningJob(teamService));
+        
         HttpServer server = new HttpServer(port);
         server.start();
         server.join();
@@ -81,6 +91,13 @@ public class Main {
         dataSource.setUser(username);
         dataSource.setPassword(password);
         return dataSource;
+    }
+    
+    private static EmailSender createEmaiSender() throws URISyntaxException {
+        String sendGridUserName = System.getenv("SENDGRID_USERNAME");
+        String sendGridPassword = System.getenv("SENDGRID_PASSWORD");
+        
+        return new SendGridEmailSender(sendGridUserName, sendGridPassword);
     }
     
 }

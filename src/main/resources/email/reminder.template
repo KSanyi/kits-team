@@ -1,0 +1,9 @@
+Hi ${nickName}!<br/>
+<br/>
+Még nem jelentkeztél a <b>${matchDay}i ${opponent}</b> elleni meccsre!<br/>
+Időpont: <b>${time}</b><br/>
+Helyszín: <b>${venue}</b><br/><br/>
+Jelentkezz <a href="${url}">itt</a>!<br/>
+<br/>
+Köszi,<br/>
+Lúzer FC

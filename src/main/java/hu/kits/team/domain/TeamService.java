@@ -4,10 +4,15 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import java.lang.invoke.MethodHandles;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import hu.kits.team.common.Clock;
+import hu.kits.team.domain.email.EmailCreator;
+import hu.kits.team.domain.email.EmailSender;
 
 public class TeamService {
 
@@ -17,11 +22,13 @@ public class TeamService {
     
     private final ChampionshipRepository championshipRepository;
     private final MatchRepository matchRepository;
+    private final EmailSender emailSender;
    
-    public TeamService(Members members, ChampionshipRepository championshipRepository, MatchRepository matchRepository) {
+    public TeamService(Members members, ChampionshipRepository championshipRepository, MatchRepository matchRepository, EmailSender emailSender) {
         this.members = members;
         this.championshipRepository = championshipRepository;
         this.matchRepository = matchRepository;
+        this.emailSender = emailSender;
     }
     
     public Members members() {
@@ -54,11 +61,17 @@ public class TeamService {
 
     public void saveStatementForMatch(MatchData matchData, MemberStatement memberStatement) {
         matchRepository.saveStatementForMatch(matchData, memberStatement);
+        if(memberStatement.mark == Mark.COMING) {
+            emailSender.sendEmail(EmailCreator.createCalendarEntryEmail(memberStatement.member, matchData));
+        }
         log.info("Match statement saved: {} {}", matchData, memberStatement);
     }
 
     public void updateStatementForMatch(MatchData matchData, MemberStatement updatedMemberStatement) {
         matchRepository.updateStatementForMatch(matchData, updatedMemberStatement);
+        if(updatedMemberStatement.mark == Mark.COMING) {
+            emailSender.sendEmail(EmailCreator.createCalendarEntryEmail(updatedMemberStatement.member, matchData));
+        }
         log.info("Match statement updated: {} {}", matchData, updatedMemberStatement);
     }
     
@@ -70,7 +83,23 @@ public class TeamService {
     public void removeGuestForMatch(MatchData matchData, Guest guest) {
         matchRepository.removeGuestForMatch(matchData.id, guest);
         log.info("Guest removed for match {}: {}", matchData, guest);
+    }
+    
+    public int sendReminders() {
         
+        Matches matches = loadAllMatches();
+        LocalDate cutoffDate = Clock.today().minusDays(3);
+        List<Match> upcomingMatches = matches.findAfter(cutoffDate);
+        
+        int count = 0;
+        for(Match match : upcomingMatches) {
+            for(Member member : match.noStatements(members)) {
+                emailSender.sendEmail(EmailCreator.createReminderEmail(member, match.matchData));
+                count++;
+            }
+        }
+        
+        return count;
     }
 
 }

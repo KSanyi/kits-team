@@ -22,6 +22,8 @@ import hu.kits.team.domain.TeamService;
 
 public class TeamServiceTest {
 
+    private final SpyEmailSender spyEmailSender = new SpyEmailSender();
+    
     private TeamService teamService;
     
     @BeforeEach
@@ -31,7 +33,7 @@ public class TeamServiceTest {
                 "INSERT INTO MEMBER VALUES('zolika', 'Wéber Zoltán', 'weberzoli@gmail.com', 1, 'abcd')",
                 "INSERT INTO CHAMPIONSHIP VALUES (null, 'Üzleti Liga ÁBL 2019', 6)");
         
-        teamService = TeamServiceFactory.create(dataSource);
+        teamService = TeamServiceFactory.create(dataSource, spyEmailSender);
     }
     
     @Test
