@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import hu.kits.team.domain.Championship;
 import hu.kits.team.domain.ChampionshipRepository;
 import hu.kits.team.domain.MatchData;
+import hu.kits.team.domain.Venue;
+import hu.kits.team.domain.VenueRepository;
 
 class MatchDataTable {
 
@@ -25,47 +27,54 @@ class MatchDataTable {
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_CHAMP_ID = "CHAMP_ID";
     private static final String COLUMN_TIME = "TIME";
-    private static final String COLUMN_VENUE = "VENUE";
+    private static final String COLUMN_VENUE_ID = "VENUE_ID";
     private static final String COLUMN_OPPONENT = "OPPONENT";
     
     private final Jdbi jdbi;
     
     private final ChampionshipRepository championshipRepository;
+    
+    private final VenueRepository venueRepository;
 
-    MatchDataTable(DataSource dataSource, ChampionshipRepository championshipRepository) {
+    MatchDataTable(DataSource dataSource, ChampionshipRepository championshipRepository, VenueRepository venueRepository) {
         jdbi = Jdbi.create(dataSource);
         this.championshipRepository = championshipRepository;
+        this.venueRepository = venueRepository;
     }
 
     List<MatchData> loadAll() {
         String sql = String.format("SELECT * FROM %s", TABLE_MATCH_DATA);
         
         List<Championship> championships = championshipRepository.loadAll();
+        List<Venue> venues = venueRepository.loadAll();
         
         return jdbi.withHandle(handle -> 
-            handle.createQuery(sql).map((rs, ctx) -> mapToMatchData(rs, championships)).list());
+            handle.createQuery(sql).map((rs, ctx) -> mapToMatchData(rs, championships, venues)).list());
     }
     
     MatchData find(long id) {
         String sql = String.format("SELECT * FROM %s WHERE %s = :id", TABLE_MATCH_DATA, COLUMN_ID);
         
         List<Championship> championships = championshipRepository.loadAll();
+        List<Venue> venues = venueRepository.loadAll();
         
         return jdbi.withHandle(handle -> 
-            handle.createQuery(sql).bind("id", id).map((rs, ctx) -> mapToMatchData(rs, championships)).findOnly());
+            handle.createQuery(sql).bind("id", id).map((rs, ctx) -> mapToMatchData(rs, championships, venues)).findOnly());
     }
     
-    private static MatchData mapToMatchData(ResultSet rs, List<Championship> championships) throws SQLException {
+    private static MatchData mapToMatchData(ResultSet rs, List<Championship> championships, List<Venue> venues) throws SQLException {
         
         long champId = rs.getLong(COLUMN_CHAMP_ID);
+        String venueId = rs.getString(COLUMN_VENUE_ID);
         
         Championship championship = championships.stream().filter(c -> c.id == champId).findAny().get();
+        Venue venue = venues.stream().filter(v -> v.id.equals(venueId)).findAny().get();
         
         return new MatchData(
                 rs.getLong(COLUMN_ID),
                 championship,
                 rs.getTimestamp(COLUMN_TIME).toLocalDateTime(),
-                rs.getString(COLUMN_VENUE),
+                venue,
                 rs.getString(COLUMN_OPPONENT));
     }
 
@@ -88,7 +97,7 @@ class MatchDataTable {
         Map<String, Object> valuesMap = new HashMap<>();
         valuesMap.put(COLUMN_CHAMP_ID, matchData.championship.id);
         valuesMap.put(COLUMN_TIME, matchData.time);
-        valuesMap.put(COLUMN_VENUE, matchData.venue);
+        valuesMap.put(COLUMN_VENUE_ID, matchData.venue.id);
         valuesMap.put(COLUMN_OPPONENT, matchData.opponent);
         
         return valuesMap;

@@ -19,6 +19,7 @@ import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
 import hu.kits.team.domain.Members;
 import hu.kits.team.domain.TeamService;
+import hu.kits.team.domain.Venue;
 
 public class TeamServiceTest {
 
@@ -31,7 +32,8 @@ public class TeamServiceTest {
         DataSource dataSource = InMemoryDataSourceFactory.createDataSource(
                 "INSERT INTO MEMBER VALUES('sanyi', 'Kócsó Sándor', 'kocso.sandor.gabor@gmail.com', 1, 'abcd')",
                 "INSERT INTO MEMBER VALUES('zolika', 'Wéber Zoltán', 'weberzoli@gmail.com', 1, 'abcd')",
-                "INSERT INTO CHAMPIONSHIP VALUES (null, 'Üzleti Liga ÁBL 2019', 6)");
+                "INSERT INTO CHAMPIONSHIP VALUES (null, 'Üzleti Liga ÁBL 2019', 6)",
+                "INSERT INTO VENUE VALUES ('sportmax2', 'SportMax2', 'Budapest, Mom Park 1', null)");
         
         teamService = TeamServiceFactory.create(dataSource, spyEmailSender);
     }
@@ -72,8 +74,9 @@ public class TeamServiceTest {
     public void matchData() {
         
         Championship championship = teamService.loadChampionships().get(0);
+        Venue venue = teamService.loadVenues().get(0);
         
-        MatchData matchData = new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), "BEAC", "Jubi Titáns");
+        MatchData matchData = new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns");
         
         teamService.saveNewMatchData(matchData);
         
@@ -81,12 +84,12 @@ public class TeamServiceTest {
         
         assertEquals("Üzleti Liga ÁBL 2019", matchData.championship.name);
         assertEquals("Jubi Titáns", matchData.opponent);
-        assertEquals("BEAC", matchData.venue);
+        assertEquals("SportMax2", matchData.venue.name);
         assertEquals(LocalDateTime.of(2019,8,8, 20,0), matchData.time);
         
         // UPDATE
         
-        MatchData updatedMatchData = new MatchData(matchData.id, championship, LocalDateTime.of(2019,8,8, 21,0), "Sportmax2", "LogMeIn");
+        MatchData updatedMatchData = new MatchData(matchData.id, championship, LocalDateTime.of(2019,8,8, 21,0), venue, "LogMeIn");
         
         teamService.updateMatchData(updatedMatchData);
         
@@ -98,7 +101,7 @@ public class TeamServiceTest {
         
         assertEquals("Üzleti Liga ÁBL 2019", matchData.championship.name);
         assertEquals("LogMeIn", matchData.opponent);
-        assertEquals("Sportmax2", matchData.venue);
+        assertEquals("SportMax2", matchData.venue.name);
         assertEquals(LocalDateTime.of(2019,8,8, 21,0), matchData.time);
     }
     
@@ -109,8 +112,9 @@ public class TeamServiceTest {
         Member zoli = teamService.members().entries().get(1);
         
         Championship championship = teamService.loadChampionships().get(0);
+        Venue venue = teamService.loadVenues().get(0);
         
-        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), "BEAC", "Jubi Titáns"));
+        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns"));
         
         teamService.saveStatementForMatch(matchData, new MemberStatement(sanyi, Mark.COMING, LocalDateTime.of(2019,8,5, 8,0), ""));
         teamService.saveStatementForMatch(matchData, new MemberStatement(zoli, Mark.NOT_COMING, LocalDateTime.of(2019,8,5, 9,0), ""));
@@ -134,8 +138,9 @@ public class TeamServiceTest {
         Member sanyi = teamService.members().entries().get(0);
         
         Championship championship = teamService.loadChampionships().get(0);
+        Venue venue = teamService.loadVenues().get(0);
         
-        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), "BEAC", "Jubi Titáns"));
+        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns"));
         
         teamService.saveStatementForMatch(matchData, new MemberStatement(sanyi, Mark.COMING, LocalDateTime.of(2019,8,5, 8,0), ""));
         

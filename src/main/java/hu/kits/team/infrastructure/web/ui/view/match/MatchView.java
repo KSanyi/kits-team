@@ -71,7 +71,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     private void initAppBar() {
         AppBar appBar = MainLayout.get().getAppBar();
-        appBar.setTitle(Formatters.formatDateTime(match.matchData.time) + " vs " + match.matchData.opponent);
+        appBar.setTitle(Formatters.formatDateTime(match.matchData.time) + " vs " + match.matchData.opponent + " - " + match.matchData.venue.name);
 
         Component statusBadge = createStatusBadge();
         

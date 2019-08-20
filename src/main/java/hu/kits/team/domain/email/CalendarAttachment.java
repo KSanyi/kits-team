@@ -60,7 +60,7 @@ public class CalendarAttachment {
     }
     
     private String location() {
-        return matchData.venue;
+        return matchData.venue.address;
     }
     
 }

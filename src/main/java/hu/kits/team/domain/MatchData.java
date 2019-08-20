@@ -12,11 +12,11 @@ public class MatchData {
     
     public final LocalDateTime time;
     
-    public final String venue;
+    public final Venue venue;
     
     public final String opponent;
 
-    public MatchData(long id, Championship championship, LocalDateTime time, String venue, String opponent) {
+    public MatchData(long id, Championship championship, LocalDateTime time, Venue venue, String opponent) {
         this.id = id;
         this.championship = championship;
         this.time = time;

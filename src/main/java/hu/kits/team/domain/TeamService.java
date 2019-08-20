@@ -21,12 +21,14 @@ public class TeamService {
     private final Members members;
     
     private final ChampionshipRepository championshipRepository;
+    private final VenueRepository venueRepository;
     private final MatchRepository matchRepository;
     private final EmailSender emailSender;
    
-    public TeamService(Members members, ChampionshipRepository championshipRepository, MatchRepository matchRepository, EmailSender emailSender) {
+    public TeamService(Members members, ChampionshipRepository championshipRepository, VenueRepository venueRepository, MatchRepository matchRepository, EmailSender emailSender) {
         this.members = members;
         this.championshipRepository = championshipRepository;
+        this.venueRepository = venueRepository;
         this.matchRepository = matchRepository;
         this.emailSender = emailSender;
     }
@@ -45,6 +47,10 @@ public class TeamService {
     
     public void updateChampionship(Championship championship) {
         championshipRepository.update(championship);
+    }
+    
+    public List<Venue> loadVenues() {
+        return venueRepository.loadAll().stream().sorted(comparing(v -> v.name)).collect(toList());
     }
 
     public MatchData saveNewMatchData(MatchData matchData) {

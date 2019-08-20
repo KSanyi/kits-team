@@ -14,6 +14,7 @@ import hu.kits.team.domain.MatchRepository;
 import hu.kits.team.domain.Matches;
 import hu.kits.team.domain.MemberStatement;
 import hu.kits.team.domain.Members;
+import hu.kits.team.domain.VenueRepository;
 
 public class MatchJdbiRepository implements MatchRepository {
 
@@ -23,8 +24,8 @@ public class MatchJdbiRepository implements MatchRepository {
     
     private final GuestForMatchTable guestForMatchTable;
 
-    public MatchJdbiRepository(DataSource dataSource, ChampionshipRepository championshipRepository, Members members) {
-        matchDataTable = new MatchDataTable(dataSource, championshipRepository);
+    public MatchJdbiRepository(DataSource dataSource, ChampionshipRepository championshipRepository, VenueRepository venueRepository, Members members) {
+        matchDataTable = new MatchDataTable(dataSource, championshipRepository, venueRepository);
         memberStatementTable = new MatchMemberStatementTable(dataSource, members);
         guestForMatchTable = new GuestForMatchTable(dataSource);
     }
