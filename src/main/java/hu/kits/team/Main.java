@@ -53,8 +53,13 @@ public class Main {
         scheduler.addJob(new MorningJob(teamService));
         
         HttpServer server = new HttpServer(port);
-        server.start();
-        server.join();
+        try {
+            server.start();
+            server.join();
+        } catch(IllegalStateException ex) {
+            logger.info(ex.getMessage());
+        }
+        
     }
     
     private static int getPort() {
