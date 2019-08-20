@@ -43,7 +43,7 @@ public class SendGridEmailSender implements EmailSender {
     }
 
     @Override
-    public void sendEmail(Email email) {
+    public boolean sendEmail(Email email) {
         
         Properties props = new Properties();
         props.put("mail.transport.protocol", "smtp");
@@ -70,9 +70,10 @@ public class SendGridEmailSender implements EmailSender {
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
             log.info("Email sent: {}", email);
+            return true;
         } catch(Exception ex) {
             log.error("Error during email sending", ex);
-            throw new RuntimeException(ex);
+            return false;
         }
     }
     

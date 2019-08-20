@@ -8,7 +8,7 @@ public class EmailCreator {
 
     public static Email createCalendarEntryEmail(Member member, MatchData matchData) {
         
-        String subject = "Meccs: " + Formatters.formatTimeWithWeekday(matchData.time) + " vs " + matchData.opponent;
+        String subject = "Meccs: " + Formatters.formatDateTime(matchData.time) + " vs " + matchData.opponent;
         return new Email("info@luzerfc.hu", member.email, subject, "Mentsd el a naptárodba!", new CalendarAttachment(matchData));
     }
     

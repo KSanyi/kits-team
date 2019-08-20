@@ -8,8 +8,9 @@ public class SpyEmailSender implements EmailSender {
     private Email lastEmailSent;
     
     @Override
-    public void sendEmail(Email email) {
+    public boolean sendEmail(Email email) {
         lastEmailSent = email;
+        return true;
     }
 
     public Email getLastEmailSent() {
