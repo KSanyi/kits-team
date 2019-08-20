@@ -77,6 +77,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         
         ContextMenu contextMenu = new ContextMenu(statusBadge);
         contextMenu.addItem("Vendég hozzádása", click -> openGuestWindow());
+        contextMenu.addItem("Emlékeztető küldése", click -> sendReminders());
         
         appBar.setPreTabComponent(statusBadge);
         
@@ -104,6 +105,11 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         };
         
         new GuestWindow(callback).open();
+    }
+    
+    private void sendReminders() {
+        int remindersSent = Main.teamService.sendReminders(match);
+        UIUtils.showNotification(remindersSent + " emlékeztető email küldve");
     }
     
     private Component createStatusBadge() {

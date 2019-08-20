@@ -99,12 +99,18 @@ public class TeamService {
         
         int count = 0;
         for(Match match : upcomingMatches) {
-            for(Member member : match.noStatements(members)) {
-                boolean success = emailSender.sendEmail(EmailCreator.createReminderEmail(member, match.matchData));
-                if(success) count++;
-            }
+            count += sendReminders(match);
         }
         
+        return count;
+    }
+    
+    public int sendReminders(Match match) {
+        int count = 0;
+        for(Member member : match.noStatements(members)) {
+            boolean success = emailSender.sendEmail(EmailCreator.createReminderEmail(member, match.matchData));
+            if(success) count++;
+        }
         return count;
     }
 
