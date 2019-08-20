@@ -6,6 +6,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import javax.servlet.ServletException;
+import javax.websocket.server.ServerContainer;
+
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -15,6 +18,7 @@ import org.eclipse.jetty.webapp.MetaInfConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
+import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +50,13 @@ public class HttpServer extends Server {
           new MetaInfConfiguration()
         });
         context.getServletContext().setExtendedListenerTypes(true);
+        
+        try {
+            // to supress this: java.lang.IllegalStateException: Unable to configure jsr356 at that stage. ServerContainer is null 
+            context.getServletContext().setAttribute(ServerContainer.class.getName(), WebSocketServerContainerInitializer.configureContext(context));
+        } catch(ServletException ex) {
+            logger.error(ex.getMessage());
+        }
         context.addEventListener(new ServletContextListeners());
         
         return context;
