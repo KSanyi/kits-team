@@ -17,4 +17,7 @@ public class Venue {
         this.gps = gps;
     }
     
+    public String toString() {
+        return name + " " + address;
+    }
 }
