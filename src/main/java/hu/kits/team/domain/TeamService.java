@@ -4,13 +4,13 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import java.lang.invoke.MethodHandles;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.kits.team.common.Clock;
+import hu.kits.team.common.DateInterval;
 import hu.kits.team.domain.email.EmailCreator;
 import hu.kits.team.domain.email.EmailSender;
 
@@ -94,8 +94,8 @@ public class TeamService {
     public int sendReminders() {
         
         Matches matches = loadAllMatches();
-        LocalDate cutoffDate = Clock.today().minusDays(3);
-        List<Match> upcomingMatches = matches.findAfter(cutoffDate);
+        DateInterval dateInterval = new DateInterval(Clock.today(), Clock.today().plusDays(3));
+        List<Match> upcomingMatches = matches.in(dateInterval);
         
         int count = 0;
         for(Match match : upcomingMatches) {

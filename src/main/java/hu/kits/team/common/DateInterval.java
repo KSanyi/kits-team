@@ -2,6 +2,7 @@ package hu.kits.team.common;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +45,10 @@ public class DateInterval implements Comparable<DateInterval> {
 	public boolean contains(LocalDate value) {
 		return !value.isBefore(from) && !value.isAfter(to);
 	}
+	
+	public boolean contains(LocalDateTime time) {
+        return contains(time.toLocalDate());
+    }
 	
 	public boolean contains(DateInterval other) {
         return !this.from.isAfter(other.from) && !this.to.isBefore(other.to);

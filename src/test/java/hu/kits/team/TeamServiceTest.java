@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import hu.kits.team.common.Clock;
 import hu.kits.team.domain.Championship;
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Match;
@@ -153,6 +154,31 @@ public class TeamServiceTest {
         match = teamService.loadAllMatches().entries().get(0);
         
         assertEquals(Mark.NOT_COMING, match.statementFor(sanyi).get().mark);
+    }
+    
+    @Test
+    public void sendReminders() {
+        
+        Championship championship = teamService.loadChampionships().get(0);
+        Venue venue = teamService.loadVenues().get(0);
+        
+        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns"));
+        
+        Clock.setStaticDate(LocalDateTime.of(2019,8,4, 8,0));
+        
+        int remindersSent = teamService.sendReminders();
+        assertEquals(0, remindersSent);
+        
+        Clock.setStaticDate(LocalDateTime.of(2019,8,7, 8,0));
+        
+        remindersSent = teamService.sendReminders();
+        assertEquals(2, remindersSent);
+        
+        Member sanyi = teamService.members().entries().get(0);
+        teamService.saveStatementForMatch(matchData, new MemberStatement(sanyi, Mark.COMING, LocalDateTime.of(2019,8,5, 8,0), ""));
+        
+        remindersSent = teamService.sendReminders();
+        assertEquals(1, remindersSent);
     }
     
 }

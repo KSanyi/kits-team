@@ -3,10 +3,11 @@ package hu.kits.team.domain;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import hu.kits.team.common.DateInterval;
 
 public class Matches {
 
@@ -40,9 +41,9 @@ public class Matches {
             .sorted(comparing((Match e) -> e.matchData.time).reversed()).findFirst().orElseThrow();
     }
 
-    public List<Match> findAfter(LocalDate cutoffDate) {
+    public List<Match> in(DateInterval dateInterval) {
         return entries.stream()
-                .filter(e -> e.matchData.time.isAfter(cutoffDate.atStartOfDay()))
+                .filter(e -> dateInterval.contains(e.matchData.time))
                 .collect(toList());
     }
 }
