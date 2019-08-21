@@ -7,7 +7,7 @@ import hu.kits.team.domain.TeamService;
 public class MorningJob extends DailyJob {
 
     public MorningJob(TeamService teamService) {
-        super("Morning job", List.of(DailyTime.T_07_00), new MatchReminder(teamService));
+        super("Morning job", List.of(DailyTime.T_05_00), new MatchReminder(teamService));
     }
     
     private static class MatchReminder implements Task {
