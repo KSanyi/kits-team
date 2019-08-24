@@ -37,6 +37,7 @@ public class ListItem extends FlexLayout implements HasStyle {
         content = new FlexBoxLayout(this.primary, this.secondary);
         content.addClassName(CLASS_NAME + "__content");
         content.setFlexDirection(FlexDirection.COLUMN);
+        setHorizontalPadding(false);
         add(content);
     }
 

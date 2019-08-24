@@ -38,7 +38,7 @@ public class NaviDrawer extends Composite<Div> implements AfterNavigationObserve
     }
 
     @ClientCallable
-    public void onSwipeAway(JsonObject data) {
+    public void onSwipeAway(@SuppressWarnings("unused") JsonObject data) {
         close();
     }
 

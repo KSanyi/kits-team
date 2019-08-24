@@ -68,13 +68,13 @@ public class FlexBoxLayout extends FlexLayout {
         getStyle().remove(DISPLAY);
     }
 
-    public void setFlex(String value, Component... components) {
+    public static void setFlex(String value, Component... components) {
         for (Component component : components) {
             component.getElement().getStyle().set("flex", value);
         }
     }
 
-    public void setFlexBasis(String value, Component... components) {
+    public static void setFlexBasis(String value, Component... components) {
         for (Component component : components) {
             component.getElement().getStyle().set("flex-basis", value);
         }
@@ -88,7 +88,7 @@ public class FlexBoxLayout extends FlexLayout {
         getStyle().remove(FLEX_DIRECTION);
     }
 
-    public void setFlexShrink(String value, Component... components) {
+    public static void setFlexShrink(String value, Component... components) {
         for (Component component : components) {
             component.getElement().getStyle().set("flex-shrink", value);
         }

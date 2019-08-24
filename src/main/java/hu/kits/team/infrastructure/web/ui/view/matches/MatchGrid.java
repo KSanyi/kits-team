@@ -26,38 +26,30 @@ public class MatchGrid extends Grid<Match> {
     public MatchGrid() {
 
         addColumn(new ComponentRenderer<>(this::createTime))
-            .setWidth(UIUtils.COLUMN_WIDTH_S);
+            .setWidth(UIUtils.COLUMN_WIDTH_SM)
+            .setFlexGrow(2);
         
         addColumn(new ComponentRenderer<>(this::createRow))
-            .setWidth(UIUtils.COLUMN_WIDTH_XL);
+            .setWidth(UIUtils.COLUMN_WIDTH_XL)
+            .setFlexGrow(3);
         
         addSelectionListener(this::matchSelected);
-        
     }
     
     private Component createRow(Match match) {
         MatchData matchData = match.matchData;
-        
-        ListItem item = new ListItem(matchData.opponent, matchData.championship.name, UIUtils.createRoundBadge(match.statusString()));
-        return item;
+        return new ListItem(matchData.opponent, matchData.championship.name, UIUtils.createRoundBadge(match.statusString()));
     }
     
     private Component createTime(Match match) {
-        
         MatchData matchData = match.matchData;
-        
         LocalDate matchDate = matchData.time.toLocalDate();
         LocalTime matchTime = matchData.time.toLocalTime();
         
-        ListItem item = new ListItem(Formatters.formatDate(matchDate), matchTime.toString());
-        item.setHorizontalPadding(false);
-        
-        return item;
+        return new ListItem(Formatters.formatDate(matchDate), matchTime.toString());
     }
 
-
     private void matchSelected(SelectionEvent<Grid<Match>, Match> selectionEvent) {
-        
         selectionEvent.getFirstSelectedItem().ifPresent(match -> getUI().ifPresent(ui -> ui.navigate(MatchView.class, match.matchData.id)));
     }
     

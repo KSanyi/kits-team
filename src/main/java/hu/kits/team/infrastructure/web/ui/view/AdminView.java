@@ -27,7 +27,7 @@ public class AdminView extends SplitViewFrame implements BeforeEnterObserver {
         initAppBar();
     }
     
-    private Component createView() {
+    private static Component createView() {
         
         Div content = new Div();
         content.addClassName("grid-view");
@@ -35,13 +35,9 @@ public class AdminView extends SplitViewFrame implements BeforeEnterObserver {
         return content;
     }
     
-    private void initAppBar() {
+    private static void initAppBar() {
         AppBar appBar = MainLayout.get().getAppBar();
         appBar.setTitle("Admin");
-    }
-    
-    private void init() {
-        
     }
     
     @Override
@@ -49,8 +45,6 @@ public class AdminView extends SplitViewFrame implements BeforeEnterObserver {
         currentUser = Session.currentMember();
         if(currentUser == null) {
             event.forwardTo(LoginView.class);
-        } else {
-            init();
         }
     }
 

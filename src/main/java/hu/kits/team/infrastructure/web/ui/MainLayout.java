@@ -149,8 +149,7 @@ public class MainLayout extends FlexBoxLayout implements RouterLayout, PageConfi
         if (appFooterInner == null) {
             appFooterInner = new Div();
             appFooterInner.addClassName("app-footer-inner");
-            column.getElement().insertChild(column.getElement().getChildCount(),
-                    appFooterInner.getElement());
+            column.getElement().insertChild(column.getElement().getChildCount(), appFooterInner.getElement());
         }
         appFooterInner.removeAll();
         appFooterInner.add(components);
@@ -160,8 +159,7 @@ public class MainLayout extends FlexBoxLayout implements RouterLayout, PageConfi
         if (appFooterOuter == null) {
             appFooterOuter = new Div();
             appFooterOuter.addClassName("app-footer-outer");
-            getElement().insertChild(getElement().getChildCount(),
-                    appFooterOuter.getElement());
+            getElement().insertChild(getElement().getChildCount(), appFooterOuter.getElement());
         }
         appFooterOuter.removeAll();
         appFooterOuter.add(components);
@@ -172,8 +170,7 @@ public class MainLayout extends FlexBoxLayout implements RouterLayout, PageConfi
         settings.addMetaTag("apple-mobile-web-app-capable", "yes");
         settings.addMetaTag("apple-mobile-web-app-status-bar-style", "black");
 
-        settings.addFavIcon("icon", "frontend/styles/favicons/favicon.ico",
-                "256x256");
+        settings.addFavIcon("icon", "frontend/styles/favicons/favicon.ico", "256x256");
     }
 
     @Override

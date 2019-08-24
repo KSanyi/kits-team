@@ -40,24 +40,19 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
         addColumn(new ComponentRenderer<>(this::createComingIcon))
             .setTextAlign(ColumnTextAlign.CENTER)
             .setWidth(UIUtils.COLUMN_WIDTH_XS);
+        
+        setSelectionMode(SelectionMode.NONE);
     }
 
     private Component createMemberInfo(MemberStatementRow row) {
         Player player = row.player;
         
-        ListItem item;
         if(player instanceof Member) {
             Member member = (Member)player;
-            item = new ListItem(UIUtils.createRoundBadge(member.getInitials()), member.nickName(), member.email);
+            return new ListItem(UIUtils.createRoundBadge(member.getInitials()), member.nickName(), member.email);
         } else {
-            item = new ListItem(UIUtils.createRoundBadge("V", Color.Primary._50), player.name, "");
+            return new ListItem(UIUtils.createRoundBadge("V", Color.Primary._50), player.name, "");
         }
-        
-        //if(currentUser.id.equals(member.id)) {
-            //item.setSuffix(UIUtils.createInitials("X"));
-        //}
-        item.setHorizontalPadding(false);
-        return item;
     }
     
     private Icon createComingIcon(MemberStatementRow row) {
