@@ -86,6 +86,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         anchor.setTarget("blank");
         anchor.setClassName("fa fa-map-marker-alt");
         anchor.addClassName("googleAnchor");
+        appBar.removeAllActionItems();
         appBar.addActionItem(anchor);
         
         List<Optional<Mark>> statements = new ArrayList<>();
