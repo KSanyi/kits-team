@@ -14,7 +14,7 @@ public class EmailCreator {
     
     public static Email createReminderEmail(Member member, MatchData matchData) {
         
-        String subject = "Meccs emlékeztető: " + Formatters.formatTimeWithWeekday(matchData.time) + " vs " + matchData.opponent;
+        String subject = "Meccs emlékeztető: " + Formatters.formatDateTime2(matchData.time) + " vs " + matchData.opponent;
         String content = EmailContentCreator.createReminderEmailContent(member, matchData);
         return new Email("reminder@luzerfc.hu", member.email, subject, content);
     }

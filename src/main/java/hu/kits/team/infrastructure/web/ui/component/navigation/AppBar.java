@@ -15,7 +15,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -47,7 +47,7 @@ public class AppBar extends Composite<FlexLayout> {
     private Button menuIcon;
     private Button contextIcon;
 
-    private H4 title;
+    private H5 title;
     private FlexBoxLayout actionItems;
     private Image avatar;
 
@@ -101,7 +101,7 @@ public class AppBar extends Composite<FlexLayout> {
     }
 
     private void initTitle(String title) {
-        this.title = new H4(title);
+        this.title = new H5(title);
         this.title.setClassName(CLASS_NAME + "__title");
     }
 
@@ -135,7 +135,7 @@ public class AppBar extends Composite<FlexLayout> {
     }
 
     private void initContainer() {
-        container = new FlexBoxLayout(menuIcon, contextIcon, this.title, actionItems, avatar);
+        container = new FlexBoxLayout(menuIcon, contextIcon, title, actionItems, avatar);
         container.addClassName(CLASS_NAME + "__container");
         container.setAlignItems(FlexComponent.Alignment.CENTER);
         getContent().add(container);
@@ -291,4 +291,5 @@ public class AppBar extends Composite<FlexLayout> {
         preTabContainer.removeAll();
         preTabContainer.add(createRoundBadge);
     }
+    
 }

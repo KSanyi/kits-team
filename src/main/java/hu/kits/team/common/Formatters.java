@@ -1,5 +1,7 @@
 package hu.kits.team.common;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +26,15 @@ public class Formatters {
         return (Clock.today().getYear() == time.getYear() ? DATE_TIME_FORMAT_WITHOUT_YEAR : DATE_TIME_FORMAT).format(time);
     }
     
-    public static String formatTimeWithWeekday(LocalDateTime time) {
+    public static String formatDateTime2(LocalDateTime time) {
+        if(time.isAfter(Clock.now()) && DAYS.between(Clock.today(), time.toLocalDate()) < 7) {
+            return formatTimeWithWeekday(time);
+        } else {
+            return formatDateTime(time);
+        }
+    }   
+    
+    private static String formatTimeWithWeekday(LocalDateTime time) {
         return DATE_TIME_FORMAT_WITH_WEEKDAY.format(time);
     }
     

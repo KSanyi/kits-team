@@ -13,6 +13,7 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -71,7 +72,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     private void initAppBar() {
         AppBar appBar = MainLayout.get().getAppBar();
-        appBar.setTitle(Formatters.formatDateTime(match.matchData.time) + " vs " + match.matchData.opponent + " - " + match.matchData.venue.name);
+        appBar.setTitle(Formatters.formatDateTime2(match.matchData.time) + " vs " + match.matchData.opponent + " - " + match.matchData.venue.name);
 
         Component statusBadge = createStatusBadge();
         
@@ -80,6 +81,12 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         contextMenu.addItem("Emlékeztető küldése", click -> sendReminders());
         
         appBar.setPreTabComponent(statusBadge);
+        
+        Anchor anchor = new Anchor("https://maps.google.com/?q=" + match.matchData.venue.address, "");
+        anchor.setTarget("blank");
+        anchor.setClassName("fa fa-map-marker-alt");
+        anchor.addClassName("googleAnchor");
+        appBar.addActionItem(anchor);
         
         List<Optional<Mark>> statements = new ArrayList<>();
         match.noStatements(Main.teamService.members()).stream().forEach(s -> statements.add(Optional.empty()));
