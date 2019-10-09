@@ -31,7 +31,7 @@ import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
 import hu.kits.team.infrastructure.web.ui.view.matches.MatchesView;
 
 @HtmlImport("frontend://styles/shared-styles.html")
-@PWA(name = "Lúzer FC", shortName = "Lúzer FC", startPath="/match")
+@PWA(name = "Jonny", shortName = "Jonny", startPath="/match")
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
 public class MainLayout extends FlexBoxLayout implements RouterLayout, PageConfigurator, AfterNavigationObserver {
 

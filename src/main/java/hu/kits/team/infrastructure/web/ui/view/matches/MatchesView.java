@@ -18,7 +18,7 @@ import hu.kits.team.infrastructure.web.ui.view.LoginView;
 import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 
 @Route(value = "matches", layout = MainLayout.class)
-@PageTitle("Meccsek")
+@PageTitle("Jonny Meccsek")
 public class MatchesView extends SplitViewFrame implements BeforeEnterObserver {
 
     private final MatchGrid matchGrid = new MatchGrid();

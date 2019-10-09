@@ -27,7 +27,7 @@ import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
 
 @Route(value = "login")
-@PageTitle("Login")
+@PageTitle("Jonny Login")
 public class LoginView extends VerticalLayout implements BeforeEnterObserver, PageConfigurator {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

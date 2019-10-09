@@ -15,7 +15,7 @@ import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
 import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 
 @Route(value = "admin", layout = MainLayout.class)
-@PageTitle("Admin")
+@PageTitle("Jonny Admin")
 public class AdminView extends SplitViewFrame implements BeforeEnterObserver {
 
     private Member currentUser;

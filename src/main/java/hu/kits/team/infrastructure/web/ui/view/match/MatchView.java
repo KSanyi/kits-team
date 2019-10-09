@@ -43,7 +43,7 @@ import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.LoginView;
 
 @Route(value = "match", layout = MainLayout.class)
-@PageTitle("Meccs")
+@PageTitle("Jonny Meccs")
 public class MatchView extends ViewFrame implements HasUrlParameter<Long>, BeforeEnterObserver {
 
     protected static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
