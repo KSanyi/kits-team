@@ -96,7 +96,12 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         appBar.removeAllTabs();
         for(StatementFilter filter : StatementFilter.values()) {
             int count = (int)statements.stream().filter(filter.filter::test).count();
-            String caption = filter.label + "(" + count + ")";
+            String caption;
+            if(filter == StatementFilter.COMING && !match.guests().isEmpty()) {
+                caption = filter.label + "(" + count + "+" + match.guests().size() + "v)";
+            } else {
+                caption = filter.label + "(" + count + ")";
+            }
             appBar.addTab(caption, filter);
         }
         
