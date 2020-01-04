@@ -68,7 +68,20 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         setViewFooter(createButtonBar());
         init();
         isAttached = true;
+        
+        /*
+        UI ui = attachEvent.getUI();
+        ui.getPage().executeJavaScript("window.addSwipeAway($0,$1,$2,$3)", this.getElement(), this, "onSwipeAway", this.getElement());
+        */
+        
     }
+    
+    /*
+    @ClientCallable
+    public void onSwipeAway(JsonObject data) {
+        System.out.println(data);
+    }
+    */
     
     private void initAppBar() {
         AppBar appBar = MainLayout.get().getAppBar();
@@ -107,6 +120,37 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         
         appBar.addTabSelectionListener(e -> filter());
         appBar.centerTabs();
+        appBar.unHideButtonsContainer();
+        setupButtons(appBar.getButtonsContainer());
+    }
+    
+    private void setupButtons(HorizontalLayout buttonsContainer) {
+        Matches matches = Main.teamService.loadAllMatches();
+        
+        Optional<Match> previousMatch = matches.findPrev(match.matchData.id);
+        Button prevButton = new Button(VaadinIcon.ARROW_LEFT.create());
+        prevButton.setWidthFull();
+        if(previousMatch.isPresent()) {
+            prevButton.addClickListener(click -> gotoMatch(previousMatch.get()));
+        } else {
+            prevButton.setEnabled(false);
+        }
+        
+        Optional<Match> nextMatch = matches.findNext(match.matchData.id);
+        Button nextButton = new Button(VaadinIcon.ARROW_RIGHT.create());
+        nextButton.setWidthFull();
+        if(nextMatch.isPresent()) {
+            nextButton.addClickListener(click -> gotoMatch(nextMatch.get()));
+        } else {
+            nextButton.setEnabled(false);
+        }
+        
+        buttonsContainer.removeAll();
+        buttonsContainer.add(prevButton, nextButton);
+    }
+    
+    private void gotoMatch(Match match) {
+        getUI().ifPresent(ui -> ui.navigate(MatchView.class, match.matchData.id));
     }
     
     private void openGuestWindow() {

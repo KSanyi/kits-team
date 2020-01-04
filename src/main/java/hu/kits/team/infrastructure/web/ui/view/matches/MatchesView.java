@@ -57,6 +57,7 @@ public class MatchesView extends SplitViewFrame implements BeforeEnterObserver {
             //detailsDrawer.hide();
         });
         appBar.centerTabs();
+        appBar.hideButtonsContainer();
     }
     
     private void filter() {

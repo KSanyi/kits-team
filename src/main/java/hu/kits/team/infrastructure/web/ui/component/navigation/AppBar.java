@@ -22,6 +22,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.server.VaadinSession;
@@ -51,6 +52,7 @@ public class AppBar extends Composite<FlexLayout> {
     private FlexBoxLayout actionItems;
     private Image avatar;
 
+    private HorizontalLayout buttonsContainer;
     private FlexBoxLayout tabContainer;
     private NaviTabs tabs;
     private Button addTab;
@@ -71,6 +73,7 @@ public class AppBar extends Composite<FlexLayout> {
         initAvatar();
         initActionItems();
         initContainer();
+        initButtons();
         initTabs(tabs);
     }
 
@@ -139,6 +142,11 @@ public class AppBar extends Composite<FlexLayout> {
         container.addClassName(CLASS_NAME + "__container");
         container.setAlignItems(FlexComponent.Alignment.CENTER);
         getContent().add(container);
+    }
+    
+    private void initButtons() {
+        buttonsContainer = new HorizontalLayout();
+        getContent().add(buttonsContainer);
     }
 
     private void initTabs(NaviTab... tabs) {
@@ -290,6 +298,18 @@ public class AppBar extends Composite<FlexLayout> {
     public void setPreTabComponent(Component createRoundBadge) {
         preTabContainer.removeAll();
         preTabContainer.add(createRoundBadge);
+    }
+    
+    public void hideButtonsContainer() {
+        buttonsContainer.setVisible(false);
+    }
+    
+    public void unHideButtonsContainer() {
+        buttonsContainer.setVisible(true);
+    }
+    
+    public HorizontalLayout getButtonsContainer() {
+        return buttonsContainer;
     }
     
 }

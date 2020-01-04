@@ -46,4 +46,28 @@ public class Matches {
                 .filter(e -> dateInterval.contains(e.matchData.time))
                 .collect(toList());
     }
+
+    public Optional<Match> findPrev(long matchId) {
+        List<Match> entries = entries();
+        for(int i=0;i<entries.size();i++) {
+            if(entries.get(i).matchData.id == matchId) {
+                if(i > 0) {
+                    return Optional.of(entries.get(i-1));
+                }
+            }
+        }
+        return Optional.empty();
+    }
+    
+    public Optional<Match> findNext(long matchId) {
+        List<Match> entries = entries();
+        for(int i=0;i<entries.size();i++) {
+            if(entries.get(i).matchData.id == matchId) {
+                if(entries.size() > i+1) {
+                    return Optional.of(entries.get(i+1));
+                }
+            }
+        }
+        return Optional.empty();
+    }
 }
