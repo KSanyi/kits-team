@@ -21,8 +21,10 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.server.VaadinSession;
@@ -49,6 +51,7 @@ public class AppBar extends Composite<FlexLayout> {
     private Button contextIcon;
 
     private H5 title;
+    private HorizontalLayout subTitleContainer;
     private FlexBoxLayout actionItems;
     private Image avatar;
 
@@ -73,6 +76,7 @@ public class AppBar extends Composite<FlexLayout> {
         initAvatar();
         initActionItems();
         initContainer();
+        initSubtitleContainer();
         initButtons();
         initTabs(tabs);
     }
@@ -138,7 +142,9 @@ public class AppBar extends Composite<FlexLayout> {
     }
 
     private void initContainer() {
-        container = new FlexBoxLayout(menuIcon, contextIcon, title, actionItems, avatar);
+        Div spacer = new Div();
+        container = new FlexBoxLayout(menuIcon, contextIcon, title, actionItems, spacer, avatar);
+        container.expand(spacer);
         container.addClassName(CLASS_NAME + "__container");
         container.setAlignItems(FlexComponent.Alignment.CENTER);
         getContent().add(container);
@@ -147,6 +153,15 @@ public class AppBar extends Composite<FlexLayout> {
     private void initButtons() {
         buttonsContainer = new HorizontalLayout();
         getContent().add(buttonsContainer);
+    }
+    
+    private void initSubtitleContainer() {
+        subTitleContainer = new HorizontalLayout();
+        VerticalLayout layout = new VerticalLayout(subTitleContainer);
+        layout.setAlignSelf(Alignment.CENTER, subTitleContainer);
+        layout.setMargin(false);
+        layout.setPadding(false);
+        getContent().add(layout);
     }
 
     private void initTabs(NaviTab... tabs) {
@@ -310,6 +325,18 @@ public class AppBar extends Composite<FlexLayout> {
     
     public HorizontalLayout getButtonsContainer() {
         return buttonsContainer;
+    }
+    
+    public void hideSubTitleContainer() {
+        subTitleContainer.setVisible(false);
+    }
+    
+    public void unHideSubTitleContainer() {
+        subTitleContainer.setVisible(true);
+    }
+    
+    public HorizontalLayout getSubTitleContainer() {
+        return subTitleContainer;
     }
     
 }

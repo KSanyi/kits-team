@@ -15,6 +15,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -85,8 +86,21 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     private void initAppBar() {
         AppBar appBar = MainLayout.get().getAppBar();
-        appBar.setTitle(Formatters.formatDateTime2(match.matchData.time) + " vs " + match.matchData.opponent + " - " + match.matchData.venue.name);
+        appBar.setTitle(Formatters.formatDateTime2(match.matchData.time));
 
+        HorizontalLayout subTitleContainer = appBar.getSubTitleContainer();
+        subTitleContainer.removeAll();
+        Label subtitle = new Label(" vs " + match.matchData.opponent + " - " + match.matchData.venue.name);
+        subtitle.getElement().getStyle().set("font-weight", "bold");
+        subTitleContainer.add(subtitle);
+        
+        Anchor anchor = new Anchor("https://maps.google.com/?q=" + match.matchData.venue.address, "");
+        anchor.setTarget("blank");
+        anchor.setClassName("fa fa-map-marker-alt");
+        anchor.addClassName("googleAnchor");
+        appBar.removeAllActionItems();
+        subTitleContainer.add(anchor);
+        
         Component statusBadge = createStatusBadge();
         
         ContextMenu contextMenu = new ContextMenu(statusBadge);
@@ -94,13 +108,6 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         contextMenu.addItem("Emlékeztető küldése", click -> sendReminders());
         
         appBar.setPreTabComponent(statusBadge);
-        
-        Anchor anchor = new Anchor("https://maps.google.com/?q=" + match.matchData.venue.address, "");
-        anchor.setTarget("blank");
-        anchor.setClassName("fa fa-map-marker-alt");
-        anchor.addClassName("googleAnchor");
-        appBar.removeAllActionItems();
-        appBar.addActionItem(anchor);
         
         List<Optional<Mark>> statements = new ArrayList<>();
         match.noStatements(Main.teamService.members()).stream().forEach(s -> statements.add(Optional.empty()));
