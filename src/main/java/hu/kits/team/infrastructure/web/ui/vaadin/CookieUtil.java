@@ -29,7 +29,7 @@ public class CookieUtil {
     public static void createUserCookie(String memberId) {
         Cookie cookie = new Cookie(COOKIE_KEY, memberId);
         cookie.setPath("/");
-        cookie.setMaxAge(10 * 24 * 60 * 60);
+        cookie.setMaxAge(100 * 24 * 60 * 60);
         
         log.debug("New user cookie created: {}: {}", COOKIE_KEY, printUserCookie(cookie));
         
