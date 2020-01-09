@@ -225,7 +225,12 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
                     comingButton.setVisible(true);
                     comingButton.setText("Mégis jövök");
                 }
-            } 
+            } else {
+                comingButton.setVisible(true);
+                notComingButton.setVisible(true);
+                notComingButton.setText("Nem jövök");
+                comingButton.setText("Jövök");
+            }
         } else {
             setViewFooter(new Div());
         }
