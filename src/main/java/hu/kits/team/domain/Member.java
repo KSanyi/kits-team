@@ -28,7 +28,12 @@ public class Member extends Player {
     }
 
     public String nickName() {
-        return id.substring(0, 1).toUpperCase() + id.substring(1);
+        String[] nameParts = id.split("_");
+        return Stream.of(nameParts).map(namePart -> capitalize(namePart)).collect(joining(" "));
+    }
+    
+    private static String capitalize(String name) {
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
     public String getInitials() {
