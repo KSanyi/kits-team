@@ -12,7 +12,6 @@ import org.apache.commons.io.IOUtils;
 
 import hu.kits.team.Main;
 import hu.kits.team.common.Formatters;
-import hu.kits.team.common.Util;
 import hu.kits.team.domain.MatchData;
 import hu.kits.team.domain.Member;
 
@@ -46,7 +45,7 @@ class EmailContentCreator {
     private static Map<String, Object> createDataMap(Member member, MatchData matchData) {
         Map<String, Object> map = new HashMap<>();
         
-        map.put("nickName", Util.withCapital(member.id));
+        map.put("nickName", member.firstName());
         map.put("matchId", matchData.id);
         map.put("opponent", matchData.opponent);
         map.put("venue", matchData.venue);

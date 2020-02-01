@@ -4,6 +4,8 @@ import static java.util.stream.Collectors.joining;
 
 import java.util.stream.Stream;
 
+import hu.kits.team.common.Util;
+
 public class Member extends Player {
 
     public final String id;
@@ -29,17 +31,18 @@ public class Member extends Player {
 
     public String nickName() {
         String[] nameParts = id.split("_");
-        return Stream.of(nameParts).map(namePart -> capitalize(namePart)).collect(joining(" "));
+        return Stream.of(nameParts).map(namePart -> Util.withCapital(namePart)).collect(joining(" "));
     }
     
-    private static String capitalize(String name) {
-        return name.substring(0, 1).toUpperCase() + name.substring(1);
+    public String firstName() {
+        String[] nameParts = nickName().split(" ");
+        return nameParts[nameParts.length-1];
     }
-
+    
     public String getInitials() {
         return Stream.of(name.split(" "))
                 .map(part -> part.substring(0,  1).toUpperCase())
                 .collect(joining(""));
     }
-    
+
 }
