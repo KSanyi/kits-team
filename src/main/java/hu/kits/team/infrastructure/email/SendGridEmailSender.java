@@ -63,7 +63,6 @@ public class SendGridEmailSender implements EmailSender {
             message.setFrom(new InternetAddress(email.sender));
             message.setSubject(email.subject);
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email.recipient));
-            message.addRecipient(Message.RecipientType.CC, new InternetAddress("kocso.sandor.gabor@gmail.com"));
             message.setContent(createContent(email));
 
             transport.connect();
