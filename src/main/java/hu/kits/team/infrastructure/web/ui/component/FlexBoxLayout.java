@@ -8,7 +8,6 @@ import hu.kits.team.infrastructure.web.ui.component.layout.Size;
 import hu.kits.team.infrastructure.web.ui.component.util.css.BorderRadius;
 import hu.kits.team.infrastructure.web.ui.component.util.css.BoxSizing;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Display;
-import hu.kits.team.infrastructure.web.ui.component.util.css.FlexDirection;
 import hu.kits.team.infrastructure.web.ui.component.util.css.FlexWrap;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Overflow;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Position;
@@ -81,7 +80,7 @@ public class FlexBoxLayout extends FlexLayout {
     }
 
     public void setFlexDirection(FlexDirection direction) {
-        getStyle().set(FLEX_DIRECTION, direction.getValue());
+        getStyle().set(FLEX_DIRECTION, direction.name());
     }
 
     public void removeFlexDirection() {
@@ -95,7 +94,7 @@ public class FlexBoxLayout extends FlexLayout {
     }
 
     public void setFlexWrap(FlexWrap wrap) {
-        getStyle().set(FLEX_WRAP, wrap.getValue());
+        getStyle().set(FLEX_WRAP, wrap.name());
     }
 
     public void removeFlexWrap() {

@@ -10,7 +10,6 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import hu.kits.team.infrastructure.web.ui.component.util.FontSize;
 import hu.kits.team.infrastructure.web.ui.component.util.TextColor;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
-import hu.kits.team.infrastructure.web.ui.component.util.css.FlexDirection;
 import hu.kits.team.infrastructure.web.ui.component.util.css.WhiteSpace;
 
 public class ListItem extends FlexLayout implements HasStyle {

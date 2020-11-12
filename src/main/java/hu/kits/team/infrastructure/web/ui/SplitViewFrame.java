@@ -10,9 +10,9 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 
 import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
-import hu.kits.team.infrastructure.web.ui.component.util.css.FlexDirection;
 
 /**
  * A view frame that establishes app design guidelines. It consists of four
