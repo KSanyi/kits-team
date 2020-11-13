@@ -1,1 +1,1 @@
-web: java -jar target/app.jar
+web: java --enable-preview -jar target/app.jar
