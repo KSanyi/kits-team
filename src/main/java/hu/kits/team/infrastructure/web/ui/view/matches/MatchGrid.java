@@ -15,6 +15,7 @@ import com.vaadin.flow.data.selection.SelectionEvent;
 import hu.kits.team.common.Formatters;
 import hu.kits.team.domain.Match;
 import hu.kits.team.domain.MatchData;
+import hu.kits.team.infrastructure.web.ui.component.Initials;
 import hu.kits.team.infrastructure.web.ui.component.ListItem;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
 import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
@@ -38,7 +39,7 @@ public class MatchGrid extends Grid<Match> {
     
     private Component createRow(Match match) {
         MatchData matchData = match.matchData;
-        return new ListItem(matchData.opponent, matchData.championship.name, UIUtils.createRoundBadge(match.statusString()));
+        return new ListItem(matchData.opponent, matchData.championship.name, new Initials(match.statusString()));
     }
     
     private Component createTime(Match match) {

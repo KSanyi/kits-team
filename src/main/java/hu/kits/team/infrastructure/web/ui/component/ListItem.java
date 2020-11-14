@@ -2,6 +2,7 @@ package hu.kits.team.infrastructure.web.ui.component;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -12,6 +13,7 @@ import hu.kits.team.infrastructure.web.ui.component.util.TextColor;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
 import hu.kits.team.infrastructure.web.ui.component.util.css.WhiteSpace;
 
+@CssImport("./styles/components/list-item.css")
 public class ListItem extends FlexLayout implements HasStyle {
 
     private final String CLASS_NAME = "list-item";

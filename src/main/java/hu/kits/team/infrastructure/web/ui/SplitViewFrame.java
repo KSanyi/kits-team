@@ -9,6 +9,7 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 
@@ -24,6 +25,7 @@ import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
  * <li>Bottom {@link #setViewFooter(Component...) footer}</li>
  * </ul>
  */
+@CssImport("./styles/components/view-frame.css")
 public class SplitViewFrame extends Composite<Div> implements HasStyle {
 
     protected static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

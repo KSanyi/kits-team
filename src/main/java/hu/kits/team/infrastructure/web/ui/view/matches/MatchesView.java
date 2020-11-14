@@ -1,5 +1,10 @@
 package hu.kits.team.infrastructure.web.ui.view.matches;
 
+import java.lang.invoke.MethodHandles;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;
@@ -11,7 +16,7 @@ import com.vaadin.flow.router.Route;
 import hu.kits.team.Main;
 import hu.kits.team.domain.Member;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
-import hu.kits.team.infrastructure.web.ui.SplitViewFrame;
+import hu.kits.team.infrastructure.web.ui.ViewFrame;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
 import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.LoginView;
@@ -19,26 +24,19 @@ import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 
 @Route(value = "matches", layout = MainLayout.class)
 @PageTitle("Jonny Meccsek")
-public class MatchesView extends SplitViewFrame implements BeforeEnterObserver {
+public class MatchesView extends ViewFrame implements BeforeEnterObserver {
 
+    protected static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    
     private final MatchGrid matchGrid = new MatchGrid();
     
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
-        setViewContent(createView());
+        matchGrid.setHeightFull();
+        setViewContent(matchGrid);
         initAppBar();
         init();
-    }
-    
-    private Component createView() {
-        
-        matchGrid.setHeight("100%");
-        
-        Div content = new Div(matchGrid);
-        content.addClassName("grid-view");
-        
-        return content;
     }
     
     private void initAppBar() {

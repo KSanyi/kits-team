@@ -8,7 +8,6 @@ import hu.kits.team.infrastructure.web.ui.component.layout.Size;
 import hu.kits.team.infrastructure.web.ui.component.util.css.BorderRadius;
 import hu.kits.team.infrastructure.web.ui.component.util.css.BoxSizing;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Display;
-import hu.kits.team.infrastructure.web.ui.component.util.css.FlexWrap;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Overflow;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Position;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Shadow;

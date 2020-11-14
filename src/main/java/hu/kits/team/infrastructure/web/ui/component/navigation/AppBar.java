@@ -14,6 +14,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.Image;
@@ -39,6 +40,7 @@ import hu.kits.team.infrastructure.web.ui.vaadin.CookieUtil;
 import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 
+@CssImport("./styles/components/app-bar.css")
 public class AppBar extends Composite<FlexLayout> {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

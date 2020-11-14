@@ -4,8 +4,10 @@ import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 
+@CssImport("./styles/components/view-frame.css")
 public class ViewFrame extends Composite<Div> implements HasStyle {
 
     private final String CLASS_NAME = "view-frame";

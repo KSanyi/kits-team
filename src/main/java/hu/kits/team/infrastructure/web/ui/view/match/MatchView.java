@@ -16,7 +16,9 @@ import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -37,6 +39,7 @@ import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.ViewFrame;
+import hu.kits.team.infrastructure.web.ui.component.Initials;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
@@ -90,14 +93,15 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
 
         HorizontalLayout subTitleContainer = appBar.getSubTitleContainer();
         subTitleContainer.removeAll();
+        subTitleContainer.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
         Label subtitle = new Label(" vs " + match.matchData.opponent + " - " + match.matchData.venue.name);
         subtitle.getElement().getStyle().set("font-weight", "bold");
         subTitleContainer.add(subtitle);
         
-        Anchor anchor = new Anchor("https://maps.google.com/?q=" + match.matchData.venue.address, "");
+        Anchor anchor = new Anchor("https://maps.google.com/?q=" + match.matchData.venue.address, new Icon(VaadinIcon.MAP_MARKER));
         anchor.setTarget("blank");
-        anchor.setClassName("fa fa-map-marker-alt");
-        anchor.addClassName("googleAnchor");
+        anchor.getStyle().set("color", "green");
+        //anchor.addClassName("googleAnchor");
         appBar.removeAllActionItems();
         subTitleContainer.add(anchor);
         
@@ -180,11 +184,11 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         String statusString = match.statusString();
         
         if(statusString.startsWith("+")) {
-            return UIUtils.createRoundBadge(statusString, LumoStyles.Color.Success._100);
+            return new Initials(statusString, LumoStyles.Color.Success._100);
         } else if(statusString.startsWith("-")) {
-            return UIUtils.createRoundBadge(statusString, LumoStyles.Color.Error._100);
+            return new Initials(statusString, LumoStyles.Color.Error._100);
         } else {
-            return UIUtils.createRoundBadge(statusString, LumoStyles.Color.Contrast._50);
+            return new Initials(statusString, LumoStyles.Color.Contrast._50);
         }
     }
     

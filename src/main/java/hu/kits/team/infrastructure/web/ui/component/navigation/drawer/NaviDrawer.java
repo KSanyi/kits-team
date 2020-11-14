@@ -5,7 +5,9 @@ import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -15,7 +17,8 @@ import com.vaadin.flow.router.AfterNavigationObserver;
 import elemental.json.JsonObject;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
 
-@HtmlImport("swipe-away.html")
+@CssImport("./styles/components/navi-drawer.css")
+@JsModule("./swipe-away.js")
 public class NaviDrawer extends Composite<Div> implements AfterNavigationObserver {
 
     private static final String CLASS_NAME = "navi-drawer";

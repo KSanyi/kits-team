@@ -17,6 +17,7 @@ import hu.kits.team.domain.Guest;
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Member;
 import hu.kits.team.domain.Player;
+import hu.kits.team.infrastructure.web.ui.component.Initials;
 import hu.kits.team.infrastructure.web.ui.component.ListItem;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles.Color;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
@@ -49,9 +50,9 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
         
         if(player instanceof Member) {
             Member member = (Member)player;
-            return new ListItem(UIUtils.createRoundBadge(member.getInitials()), member.nickName(), member.email);
+            return new ListItem(new Initials(member.getInitials()), member.nickName(), member.email);
         } else {
-            return new ListItem(UIUtils.createRoundBadge("V", Color.Primary._50), player.name, "");
+            return new ListItem(new Initials("V", Color.Primary._50), player.name, "");
         }
     }
     

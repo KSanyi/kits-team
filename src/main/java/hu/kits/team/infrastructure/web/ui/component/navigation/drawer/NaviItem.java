@@ -3,6 +3,7 @@ package hu.kits.team.infrastructure.web.ui.component.navigation.drawer;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
@@ -24,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+@CssImport("./styles/components/navi-item.css")
 public class NaviItem extends Div {
 
     protected final String CLASS_NAME = "navi-item";

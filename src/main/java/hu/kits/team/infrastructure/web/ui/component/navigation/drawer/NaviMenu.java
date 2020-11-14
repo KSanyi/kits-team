@@ -1,6 +1,7 @@
 package hu.kits.team.infrastructure.web.ui.component.navigation.drawer;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -8,6 +9,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CssImport("./styles/components/navi-menu.css")
 public class NaviMenu extends Div {
 
     private static final String CLASS_NAME = "navi-menu";

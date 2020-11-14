@@ -1,12 +1,14 @@
 package hu.kits.team.infrastructure.web.ui.component.navigation.drawer;
 
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
 
+@CssImport("./styles/components/brand-expression.css")
 public class BrandExpression extends Composite<Div> {
 
     private String CLASS_NAME = "brand-expression";
