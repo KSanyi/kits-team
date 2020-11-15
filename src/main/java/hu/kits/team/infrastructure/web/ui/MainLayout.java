@@ -11,14 +11,10 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.ErrorHandler;
-import com.vaadin.flow.server.InitialPageSettings;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.server.VaadinSession;
 
 import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
@@ -30,8 +26,6 @@ import hu.kits.team.infrastructure.web.ui.component.util.css.Overflow;
 import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
 import hu.kits.team.infrastructure.web.ui.view.matches.MatchesView;
 
-@PWA(name = "Jonny", shortName = "Jonny", startPath="/match")
-@Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
 @CssImport(value = "./styles/components/charts.css", themeFor = "vaadin-chart", include = "vaadin-chart-default-theme")
 @CssImport(value = "./styles/components/floating-action-button.css", themeFor = "vaadin-button")
 @CssImport(value = "./styles/components/grid.css", themeFor = "vaadin-grid")
@@ -45,7 +39,7 @@ import hu.kits.team.infrastructure.web.ui.view.matches.MatchesView;
 @CssImport("./styles/misc/box-shadow-borders.css")
 @CssImport(value = "./styles/styles.css", include = "lumo-badge")
 @JsModule("@vaadin/vaadin-lumo-styles/badge")
-public class MainLayout extends FlexBoxLayout implements RouterLayout, PageConfigurator, AfterNavigationObserver {
+public class MainLayout extends FlexBoxLayout implements RouterLayout, AfterNavigationObserver {
 
     private static final Logger log = LoggerFactory.getLogger(MainLayout.class);
     private static final String CLASS_NAME = "root";
@@ -175,14 +169,6 @@ public class MainLayout extends FlexBoxLayout implements RouterLayout, PageConfi
         }
         appFooterOuter.removeAll();
         appFooterOuter.add(components);
-    }
-
-    @Override
-    public void configurePage(InitialPageSettings settings) {
-        settings.addMetaTag("apple-mobile-web-app-capable", "yes");
-        settings.addMetaTag("apple-mobile-web-app-status-bar-style", "black");
-
-        settings.addFavIcon("icon", "frontend/styles/favicons/favicon.ico", "256x256");
     }
 
     @Override

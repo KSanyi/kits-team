@@ -15,8 +15,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.InitialPageSettings;
-import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.server.VaadinSession;
 
 import hu.kits.team.Main;
@@ -28,7 +26,7 @@ import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
 
 @Route(value = "login")
 @PageTitle("Jonny Login")
-public class LoginView extends VerticalLayout implements BeforeEnterObserver, PageConfigurator {
+public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     
@@ -105,6 +103,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver, Pa
         log.info(member + " using " + VaadinSession.getCurrent().getBrowser().getBrowserApplication());
     }
     
+    /*
     @Override
     public void configurePage(InitialPageSettings settings) {
        // Force login page to use Shady DOM to avoid problems with browsers and
@@ -114,5 +113,6 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver, Pa
                    + "window.customElements.forcePolyfill=true;" + "window.ShadyDOM={force:true};",
              InitialPageSettings.WrapMode.JAVASCRIPT);
     }
+    */
 
 }

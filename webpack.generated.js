@@ -5,25 +5,27 @@
  * This file will be overwritten on every run. Any custom changes should be made to webpack.config.js
  */
 const fs = require('fs');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-const {BabelMultiTargetPlugin} = require('webpack-babel-multi-target-plugin');
 
 const path = require('path');
-const baseDir = path.resolve(__dirname);
-// the folder of app resources (main.js and flow templates)
-const frontendFolder = require('path').resolve(__dirname, 'frontend');
 
+// the folder of app resources:
+//  - flow templates for classic Flow
+//  - client code with index.html and index.[ts/js] for CCDM
+const frontendFolder = require('path').resolve(__dirname, 'frontend');
 const fileNameOfTheFlowGeneratedMainEntryPoint = require('path').resolve(__dirname, 'target/frontend/generated-flow-imports.js');
 const mavenOutputFolderForFlowBundledFiles = require('path').resolve(__dirname, 'target/classes/META-INF/VAADIN');
-
-const devmodeGizmoJS = '@vaadin/flow-frontend/VaadinDevmodeGizmo.js'
-
+const useClientSideIndexFileForBootstrapping = true;
+const clientSideIndexHTML = require('path').resolve(__dirname, 'target/index.html');
+const clientSideIndexEntryPoint = require('path').resolve(__dirname, 'target/index');
+const devmodeGizmoJS = require('path').resolve(__dirname, 'target/flow-frontend/VaadinDevmodeGizmo.js');
 // public path for resources, must match Flow VAADIN_BUILD
 const build = 'build';
 // public path for resources, must match the request used in flow to get the /build/stats.json file
 const config = 'config';
-// folder for outputting index.js bundle, etc.
+// folder for outputting vaadin-bundle and other fragments
 const buildFolder = `${mavenOutputFolderForFlowBundledFiles}/${build}`;
 // folder for outputting stats.json
 const confFolder = `${mavenOutputFolderForFlowBundledFiles}/${config}`;
@@ -39,15 +41,14 @@ mkdirp(confFolder);
 
 let stats;
 
-const transpile = !devMode || process.argv.find(v => v.indexOf('--transpile-es5') >= 0);
-
+// Open a connection with the Java dev-mode handler in order to finish
+// webpack-dev-mode when it exits or crashes.
 const watchDogPrefix = '--watchDogPort=';
 let watchDogPort = devMode && process.argv.find(v => v.indexOf(watchDogPrefix) >= 0);
-let client;
 if (watchDogPort) {
   watchDogPort = watchDogPort.substr(watchDogPrefix.length);
   const runWatchDog = () => {
-    client = new require('net').Socket();
+    const client = new require('net').Socket();
     client.setEncoding('utf8');
     client.on('error', function () {
       console.log("Watchdog connection error. Terminating webpack process...");
@@ -61,8 +62,25 @@ if (watchDogPort) {
 
     client.connect(watchDogPort, 'localhost');
   }
-
   runWatchDog();
+}
+
+// Compute the entries that webpack have to visit
+const webPackEntries = {};
+if (useClientSideIndexFileForBootstrapping) {
+  webPackEntries.bundle = clientSideIndexEntryPoint;
+  const dirName = path.dirname(fileNameOfTheFlowGeneratedMainEntryPoint);
+  const baseName = path.basename(fileNameOfTheFlowGeneratedMainEntryPoint, '.js');
+  if (fs.readdirSync(dirName).filter(fileName => !fileName.startsWith(baseName)).length) {
+    // if there are vaadin exported views, add a second entry
+    webPackEntries.export = fileNameOfTheFlowGeneratedMainEntryPoint;
+  }
+} else {
+  webPackEntries.bundle = fileNameOfTheFlowGeneratedMainEntryPoint;
+}
+
+if (devMode) {
+  webPackEntries.devmodeGizmo = devmodeGizmoJS;
 }
 
 exports = {
@@ -74,10 +92,7 @@ exports = {
 module.exports = {
   mode: 'production',
   context: frontendFolder,
-  entry: {
-    bundle: fileNameOfTheFlowGeneratedMainEntryPoint,
-    ...(devMode && { gizmo: devmodeGizmoJS })
-  },
+  entry: webPackEntries,
 
   output: {
     filename: `${build}/vaadin-[name]-[contenthash].cache.js`,
@@ -86,6 +101,7 @@ module.exports = {
   },
 
   resolve: {
+    extensions: ['.ts', '.js'],
     alias: {
       Frontend: frontendFolder
     }
@@ -114,10 +130,12 @@ module.exports = {
 
   module: {
     rules: [
-      ...(transpile ? [{ // Files that Babel has to transpile
-        test: /\.js$/,
-        use: [BabelMultiTargetPlugin.loader()]
-      }] : []),
+      {
+        test: /\.ts$/,
+        use: [
+          'awesome-typescript-loader'
+        ]
+      },
       {
         test: /\.css$/i,
         use: ['raw-loader']
@@ -130,47 +148,14 @@ module.exports = {
   },
   plugins: [
     // Generate compressed bundles when not devMode
-    ...(devMode ? [] : [new CompressionPlugin()]),
-
-    // Transpile with babel, and produce different bundles per browser
-    ...(transpile ? [new BabelMultiTargetPlugin({
-      babel: {
-        plugins: [
-          // workaround for Safari 10 scope issue (https://bugs.webkit.org/show_bug.cgi?id=159270)
-          "@babel/plugin-transform-block-scoping",
-
-          // Edge does not support spread '...' syntax in object literals (#7321)
-          "@babel/plugin-proposal-object-rest-spread"
-        ],
-
-        presetOptions: {
-          useBuiltIns: false // polyfills are provided from webcomponents-loader.js
-        }
-      },
-      targets: {
-        'es6': { // Evergreen browsers
-          browsers: [
-            // It guarantees that babel outputs pure es6 in bundle and in stats.json
-            // In the case of browsers no supporting certain feature it will be
-            // covered by the webcomponents-loader.js
-            'last 1 Chrome major versions'
-          ],
-        },
-        'es5': { // IE11
-          browsers: [
-            'ie 11'
-          ],
-          tagAssetsWithKey: true, // append a suffix to the file name
-        }
-      }
-    })] : []),
+    !devMode && new CompressionPlugin(),
 
     // Generates the stats file for flow `@Id` binding.
     function (compiler) {
       compiler.hooks.afterEmit.tapAsync("FlowIdPlugin", (compilation, done) => {
         let statsJson = compilation.getStats().toJson();
-        // Get bundles as accepted keys (except any es5 bundle)
-        let acceptedKeys = statsJson.assets.filter(asset => asset.chunks.length > 0 && !asset.chunkNames.toString().includes("es5"))
+        // Get bundles as accepted keys
+        let acceptedKeys = statsJson.assets.filter(asset => asset.chunks.length > 0)
           .map(asset => asset.chunks).reduce((acc, val) => acc.concat(val), []);
 
         // Collect all modules for the given keys
@@ -198,23 +183,18 @@ module.exports = {
           done();
         }
       });
-
-      compiler.hooks.done.tapAsync('FlowIdPlugin', (compilation, done) => {
-        // trigger live reload via server
-        if (client) {
-          client.write('reload\n');
-        }
-        done();
-      });
     },
 
-    // Copy webcomponents polyfills. They are not bundled because they
-    // have its own loader based on browser quirks.
-    new CopyWebpackPlugin([{
-      from: `${baseDir}/node_modules/@webcomponents/webcomponentsjs`,
-      to: `${build}/webcomponentsjs/`
-    }]),
-  ]
+    // Includes JS output bundles into "index.html"
+    useClientSideIndexFileForBootstrapping && new HtmlWebpackPlugin({
+      template: clientSideIndexHTML,
+      inject: 'head',
+      chunks: ['bundle', ...(devMode ? ['devmodeGizmo'] : [])]
+    }),
+    useClientSideIndexFileForBootstrapping && new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: 'defer'
+    }),
+  ].filter(Boolean)
 };
 
 /**
@@ -236,8 +216,11 @@ function collectChunks(statsJson, acceptedChunks) {
           const slimModule = {
             id: module.id,
             name: module.name,
-            source: module.source,
+            source: module.source
           };
+          if(module.modules) {
+            slimModule.modules = collectSubModules(module);
+          }
           modules.push(slimModule);
         });
         const slimChunk = {
@@ -267,27 +250,40 @@ function collectModules(statsJson, acceptedChunks) {
     statsJson.modules.forEach(function (module) {
       // Add module if module chunks contain an accepted chunk and the module is generated-flow-imports.js module
       if (module.chunks.filter(key => acceptedChunks.includes(key)).length > 0
-          && (module.name.includes("generated-flow-imports.js") || module.name.includes("generated-flow-imports-fallback.js"))) {
-        let subModules = [];
-        // Create sub modules only if they are available
-        if (module.modules) {
-          module.modules.filter(module => !module.name.includes("es5")).forEach(function (module) {
-            const subModule = {
-              name: module.name,
-              source: module.source
-            };
-            subModules.push(subModule);
-          });
-        }
+        && (module.name.includes("generated-flow-imports.js") || module.name.includes("generated-flow-imports-fallback.js"))) {
         const slimModule = {
           id: module.id,
           name: module.name,
-          source: module.source,
-          modules: subModules
+          source: module.source
         };
+        if(module.modules) {
+          slimModule.modules = collectSubModules(module);
+        }
         modules.push(slimModule);
       }
     });
   }
+  return modules;
+}
+
+/**
+ * Collect any modules under a module (aka. submodules);
+ *
+ * @param module module to get submodules for
+ */
+function collectSubModules(module) {
+  let modules = [];
+  module.modules.forEach(function (submodule) {
+    if (submodule.source) {
+      const slimModule = {
+        name: submodule.name,
+        source: submodule.source,
+      };
+      if(submodule.id) {
+        slimModule.id = submodule.id;
+      }
+      modules.push(slimModule);
+    }
+  });
   return modules;
 }

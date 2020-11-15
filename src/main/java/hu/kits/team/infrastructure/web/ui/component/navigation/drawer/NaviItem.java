@@ -1,5 +1,8 @@
 package hu.kits.team.infrastructure.web.ui.component.navigation.drawer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -13,17 +16,8 @@ import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.server.startup.FakeBrowser;
 
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
-
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 @CssImport("./styles/components/navi-item.css")
 public class NaviItem extends Div {
@@ -51,16 +45,6 @@ public class NaviItem extends Div {
     public NaviItem(Image image, String text, Class<? extends Component> navigationTarget) {
         this(text, navigationTarget);
         link.getElement().insertChild(0, image.getElement());
-    }
-
-    public NaviItem(String svg, String text, Class<? extends Component> navigationTarget) {
-        this(text, navigationTarget);
-        try {
-            String content = readFile(svg);
-            link.getElement().insertChild(0, createSVGContainer(content));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public NaviItem(String text, Class<? extends Component> navigationTarget) {
@@ -158,12 +142,6 @@ public class NaviItem extends Div {
 
     public boolean hasSubItems() {
         return subItems.size() > 0;
-    }
-
-    protected static String readFile(String path) throws IOException {
-        try (InputStream resourceAsStream = VaadinService.getCurrent().getResourceAsStream("frontend://" + path, FakeBrowser.getEs6(), null)) {
-            return IOUtils.toString(resourceAsStream, "UTF-8");
-        }
     }
 
     protected Element createSVGContainer(String content) {

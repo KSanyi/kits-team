@@ -63,7 +63,7 @@ public class HttpServer extends Server {
     }
     
     private static Resource createBaseResource() {
-        URL webRootLocation = Main.class.getResource("/META-INF/");
+        URL webRootLocation = Main.class.getResource("/webapp/");
         try {
             URI webRootUri = webRootLocation.toURI();
             return Resource.newResource(webRootUri);
