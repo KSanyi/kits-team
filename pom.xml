@@ -15,7 +15,7 @@
 		<maven.compiler.source>14</maven.compiler.source>
 		<maven.compiler.target>14</maven.compiler.target>
 
-		<vaadin.version>17.0.9</vaadin.version>
+		<vaadin.version>18.0.1</vaadin.version>
 		<vaadin-install-nodejs>true</vaadin-install-nodejs>
 		<frontend-maven-plugin.nodeVersion>v13.2.0</frontend-maven-plugin.nodeVersion>
 		<jetty.version>9.4.35.v20201120</jetty.version>
