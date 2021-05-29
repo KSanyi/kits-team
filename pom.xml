@@ -175,6 +175,20 @@
 									<mainClass>hu.kits.team.Main</mainClass>
 								</transformer>
 							</transformers>
+							<filters>
+                                <filter>
+                                <!-- on heroku this exception is thrown after adding sendgrid-java
+                                     Exception in thread "main" java.lang.SecurityException: Invalid signature file digest for Manifest main attributes
+                                     That's why this filter is here
+                                -->
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
 						</configuration>
 					</execution>
 				</executions>
