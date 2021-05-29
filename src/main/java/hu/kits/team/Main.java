@@ -99,10 +99,9 @@ public class Main {
     }
     
     private static EmailSender createEmaiSender() throws URISyntaxException {
-        String sendGridUserName = System.getenv("SENDGRID_USERNAME");
         String sendGridPassword = System.getenv("SENDGRID_PASSWORD");
         
-        return new SendGridEmailSender(sendGridUserName, sendGridPassword);
+        return new SendGridEmailSender(sendGridPassword);
     }
     
 }
