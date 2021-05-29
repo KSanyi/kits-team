@@ -1,25 +1,19 @@
 package hu.kits.team.infrastructure.email;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Properties;
-
-import javax.activation.CommandMap;
-import javax.activation.MailcapCommandMap;
-import javax.mail.Authenticator;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import java.util.Base64;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Attachments;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Personalization;
 
 import hu.kits.team.domain.email.Email;
 import hu.kits.team.domain.email.EmailSender;
@@ -28,86 +22,51 @@ public class SendGridEmailSender implements EmailSender {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     
-    private final String sendGridUser;
+    private final SendGrid sendGrid;
     
-    private final String sendGridPassword;
-    
-    public SendGridEmailSender(String sendGridUser, String sendGridPassword) {
-        this.sendGridUser = sendGridUser;
-        this.sendGridPassword = sendGridPassword;
-        
-        MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap(); 
-        mc.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html"); 
-        mc.addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed"); 
-        mc.addMailcap("text/calendar;; x-java-content-handler=com.sun.mail.handlers.text_plain");
+    public SendGridEmailSender(String sendGridPassword) {
+        sendGrid = new SendGrid(sendGridPassword);
     }
 
     @Override
     public boolean sendEmail(Email email) {
         
-        Properties props = new Properties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.host", "smtp.sendgrid.net");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.starttls.required", "true");
-        props.put("mail.smtp.auth", "true");
-
-        Authenticator auth = new SMTPAuthenticator(sendGridUser, sendGridPassword);
-        Session mailSession = Session.getDefaultInstance(props, auth);
-        
         try {
-            Transport transport = mailSession.getTransport();
-
-            MimeMessage message = new MimeMessage(mailSession);
-            message.setFrom(new InternetAddress(email.sender));
-            message.setSubject(email.subject);
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email.recipient));
-            message.setContent(createContent(email));
-
-            transport.connect();
-            transport.sendMessage(message, message.getAllRecipients());
-            transport.close();
-            log.info("Email sent: {}", email);
-            return true;
+            Request request = new Request();
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            
+            Mail mail = new Mail();
+            mail.setFrom(new com.sendgrid.helpers.mail.objects.Email(email.sender));
+            mail.setSubject(email.subject);
+            mail.addContent(new Content("text/html", email.content));
+            
+            Personalization personalization = new Personalization();
+            personalization.addTo(new com.sendgrid.helpers.mail.objects.Email(email.recipient));
+            mail.addPersonalization(personalization);
+            
+            if(email.calendarAttachment.isPresent()) {
+                Attachments attachments = new Attachments();
+                String base64EncodedAttachment = Base64.getEncoder().encodeToString(email.calendarAttachment.get().formatToIcal().getBytes());
+                attachments.setContent(base64EncodedAttachment);
+                attachments.setType("text/calendar");
+                attachments.setFilename("calendar");
+                mail.addAttachments(attachments);
+            }
+            
+            request.setBody(mail.build());
+            Response response = sendGrid.api(request);
+            
+            if(response.getStatusCode() == 202) {
+                log.info("Email sent: {}", email);
+                return true;
+            } else {
+                log.error("Error sending email: {}, status code: {}, body: {}", email, response.getStatusCode(), response.getBody());
+                return false;
+            }
         } catch(Exception ex) {
             log.error("Error during email sending", ex);
             return false;
-        }
-    }
-    
-    private static Multipart createContent(Email email) throws MessagingException {
-        
-        Multipart multipart = new MimeMultipart("alternative");
-
-        BodyPart bodyPart = new MimeBodyPart();
-        bodyPart.setContent(email.content, "text/html; charset=utf-8");
-        multipart.addBodyPart(bodyPart);
-        
-        if(email.calendarAttachment.isPresent()) {
-            BodyPart calendarPart = new MimeBodyPart();
-            calendarPart.addHeader("Content-Class", "urn:content-classes:calendarmessage");
-            calendarPart.setContent(email.calendarAttachment.get().formatToIcal(), "text/calendar; charset=utf-8");
-            
-            multipart.addBodyPart(calendarPart);
-        }
-        
-        return multipart;
-    }
-
-    private static class SMTPAuthenticator extends javax.mail.Authenticator {
-        
-        private final String sendGridUser;
-        
-        private final String sendGridPassword;
-        
-        public SMTPAuthenticator(String sendGridUser, String sendGridPassword) {
-            this.sendGridUser = sendGridUser;
-            this.sendGridPassword = sendGridPassword;
-        }
-
-        public PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication(sendGridUser, sendGridPassword);
         }
     }
     
