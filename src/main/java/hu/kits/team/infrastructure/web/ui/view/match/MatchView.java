@@ -58,6 +58,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     private final Button comingButton = UIUtils.createSuccessPrimaryButton("Jövök", VaadinIcon.CHECK);
     private final Button notComingButton = UIUtils.createErrorButton("Nem jövök", VaadinIcon.CLOSE);
+    private final Component buttonBar = createButtonBar();
     
     private Optional<MemberStatement> myStatement;
     
@@ -69,7 +70,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
         setViewContent(createView());
-        setViewFooter(createButtonBar());
+        //setViewFooter(createButtonBar());
         init();
         isAttached = true;
         
@@ -235,6 +236,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
                 notComingButton.setText("Nem jövök");
                 comingButton.setText("Jövök");
             }
+            setViewFooter(buttonBar);
         } else {
             setViewFooter(new Div());
         }
