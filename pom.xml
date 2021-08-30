@@ -15,7 +15,7 @@
 		<maven.compiler.source>14</maven.compiler.source>
 		<maven.compiler.target>14</maven.compiler.target>
 
-		<vaadin.version>18.0.1</vaadin.version>
+		<vaadin.version>20.0.6</vaadin.version>
 		<jetty.version>9.4.35.v20201120</jetty.version>
 	</properties>
 
