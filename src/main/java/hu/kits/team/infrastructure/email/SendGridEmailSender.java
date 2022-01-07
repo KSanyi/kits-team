@@ -37,17 +37,17 @@ public class SendGridEmailSender implements EmailSender {
             request.setEndpoint("mail/send");
             
             Mail mail = new Mail();
-            mail.setFrom(new com.sendgrid.helpers.mail.objects.Email(email.sender));
-            mail.setSubject(email.subject);
-            mail.addContent(new Content("text/html", email.content));
+            mail.setFrom(new com.sendgrid.helpers.mail.objects.Email(email.sender()));
+            mail.setSubject(email.subject());
+            mail.addContent(new Content("text/html", email.content()));
             
             Personalization personalization = new Personalization();
-            personalization.addTo(new com.sendgrid.helpers.mail.objects.Email(email.recipient));
+            personalization.addTo(new com.sendgrid.helpers.mail.objects.Email(email.recipient()));
             mail.addPersonalization(personalization);
             
-            if(email.calendarAttachment.isPresent()) {
+            if(email.calendarAttachment().isPresent()) {
                 Attachments attachments = new Attachments();
-                String base64EncodedAttachment = Base64.getEncoder().encodeToString(email.calendarAttachment.get().formatToIcal().getBytes());
+                String base64EncodedAttachment = Base64.getEncoder().encodeToString(email.calendarAttachment().get().formatToIcal().getBytes());
                 attachments.setContent(base64EncodedAttachment);
                 attachments.setType("text/calendar");
                 attachments.setFilename("calendar");

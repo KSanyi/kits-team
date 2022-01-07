@@ -46,12 +46,12 @@ class EmailContentCreator {
         Map<String, Object> map = new HashMap<>();
         
         map.put("nickName", member.firstName());
-        map.put("matchId", matchData.id);
-        map.put("opponent", matchData.opponent);
-        map.put("venue", matchData.venue);
-        map.put("matchDay", Formatters.formatWeekday(matchData.time));
-        map.put("time", Formatters.formatDateTime(matchData.time));
-        map.put("url", Main.URL + "/match/" + matchData.id);
+        map.put("matchId", matchData.id());
+        map.put("opponent", matchData.opponent());
+        map.put("venue", matchData.venue());
+        map.put("matchDay", Formatters.formatWeekday(matchData.time()));
+        map.put("time", Formatters.formatDateTime(matchData.time()));
+        map.put("url", Main.URL + "/match/" + matchData.id());
         
         return map;
     }

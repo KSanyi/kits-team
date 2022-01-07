@@ -90,16 +90,16 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     private void initAppBar() {
         AppBar appBar = MainLayout.get().getAppBar();
-        appBar.setTitle(Formatters.formatDateTime2(match.matchData.time));
+        appBar.setTitle(Formatters.formatDateTime2(match.matchData().time()));
 
         HorizontalLayout subTitleContainer = appBar.getSubTitleContainer();
         subTitleContainer.removeAll();
         subTitleContainer.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
-        Label subtitle = new Label(" vs " + match.matchData.opponent + " - " + match.matchData.venue.name);
+        Label subtitle = new Label(" vs " + match.matchData().opponent() + " - " + match.matchData().venue().name());
         subtitle.getElement().getStyle().set("font-weight", "bold");
         subTitleContainer.add(subtitle);
         
-        Anchor anchor = new Anchor("https://maps.google.com/?q=" + match.matchData.venue.address, new Icon(VaadinIcon.MAP_MARKER));
+        Anchor anchor = new Anchor("https://maps.google.com/?q=" + match.matchData().venue().address(), new Icon(VaadinIcon.MAP_MARKER));
         anchor.setTarget("blank");
         anchor.getStyle().set("color", "green");
         //anchor.addClassName("googleAnchor");
@@ -139,7 +139,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     private void setupButtons(HorizontalLayout buttonsContainer) {
         Matches matches = Main.teamService.loadAllMatches();
         
-        Optional<Match> previousMatch = matches.findPrev(match.matchData.id);
+        Optional<Match> previousMatch = matches.findPrev(match.matchData().id());
         Button prevButton = new Button(VaadinIcon.ARROW_LEFT.create());
         prevButton.setWidthFull();
         if(previousMatch.isPresent()) {
@@ -148,7 +148,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
             prevButton.setEnabled(false);
         }
         
-        Optional<Match> nextMatch = matches.findNext(match.matchData.id);
+        Optional<Match> nextMatch = matches.findNext(match.matchData().id());
         Button nextButton = new Button(VaadinIcon.ARROW_RIGHT.create());
         nextButton.setWidthFull();
         if(nextMatch.isPresent()) {
@@ -162,13 +162,13 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     }
     
     private void gotoMatch(Match match) {
-        getUI().ifPresent(ui -> ui.navigate(MatchView.class, match.matchData.id));
+        getUI().ifPresent(ui -> ui.navigate(MatchView.class, match.matchData().id()));
     }
     
     private void openGuestWindow() {
         
         Consumer<String> callback = guestName -> {
-            Main.teamService.addGuestForMatch(match.matchData, new Guest(guestName));
+            Main.teamService.addGuestForMatch(match.matchData(), new Guest(guestName));
             UIUtils.showNotification(guestName + " hozzáadva");
             init();
         };
@@ -219,7 +219,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     }
     
     private void initButtons() {
-        if(Clock.now().isBefore(match.matchData.time)) {
+        if(Clock.now().isBefore(match.matchData().time())) {
             if(myStatement.isPresent()) {
                 if(myStatement.get().mark == Mark.COMING) {
                     comingButton.setVisible(false);
@@ -268,7 +268,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         filter();
         initButtons();
         initAppBar();
-        log.info(Session.currentMember() + " navigated to match view: {}", match.matchData);
+        log.info(Session.currentMember() + " navigated to match view: {}", match.matchData());
     }
     
     private Match loadMatch() {
@@ -289,16 +289,16 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     }
     
     void notComing(Guest guest) {
-        Main.teamService.removeGuestForMatch(match.matchData, guest);
+        Main.teamService.removeGuestForMatch(match.matchData(), guest);
         UIUtils.showNotification(guest.name + " eltávolítva");
         init();
     }
     
     private void saveStatement(Member member, Mark mark) {
         if(myStatement.isEmpty()) {
-            Main.teamService.saveStatementForMatch(match.matchData, new MemberStatement(member, mark, Clock.now(), ""));
+            Main.teamService.saveStatementForMatch(match.matchData(), new MemberStatement(member, mark, Clock.now(), ""));
         } else {
-            Main.teamService.updateStatementForMatch(match.matchData, new MemberStatement(member, mark, Clock.now(), ""));
+            Main.teamService.updateStatementForMatch(match.matchData(), new MemberStatement(member, mark, Clock.now(), ""));
         }
         init();
     }

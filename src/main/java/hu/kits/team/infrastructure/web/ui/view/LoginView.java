@@ -97,7 +97,6 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     private static void loggedIn(Member member) {
         
         Session.setMember(member);
-        VaadinSession.getCurrent().getSession().setMaxInactiveInterval(60 * 60 * 24);
         
         CookieUtil.createUserCookie(member.id);
         log.info(member + " using " + VaadinSession.getCurrent().getBrowser().getBrowserApplication());

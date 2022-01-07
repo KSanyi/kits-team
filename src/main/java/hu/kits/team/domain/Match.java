@@ -6,25 +6,10 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import hu.kits.team.common.CollectionsUtil;
 
-public class Match {
+public record Match(MatchData matchData, List<MemberStatement> memberStatements, List<Guest> guests) {
 
-    public final MatchData matchData;
-    
-    private final List<MemberStatement> memberStatements;
-    
-    private final List<Guest> guests;
-    
-    public Match(MatchData matchData, List<MemberStatement> memberStatements, List<Guest> guests) {
-        this.matchData = matchData;
-        this.memberStatements = memberStatements;
-        this.guests = guests;
-    }
-    
     public List<MemberStatement> memberStatements() {
         return memberStatements.stream()
                 .sorted(comparing(m -> m.time))
@@ -66,7 +51,7 @@ public class Match {
     
     public int status() {
         int coming = coming().size();
-        return coming - matchData.championship.numberOfPlayers;
+        return coming - matchData.championship().numberOfPlayers();
     }
     
     public String statusString() {
@@ -74,8 +59,4 @@ public class Match {
         return (status > 0 ? "+" : "") + status + "/" + withStatement().size();
     }
     
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-
 }

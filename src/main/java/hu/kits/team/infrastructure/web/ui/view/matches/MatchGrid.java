@@ -38,25 +38,25 @@ public class MatchGrid extends Grid<Match> {
     }
     
     private Component createRow(Match match) {
-        MatchData matchData = match.matchData;
-        return new ListItem(matchData.opponent, matchData.championship.name, new Initials(match.statusString()));
+        MatchData matchData = match.matchData();
+        return new ListItem(matchData.opponent(), matchData.championship().name(), new Initials(match.statusString()));
     }
     
     private Component createTime(Match match) {
-        MatchData matchData = match.matchData;
-        LocalDate matchDate = matchData.time.toLocalDate();
-        LocalTime matchTime = matchData.time.toLocalTime();
+        MatchData matchData = match.matchData();
+        LocalDate matchDate = matchData.time().toLocalDate();
+        LocalTime matchTime = matchData.time().toLocalTime();
         
         return new ListItem(Formatters.formatDate(matchDate), matchTime.toString());
     }
 
     private void matchSelected(SelectionEvent<Grid<Match>, Match> selectionEvent) {
-        selectionEvent.getFirstSelectedItem().ifPresent(match -> getUI().ifPresent(ui -> ui.navigate(MatchView.class, match.matchData.id)));
+        selectionEvent.getFirstSelectedItem().ifPresent(match -> getUI().ifPresent(ui -> ui.navigate(MatchView.class, match.matchData().id())));
     }
     
     public void filter(MatchDateFilter filter) {
         setItems(items.stream()
-                .filter(match -> filter.filter.test(match.matchData.time))
+                .filter(match -> filter.filter.test(match.matchData().time()))
                 .collect(toList()));
     }
 

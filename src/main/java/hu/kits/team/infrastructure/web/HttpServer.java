@@ -50,16 +50,22 @@ public class HttpServer extends Server {
           new MetaInfConfiguration()
         });
         context.getServletContext().setExtendedListenerTypes(true);
+        //context.getSessionHandler().setMaxInactiveInterval(60 * 60 * 120);
+        context.addEventListener(new ServletContextListeners());
         
+        handleStupidJsr356Exception(context);
+        
+        return context;
+    }
+    
+    @SuppressWarnings("deprecation")
+    private static void handleStupidJsr356Exception(WebAppContext context) {
         try {
-            // to supress this: java.lang.IllegalStateException: Unable to configure jsr356 at that stage. ServerContainer is null 
+            // to suppress this: java.lang.IllegalStateException: Unable to configure jsr356 at that stage. ServerContainer is null 
             context.getServletContext().setAttribute(ServerContainer.class.getName(), WebSocketServerContainerInitializer.configureContext(context));
         } catch(ServletException ex) {
             logger.error(ex.getMessage());
         }
-        context.addEventListener(new ServletContextListeners());
-        
-        return context;
     }
     
     private static Resource createBaseResource() {

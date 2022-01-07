@@ -72,16 +72,16 @@ public class ChampionshipJdbiRepository implements ChampionshipRepository {
     
     private static Map<String, Object> createValuesMap(Championship championship) {
         Map<String, Object> valuesMap = new HashMap<>();
-        valuesMap.put(COLUMN_NAME, championship.name);
-        valuesMap.put(COLUMN_NUM_OF_PLAYERS, championship.numberOfPlayers);
+        valuesMap.put(COLUMN_NAME, championship.name());
+        valuesMap.put(COLUMN_NUM_OF_PLAYERS, championship.numberOfPlayers());
         
         return valuesMap;
     }
 
     public void update(Championship championship) {
         Map<String, Object> values = createValuesMap(championship);
-        Map<String, Object> originalValues = createValuesMap(find(championship.id));
-        jdbi.withHandle(handle -> JdbiUtil.createUpdate(handle, TABLE_CHAMPIONSHIP, originalValues, values, COLUMN_ID, String.valueOf(championship.id)).execute());
+        Map<String, Object> originalValues = createValuesMap(find(championship.id()));
+        jdbi.withHandle(handle -> JdbiUtil.createUpdate(handle, TABLE_CHAMPIONSHIP, originalValues, values, COLUMN_ID, String.valueOf(championship.id())).execute());
     }
     
 }

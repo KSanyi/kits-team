@@ -38,7 +38,7 @@ public class CalendarAttachment {
             "DTSTAMP:" + timestamp + "\n" +
             "UID:" + UUID.randomUUID() + "\n" +
             "CREATED:" + timestamp + "\n" + 
-            "DESCRIPTION:" + Main.URL + "/match/" + matchData.id + "\n" + 
+            "DESCRIPTION:" + Main.URL + "/match/" + matchData.id() + "\n" + 
             "LAST-MODIFIED:" + timestamp + "\n" + 
             "SEQUENCE:0\n" + 
             "STATUS:CONFIRMED\n" + 
@@ -48,19 +48,19 @@ public class CalendarAttachment {
     }
     
     private LocalDateTime matchStart() {
-        return matchData.time;
+        return matchData.time();
     }
     
     private LocalDateTime matchEnd() {
-        return matchData.time.plusMinutes(50);
+        return matchData.time().plusMinutes(50);
     }
     
     private String summary() {
-        return matchData.championship.name + " vs " + matchData.opponent;
+        return matchData.championship().name() + " vs " + matchData.opponent();
     }
     
     private String location() {
-        return matchData.venue.address;
+        return matchData.venue().address();
     }
     
 }

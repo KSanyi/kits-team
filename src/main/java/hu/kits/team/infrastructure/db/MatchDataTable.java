@@ -67,8 +67,8 @@ class MatchDataTable {
         long champId = rs.getLong(COLUMN_CHAMP_ID);
         String venueId = rs.getString(COLUMN_VENUE_ID);
         
-        Championship championship = championships.stream().filter(c -> c.id == champId).findAny().get();
-        Venue venue = venues.stream().filter(v -> v.id.equals(venueId)).findAny().get();
+        Championship championship = championships.stream().filter(c -> c.id() == champId).findAny().get();
+        Venue venue = venues.stream().filter(v -> v.id().equals(venueId)).findAny().get();
         
         return new MatchData(
                 rs.getLong(COLUMN_ID),
@@ -95,18 +95,18 @@ class MatchDataTable {
     
     private static Map<String, Object> createValuesMap(MatchData matchData) {
         Map<String, Object> valuesMap = new HashMap<>();
-        valuesMap.put(COLUMN_CHAMP_ID, matchData.championship.id);
-        valuesMap.put(COLUMN_TIME, matchData.time);
-        valuesMap.put(COLUMN_VENUE_ID, matchData.venue.id);
-        valuesMap.put(COLUMN_OPPONENT, matchData.opponent);
+        valuesMap.put(COLUMN_CHAMP_ID, matchData.championship().id());
+        valuesMap.put(COLUMN_TIME, matchData.time());
+        valuesMap.put(COLUMN_VENUE_ID, matchData.venue().id());
+        valuesMap.put(COLUMN_OPPONENT, matchData.opponent());
         
         return valuesMap;
     }
 
     void update(MatchData matchData) {
         Map<String, Object> values = createValuesMap(matchData);
-        Map<String, Object> originalValues = createValuesMap(find(matchData.id));
-        jdbi.withHandle(handle -> JdbiUtil.createUpdate(handle, TABLE_MATCH_DATA, originalValues, values, COLUMN_ID, String.valueOf(matchData.id)).execute());
+        Map<String, Object> originalValues = createValuesMap(find(matchData.id()));
+        jdbi.withHandle(handle -> JdbiUtil.createUpdate(handle, TABLE_MATCH_DATA, originalValues, values, COLUMN_ID, String.valueOf(matchData.id())).execute());
     }
     
 }

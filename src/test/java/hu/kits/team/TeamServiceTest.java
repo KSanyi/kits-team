@@ -59,16 +59,16 @@ public class TeamServiceTest {
         List<Championship> championships = teamService.loadChampionships();
         
         assertEquals(2, championships.size());
-        assertEquals("BEAC nyár", championships.get(1).name);
-        assertEquals(6, championships.get(1).numberOfPlayers);
+        assertEquals("BEAC nyár", championships.get(1).name());
+        assertEquals(6, championships.get(1).numberOfPlayers());
         
-        teamService.updateChampionship(new Championship(championships.get(1).id, "BEAC nyár 2019", 5));
+        teamService.updateChampionship(new Championship(championships.get(1).id(), "BEAC nyár 2019", 5));
         
         championships = teamService.loadChampionships();
         
         assertEquals(2, championships.size());
-        assertEquals("BEAC nyár 2019", championships.get(1).name);
-        assertEquals(5, championships.get(1).numberOfPlayers);
+        assertEquals("BEAC nyár 2019", championships.get(1).name());
+        assertEquals(5, championships.get(1).numberOfPlayers());
     }
     
     @Test
@@ -81,16 +81,16 @@ public class TeamServiceTest {
         
         teamService.saveNewMatchData(matchData);
         
-        matchData = teamService.loadAllMatches().entries().get(0).matchData;
+        matchData = teamService.loadAllMatches().entries().get(0).matchData();
         
-        assertEquals("Üzleti Liga ÁBL 2019", matchData.championship.name);
-        assertEquals("Jubi Titáns", matchData.opponent);
-        assertEquals("SportMax2", matchData.venue.name);
-        assertEquals(LocalDateTime.of(2019,8,8, 20,0), matchData.time);
+        assertEquals("Üzleti Liga ÁBL 2019", matchData.championship().name());
+        assertEquals("Jubi Titáns", matchData.opponent());
+        assertEquals("SportMax2", matchData.venue().name());
+        assertEquals(LocalDateTime.of(2019,8,8, 20,0), matchData.time());
         
         // UPDATE
         
-        MatchData updatedMatchData = new MatchData(matchData.id, championship, LocalDateTime.of(2019,8,8, 21,0), venue, "LogMeIn");
+        MatchData updatedMatchData = new MatchData(matchData.id(), championship, LocalDateTime.of(2019,8,8, 21,0), venue, "LogMeIn");
         
         teamService.updateMatchData(updatedMatchData);
         
@@ -98,12 +98,12 @@ public class TeamServiceTest {
         
         assertEquals(1, matches.entries().size());
         
-        matchData = matches.entries().get(0).matchData;
+        matchData = matches.entries().get(0).matchData();
         
-        assertEquals("Üzleti Liga ÁBL 2019", matchData.championship.name);
-        assertEquals("LogMeIn", matchData.opponent);
-        assertEquals("SportMax2", matchData.venue.name);
-        assertEquals(LocalDateTime.of(2019,8,8, 21,0), matchData.time);
+        assertEquals("Üzleti Liga ÁBL 2019", matchData.championship().name());
+        assertEquals("LogMeIn", matchData.opponent());
+        assertEquals("SportMax2", matchData.venue().name());
+        assertEquals(LocalDateTime.of(2019,8,8, 21,0), matchData.time());
     }
     
     @Test

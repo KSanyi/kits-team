@@ -19,38 +19,38 @@ public class Matches {
     
     public Optional<Match> find(long matchId) {
         return entries.stream()
-            .filter(e -> e.matchData.id == matchId)
+            .filter(e -> e.matchData().id() == matchId)
             .findFirst();
     }
     
     public List<Match> entries() {
         return entries.stream()
-            .sorted(comparing(m -> m.matchData.time))
+            .sorted(comparing(m -> m.matchData().time()))
             .collect(toList());
     }
 
     public Match findNext(LocalDateTime time) {
-        return entries.stream().filter(e -> e.matchData.time.isAfter(time))
-            .sorted(comparing(e -> e.matchData.time))
+        return entries.stream().filter(e -> e.matchData().time().isAfter(time))
+            .sorted(comparing(e -> e.matchData().time()))
             .findFirst().orElseGet(() -> findLast(time));
     }
     
     private Match findLast(LocalDateTime time) {
         return entries.stream()
-            .filter(e -> e.matchData.time.isBefore(time))
-            .sorted(comparing((Match e) -> e.matchData.time).reversed()).findFirst().orElseThrow();
+            .filter(e -> e.matchData().time().isBefore(time))
+            .sorted(comparing((Match e) -> e.matchData().time()).reversed()).findFirst().orElseThrow();
     }
 
     public List<Match> in(DateInterval dateInterval) {
         return entries.stream()
-                .filter(e -> dateInterval.contains(e.matchData.time))
+                .filter(e -> dateInterval.contains(e.matchData().time()))
                 .collect(toList());
     }
 
     public Optional<Match> findPrev(long matchId) {
         List<Match> entries = entries();
         for(int i=0;i<entries.size();i++) {
-            if(entries.get(i).matchData.id == matchId) {
+            if(entries.get(i).matchData().id() == matchId) {
                 if(i > 0) {
                     return Optional.of(entries.get(i-1));
                 }
@@ -62,7 +62,7 @@ public class Matches {
     public Optional<Match> findNext(long matchId) {
         List<Match> entries = entries();
         for(int i=0;i<entries.size();i++) {
-            if(entries.get(i).matchData.id == matchId) {
+            if(entries.get(i).matchData().id() == matchId) {
                 if(entries.size() > i+1) {
                     return Optional.of(entries.get(i+1));
                 }

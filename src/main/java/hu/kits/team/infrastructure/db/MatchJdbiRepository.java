@@ -32,12 +32,12 @@ public class MatchJdbiRepository implements MatchRepository {
 
     @Override
     public void saveStatementForMatch(MatchData matchData, MemberStatement memberStatement) {
-        memberStatementTable.saveNew(new MatchMemberStatement(matchData.id, memberStatement));
+        memberStatementTable.saveNew(new MatchMemberStatement(matchData.id(), memberStatement));
     }
     
     @Override
     public void updateStatementForMatch(MatchData matchData, MemberStatement memberStatement) {
-        memberStatementTable.update(new MatchMemberStatement(matchData.id, memberStatement));
+        memberStatementTable.update(new MatchMemberStatement(matchData.id(), memberStatement));
     }
 
     @Override
@@ -64,8 +64,8 @@ public class MatchJdbiRepository implements MatchRepository {
         
         return new Matches(matchDatas.stream().map(matchData -> new Match(
                     matchData, 
-                    findStatementsForMatch(matchData.id, memberStatements),
-                    findGuestsForMatch(matchData.id, guestForMatchEntries)))
+                    findStatementsForMatch(matchData.id(), memberStatements),
+                    findGuestsForMatch(matchData.id(), guestForMatchEntries)))
                 .collect(toList()));
     }
 

@@ -38,7 +38,7 @@ public class TeamService {
     }
     
     public List<Championship> loadChampionships() {
-        return championshipRepository.loadAll().stream().sorted(comparing(c -> c.id)).collect(toList());
+        return championshipRepository.loadAll().stream().sorted(comparing(c -> c.id())).collect(toList());
     }
 
     public Championship createChampionship(String name, int numberOfPlayers) {
@@ -50,7 +50,7 @@ public class TeamService {
     }
     
     public List<Venue> loadVenues() {
-        return venueRepository.loadAll().stream().sorted(comparing(v -> v.name)).collect(toList());
+        return venueRepository.loadAll().stream().sorted(comparing(v -> v.name())).collect(toList());
     }
 
     public MatchData saveNewMatchData(MatchData matchData) {
@@ -82,12 +82,12 @@ public class TeamService {
     }
     
     public void addGuestForMatch(MatchData matchData, Guest guest) {
-        matchRepository.addGuestForMatch(matchData.id, guest);
+        matchRepository.addGuestForMatch(matchData.id(), guest);
         log.info("Guest added for match {}: {}", matchData, guest);
     }
 
     public void removeGuestForMatch(MatchData matchData, Guest guest) {
-        matchRepository.removeGuestForMatch(matchData.id, guest);
+        matchRepository.removeGuestForMatch(matchData.id(), guest);
         log.info("Guest removed for match {}: {}", matchData, guest);
     }
     
@@ -108,7 +108,7 @@ public class TeamService {
     public int sendReminders(Match match) {
         int count = 0;
         for(Member member : match.noStatements(members)) {
-            boolean success = emailSender.sendEmail(EmailCreator.createReminderEmail(member, match.matchData));
+            boolean success = emailSender.sendEmail(EmailCreator.createReminderEmail(member, match.matchData()));
             if(success) count++;
         }
         return count;
