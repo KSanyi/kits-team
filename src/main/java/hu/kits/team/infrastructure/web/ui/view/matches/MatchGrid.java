@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toList;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import com.vaadin.flow.component.Component;
@@ -61,7 +60,6 @@ public class MatchGrid extends Grid<Match> {
         setItems(items.stream()
                 .filter(match -> filter.filter.test(match.matchData().time()))
                 .sorted(filter.comparator)
-                .sorted(Comparator.comparing(m -> m.matchData().time()))
                 .collect(toList()));
     }
 
