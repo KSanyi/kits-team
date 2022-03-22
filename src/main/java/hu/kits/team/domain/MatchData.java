@@ -15,7 +15,7 @@ public record MatchData(long id, Championship championship, LocalDateTime time, 
     }
     
     public String formatResult() {
-        return matchResult.map(MatchResult::format).orElse("");
+        return matchResult.map(MatchResult::format).orElse("? : ?");
     }
     
 }
