@@ -63,7 +63,7 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
         
         for(int i=0;i<goals;i++) {
             Image goalImage = new Image(UIUtils.IMG_PATH + "small-football-icon.jpg", "O");
-            goalImage.setWidth("40px");
+            goalImage.setWidth("20px");
             layout.add(goalImage);
         }
         return layout;
