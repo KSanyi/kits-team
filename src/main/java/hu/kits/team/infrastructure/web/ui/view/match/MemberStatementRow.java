@@ -11,7 +11,7 @@ import hu.kits.team.domain.Match;
 import hu.kits.team.domain.Members;
 import hu.kits.team.domain.Player;
 
-class MemberStatementRow {
+class MemberStatementRow implements Comparable<MemberStatementRow> {
 
     final Player player;
     
@@ -28,6 +28,7 @@ class MemberStatementRow {
     static List<MemberStatementRow> createForMatch(Members members, Match match) {
         List<MemberStatementRow> rowsForMembers = members.entries().stream()
                 .map(member -> new MemberStatementRow(member, match.statementFor(member).map(m -> m.mark), match.goalsBy(member)))
+                .sorted()
                 .collect(toList());
         
         List<MemberStatementRow> rowsGuests = match.guests().stream()
@@ -35,6 +36,23 @@ class MemberStatementRow {
                 .collect(toList());
         
         return CollectionsUtil.concat(rowsForMembers, rowsGuests);
+    }
+
+    @Override
+    public int compareTo(MemberStatementRow other) {
+        return other.createScore() - createScore();
+    }
+    
+    private int createScore() {
+        if(mark.isPresent()) {
+            if(mark.get() == Mark.COMING) {
+                return 10 + goals;
+            } else {
+                return 5;
+            }
+        } else {
+            return 0;    
+        }
     }
     
 }
