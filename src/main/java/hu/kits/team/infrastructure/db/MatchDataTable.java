@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import hu.kits.team.domain.Championship;
 import hu.kits.team.domain.ChampionshipRepository;
 import hu.kits.team.domain.MatchData;
+import hu.kits.team.domain.MatchResult;
 import hu.kits.team.domain.Venue;
 import hu.kits.team.domain.VenueRepository;
 
@@ -29,6 +31,8 @@ class MatchDataTable {
     private static final String COLUMN_TIME = "TIME";
     private static final String COLUMN_VENUE_ID = "VENUE_ID";
     private static final String COLUMN_OPPONENT = "OPPONENT";
+    private static final String COLUMN_GOALS_SCORED = "GOALS_SCORED";
+    private static final String COLUMN_GOALS_CONCEDED = "GOALS_CONCEDED";
     
     private final Jdbi jdbi;
     
@@ -70,12 +74,30 @@ class MatchDataTable {
         Championship championship = championships.stream().filter(c -> c.id() == champId).findAny().get();
         Venue venue = venues.stream().filter(v -> v.id().equals(venueId)).findAny().get();
         
+        Optional<MatchResult> matchResult = loadMatchResult(rs);
+        
         return new MatchData(
                 rs.getLong(COLUMN_ID),
                 championship,
                 rs.getTimestamp(COLUMN_TIME).toLocalDateTime(),
                 venue,
-                rs.getString(COLUMN_OPPONENT));
+                rs.getString(COLUMN_OPPONENT),
+                matchResult);
+    }
+
+    private static Optional<MatchResult> loadMatchResult(ResultSet rs) throws SQLException {
+        Optional<Integer> goalsScored = loadOptionalInt(rs, COLUMN_GOALS_SCORED);
+        Optional<Integer> goalsConceded = loadOptionalInt(rs, COLUMN_GOALS_CONCEDED);
+        if(goalsScored.isEmpty() || goalsConceded.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(new MatchResult(goalsScored.get(), goalsConceded.get()));
+        }
+    }
+
+    private static Optional<Integer> loadOptionalInt(ResultSet rs, String column) throws SQLException {
+        int number = rs.getInt(column);
+        return rs.wasNull() ? Optional.empty() : Optional.of(number); 
     }
 
     void delete(long id) {
@@ -99,6 +121,8 @@ class MatchDataTable {
         valuesMap.put(COLUMN_TIME, matchData.time());
         valuesMap.put(COLUMN_VENUE_ID, matchData.venue().id());
         valuesMap.put(COLUMN_OPPONENT, matchData.opponent());
+        valuesMap.put(COLUMN_GOALS_SCORED, matchData.matchResult().isPresent() ? matchData.matchResult().get().goalsScored() : null);
+        valuesMap.put(COLUMN_GOALS_CONCEDED, matchData.matchResult().isPresent() ? matchData.matchResult().get().goalsConceded() : null);
         
         return valuesMap;
     }

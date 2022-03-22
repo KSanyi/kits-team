@@ -95,7 +95,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         HorizontalLayout subTitleContainer = appBar.getSubTitleContainer();
         subTitleContainer.removeAll();
         subTitleContainer.setDefaultVerticalComponentAlignment(Alignment.BASELINE);
-        Label subtitle = new Label(" vs " + match.matchData().opponent() + " - " + match.matchData().venue().name());
+        Label subtitle = new Label(" vs " + match.matchData().opponent() + " " + match.matchData().formatResult() + " - " + match.matchData().venue().name());
         subtitle.getElement().getStyle().set("font-weight", "bold");
         subTitleContainer.add(subtitle);
         

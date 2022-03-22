@@ -39,7 +39,9 @@ public class MatchGrid extends Grid<Match> {
     
     private Component createRow(Match match) {
         MatchData matchData = match.matchData();
-        return new ListItem(matchData.opponent(), matchData.championship().name(), new Initials(match.statusString()));
+        return new ListItem(matchData.opponent(), 
+                matchData.championship().name(), 
+                new Initials(matchData.formatResult()));
     }
     
     private Component createTime(Match match) {
@@ -49,7 +51,7 @@ public class MatchGrid extends Grid<Match> {
         
         return new ListItem(Formatters.formatDate(matchDate), matchTime.toString());
     }
-
+    
     private void matchSelected(SelectionEvent<Grid<Match>, Match> selectionEvent) {
         selectionEvent.getFirstSelectedItem().ifPresent(match -> getUI().ifPresent(ui -> ui.navigate(MatchView.class, match.matchData().id())));
     }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -15,6 +16,7 @@ import hu.kits.team.domain.Championship;
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Match;
 import hu.kits.team.domain.MatchData;
+import hu.kits.team.domain.MatchResult;
 import hu.kits.team.domain.Matches;
 import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
@@ -77,7 +79,7 @@ public class TeamServiceTest {
         Championship championship = teamService.loadChampionships().get(0);
         Venue venue = teamService.loadVenues().get(0);
         
-        MatchData matchData = new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns");
+        MatchData matchData = new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns", Optional.empty());
         
         teamService.saveNewMatchData(matchData);
         
@@ -89,8 +91,7 @@ public class TeamServiceTest {
         assertEquals(LocalDateTime.of(2019,8,8, 20,0), matchData.time());
         
         // UPDATE
-        
-        MatchData updatedMatchData = new MatchData(matchData.id(), championship, LocalDateTime.of(2019,8,8, 21,0), venue, "LogMeIn");
+        MatchData updatedMatchData = new MatchData(matchData.id(), championship, LocalDateTime.of(2019,8,8, 21,0), venue, "LogMeIn", Optional.empty());
         
         teamService.updateMatchData(updatedMatchData);
         
@@ -104,6 +105,23 @@ public class TeamServiceTest {
         assertEquals("LogMeIn", matchData.opponent());
         assertEquals("SportMax2", matchData.venue().name());
         assertEquals(LocalDateTime.of(2019,8,8, 21,0), matchData.time());
+        
+        // UPDATE score
+        updatedMatchData = new MatchData(matchData.id(), championship, LocalDateTime.of(2019,8,8, 21,0), venue, "LogMeIn", Optional.of(new MatchResult(3, 2)));
+        
+        teamService.updateMatchData(updatedMatchData);
+        
+        matches = teamService.loadAllMatches();
+        
+        assertEquals(1, matches.entries().size());
+        
+        matchData = matches.entries().get(0).matchData();
+        
+        assertEquals("Üzleti Liga ÁBL 2019", matchData.championship().name());
+        assertEquals("LogMeIn", matchData.opponent());
+        assertEquals("SportMax2", matchData.venue().name());
+        assertEquals(LocalDateTime.of(2019,8,8, 21,0), matchData.time());
+        assertEquals(new MatchResult(3, 2), matchData.matchResult().get());
     }
     
     @Test
@@ -115,7 +133,7 @@ public class TeamServiceTest {
         Championship championship = teamService.loadChampionships().get(0);
         Venue venue = teamService.loadVenues().get(0);
         
-        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns"));
+        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns", Optional.empty()));
         
         teamService.saveStatementForMatch(matchData, new MemberStatement(sanyi, Mark.COMING, LocalDateTime.of(2019,8,5, 8,0), ""));
         teamService.saveStatementForMatch(matchData, new MemberStatement(zoli, Mark.NOT_COMING, LocalDateTime.of(2019,8,5, 9,0), ""));
@@ -141,7 +159,7 @@ public class TeamServiceTest {
         Championship championship = teamService.loadChampionships().get(0);
         Venue venue = teamService.loadVenues().get(0);
         
-        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns"));
+        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns", Optional.empty()));
         
         teamService.saveStatementForMatch(matchData, new MemberStatement(sanyi, Mark.COMING, LocalDateTime.of(2019,8,5, 8,0), ""));
         
@@ -162,7 +180,7 @@ public class TeamServiceTest {
         Championship championship = teamService.loadChampionships().get(0);
         Venue venue = teamService.loadVenues().get(0);
         
-        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns"));
+        MatchData matchData = teamService.saveNewMatchData(new MatchData(0, championship, LocalDateTime.of(2019,8,8, 20,0), venue, "Jubi Titáns", Optional.empty()));
         
         Clock.setStaticDate(LocalDateTime.of(2019,8,4, 8,0));
         
