@@ -9,8 +9,10 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 import hu.kits.team.domain.Guest;
@@ -50,10 +52,21 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
         
         if(player instanceof Member) {
             Member member = (Member)player;
-            return new ListItem(new Initials(member.getInitials()), member.nickName(), member.email);
+            return new ListItem(new Initials(member.getInitials()), member.nickName(), createGoalsComponent(row.goals));
         } else {
-            return new ListItem(new Initials("V", Color.Primary._50), player.name, "");
+            return new ListItem(new Initials("V", Color.Primary._50), player.name, createGoalsComponent(row.goals));
         }
+    }
+    
+    private static Component createGoalsComponent(int goals) {
+        HorizontalLayout layout = new HorizontalLayout();
+        
+        for(int i=0;i<goals;i++) {
+            Image goalImage = new Image(UIUtils.IMG_PATH + "small-football-icon.jpg", "O");
+            goalImage.setWidth("40px");
+            layout.add(goalImage);
+        }
+        return layout;
     }
     
     private Icon createComingIcon(MemberStatementRow row) {

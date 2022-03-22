@@ -3,6 +3,7 @@ package hu.kits.team.infrastructure.db;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -14,6 +15,7 @@ import hu.kits.team.domain.MatchRepository;
 import hu.kits.team.domain.Matches;
 import hu.kits.team.domain.MemberStatement;
 import hu.kits.team.domain.Members;
+import hu.kits.team.domain.Player;
 import hu.kits.team.domain.VenueRepository;
 
 public class MatchJdbiRepository implements MatchRepository {
@@ -23,11 +25,14 @@ public class MatchJdbiRepository implements MatchRepository {
     private final MatchMemberStatementTable memberStatementTable;
     
     private final GuestForMatchTable guestForMatchTable;
+    
+    private final GoalsTable goalsTable;
 
     public MatchJdbiRepository(DataSource dataSource, ChampionshipRepository championshipRepository, VenueRepository venueRepository, Members members) {
         matchDataTable = new MatchDataTable(dataSource, championshipRepository, venueRepository);
         memberStatementTable = new MatchMemberStatementTable(dataSource, members);
         guestForMatchTable = new GuestForMatchTable(dataSource);
+        goalsTable = new GoalsTable(dataSource, members);
     }
 
     @Override
@@ -61,11 +66,13 @@ public class MatchJdbiRepository implements MatchRepository {
         List<MatchData> matchDatas = matchDataTable.loadAll();
         List<MatchMemberStatement> memberStatements = memberStatementTable.loadAll();
         List<GuestForMatch> guestForMatchEntries = guestForMatchTable.loadAll();
+        Map<Long, Map<Player, Integer>> goalsPerMatchPerPlayer = goalsTable.loadAll();
         
         return new Matches(matchDatas.stream().map(matchData -> new Match(
                     matchData, 
                     findStatementsForMatch(matchData.id(), memberStatements),
-                    findGuestsForMatch(matchData.id(), guestForMatchEntries)))
+                    findGuestsForMatch(matchData.id(), guestForMatchEntries),
+                    goalsPerMatchPerPlayer.getOrDefault(matchData.id(), Map.of())))
                 .collect(toList()));
     }
 

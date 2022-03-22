@@ -4,11 +4,15 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import hu.kits.team.common.CollectionsUtil;
 
-public record Match(MatchData matchData, List<MemberStatement> memberStatements, List<Guest> guests) {
+public record Match(MatchData matchData,
+        List<MemberStatement> memberStatements, 
+        List<Guest> guests,
+        Map<Player, Integer> goals) {
 
     public List<MemberStatement> memberStatements() {
         return memberStatements.stream()
@@ -20,6 +24,10 @@ public record Match(MatchData matchData, List<MemberStatement> memberStatements,
         return memberStatements().stream()
                 .filter(m -> m.member.id == member.id)
                 .findFirst();
+    }
+    
+    public int goalsBy(Player player) {
+        return goals.getOrDefault(player, 0);
     }
     
     public List<Player> coming() {

@@ -16,19 +16,22 @@ class MemberStatementRow {
     final Player player;
     
     final Optional<Mark> mark;
+    
+    final int goals;
 
-    MemberStatementRow(Player player, Optional<Mark> mark) {
+    MemberStatementRow(Player player, Optional<Mark> mark, int goals) {
         this.player = player;
         this.mark = mark;
+        this.goals = goals;
     }
     
     static List<MemberStatementRow> createForMatch(Members members, Match match) {
         List<MemberStatementRow> rowsForMembers = members.entries().stream()
-                .map(member -> new MemberStatementRow(member, match.statementFor(member).map(m -> m.mark)))
+                .map(member -> new MemberStatementRow(member, match.statementFor(member).map(m -> m.mark), match.goalsBy(member)))
                 .collect(toList());
         
         List<MemberStatementRow> rowsGuests = match.guests().stream()
-                .map(guest -> new MemberStatementRow(guest, Optional.of(Mark.COMING)))
+                .map(guest -> new MemberStatementRow(guest, Optional.of(Mark.COMING), match.goalsBy(guest)))
                 .collect(toList());
         
         return CollectionsUtil.concat(rowsForMembers, rowsGuests);
