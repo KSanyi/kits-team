@@ -106,10 +106,8 @@ public class TeamServiceTest {
         assertEquals("SportMax2", matchData.venue().name());
         assertEquals(LocalDateTime.of(2019,8,8, 21,0), matchData.time());
         
-        // UPDATE score
-        updatedMatchData = new MatchData(matchData.id(), championship, LocalDateTime.of(2019,8,8, 21,0), venue, "LogMeIn", Optional.of(new MatchResult(3, 2)));
-        
-        teamService.updateMatchData(updatedMatchData);
+        // UPDATE result
+        teamService.updateResult(matchData, Optional.of(new MatchResult(3, 2)));
         
         matches = teamService.loadAllMatches();
         

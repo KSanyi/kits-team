@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,11 @@ public class TeamService {
 
     public Matches loadAllMatches() {
         return matchRepository.loadAllMatches();
+    }
+    
+    public void updateResult(MatchData matchData, Optional<MatchResult> matchResult) {
+        matchRepository.updateMatchData(matchData.withResult(matchResult));
+        log.info("Match result updated: {} {}", matchData, matchResult.map(MatchResult::format).orElse("? : ?"));
     }
 
     public void updateMatchData(MatchData updatedMatchData) {

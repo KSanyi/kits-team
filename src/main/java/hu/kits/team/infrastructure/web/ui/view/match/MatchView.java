@@ -34,6 +34,7 @@ import hu.kits.team.common.Formatters;
 import hu.kits.team.domain.Guest;
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Match;
+import hu.kits.team.domain.MatchResult;
 import hu.kits.team.domain.Matches;
 import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
@@ -109,6 +110,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         Component statusBadge = createStatusBadge();
         
         ContextMenu contextMenu = new ContextMenu(statusBadge);
+        contextMenu.addItem("Eredmény frissítése", click -> openResultUpdateWindow());
         contextMenu.addItem("Vendég hozzádása", click -> openGuestWindow());
         contextMenu.addItem("Emlékeztető küldése", click -> sendReminders());
         
@@ -166,7 +168,6 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     }
     
     private void openGuestWindow() {
-        
         Consumer<String> callback = guestName -> {
             Main.teamService.addGuestForMatch(match.matchData(), new Guest(guestName));
             UIUtils.showNotification(guestName + " hozzáadva");
@@ -174,6 +175,14 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         };
         
         new GuestWindow(callback).open();
+    }
+    
+    private void openResultUpdateWindow() {
+        Consumer<Optional<MatchResult>> callback = result -> {
+            Main.teamService.updateResult(match.matchData(), result);
+            init();
+        };
+        new ResultUpdateWindow(match.matchData().matchResult(), callback).open();
     }
     
     private void sendReminders() {

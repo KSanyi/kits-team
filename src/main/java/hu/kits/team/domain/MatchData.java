@@ -10,6 +10,11 @@ public record MatchData(long id, Championship championship, LocalDateTime time, 
     public MatchData withId(long id) {
         return new MatchData(id, championship, time, venue, opponent, Optional.empty());
     }
+    
+    public MatchData withResult(Optional<MatchResult> matchResult) {
+        return new MatchData(id, championship, time, venue, opponent, matchResult);
+    }
+    
     public String toString() {
         return Formatters.formatDateTime(time) + " (" + opponent + ")";
     }

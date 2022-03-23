@@ -2,6 +2,7 @@ package hu.kits.team.infrastructure.db;
 
 import static java.util.stream.Collectors.joining;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,11 +13,15 @@ import java.util.stream.IntStream;
 
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.statement.Update;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import hu.kits.team.common.CollectionsUtil;
 
 public class JdbiUtil {
 
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    
     public static Update createInsert(Handle handle, String tableName, Map<String, ?> values) {
         
         List<String> keys = new ArrayList<>(values.keySet());
@@ -53,6 +58,9 @@ public class JdbiUtil {
         
         String updateSql = String.format("UPDATE %s SET %s WHERE %s = :id", tableName, paramMap.keySet().stream().map(column -> column + " = :" + column).collect(joining(", ")), keyColumn);
         paramMap.put("id", keyColumnValue);
+        
+        log.info("{} {} updated: {}", tableName, keyColumnValue, updatesLog.stream().collect(joining(", ")));
+        
         return handle.createUpdate(updateSql).bindMap(paramMap);
     }
     
