@@ -110,12 +110,8 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         
         Component statusBadge = createStatusBadge();
         
-        ContextMenu contextMenu = new ContextMenu(statusBadge);
-        LocalDateTime matchTime = match.matchData().time();
-        LocalDateTime currentTime = Clock.now();
-        contextMenu.addItem("Eredmény frissítése", click -> openResultUpdateWindow()).setEnabled(currentTime.isAfter(matchTime));
-        contextMenu.addItem("Vendég hozzádása", click -> openGuestWindow()).setEnabled(currentTime.isBefore(matchTime));
-        contextMenu.addItem("Emlékeztető küldése", click -> sendReminders()).setEnabled(currentTime.isBefore(matchTime));
+        ContextMenu contextMenu = createContextMenu();
+        contextMenu.setTarget(statusBadge);
         
         appBar.setPreTabComponent(statusBadge);
         
@@ -139,6 +135,16 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         appBar.centerTabs();
         appBar.unHideButtonsContainer();
         setupButtons(appBar.getButtonsContainer());
+    }
+    
+    private ContextMenu createContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+        LocalDateTime matchTime = match.matchData().time();
+        LocalDateTime currentTime = Clock.now();
+        contextMenu.addItem("Eredmény frissítése", click -> openResultUpdateWindow()).setEnabled(currentTime.isAfter(matchTime));
+        contextMenu.addItem("Vendég hozzádása", click -> openGuestWindow()).setEnabled(currentTime.isBefore(matchTime));
+        contextMenu.addItem("Emlékeztető küldése", click -> sendReminders()).setEnabled(currentTime.isBefore(matchTime));
+        return contextMenu;
     }
     
     private void setupButtons(HorizontalLayout buttonsContainer) {
