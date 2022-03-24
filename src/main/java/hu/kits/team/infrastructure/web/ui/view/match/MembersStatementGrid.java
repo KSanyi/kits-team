@@ -54,6 +54,7 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
             Member member = (Member)player;
             Image avatar = new Image(UIUtils.IMG_PATH + member.id + ".png", member.getInitials());
             avatar.setWidth("50px");
+            avatar.setHeight("50px");
             return new ListItem(avatar, member.nickName(), createGoalsComponent(row.goals));
         } else {
             return new ListItem(new Initials("V", Color.Primary._50), player.name, createGoalsComponent(row.goals));
