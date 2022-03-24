@@ -4,8 +4,8 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import hu.kits.team.common.CollectionsUtil;
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Match;
 import hu.kits.team.domain.Members;
@@ -26,16 +26,15 @@ class MemberStatementRow implements Comparable<MemberStatementRow> {
     }
     
     static List<MemberStatementRow> createForMatch(Members members, Match match) {
-        List<MemberStatementRow> rowsForMembers = members.entries().stream()
-                .map(member -> new MemberStatementRow(member, match.statementFor(member).map(m -> m.mark), match.goalsBy(member)))
+        Stream<MemberStatementRow> rowsForMembers = members.entries().stream()
+                .map(member -> new MemberStatementRow(member, match.statementFor(member).map(m -> m.mark), match.goalsBy(member)));
+        
+        Stream<MemberStatementRow> rowsGuests = match.guests().stream()
+                .map(guest -> new MemberStatementRow(guest, Optional.of(Mark.COMING), match.goalsBy(guest)));
+        
+        return Stream.concat(rowsForMembers, rowsGuests)
                 .sorted()
                 .collect(toList());
-        
-        List<MemberStatementRow> rowsGuests = match.guests().stream()
-                .map(guest -> new MemberStatementRow(guest, Optional.of(Mark.COMING), match.goalsBy(guest)))
-                .collect(toList());
-        
-        return CollectionsUtil.concat(rowsForMembers, rowsGuests);
     }
 
     @Override
