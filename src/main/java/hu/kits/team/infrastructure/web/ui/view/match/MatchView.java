@@ -1,6 +1,7 @@
 package hu.kits.team.infrastructure.web.ui.view.match;
 
 import java.lang.invoke.MethodHandles;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -110,9 +111,11 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         Component statusBadge = createStatusBadge();
         
         ContextMenu contextMenu = new ContextMenu(statusBadge);
-        contextMenu.addItem("Eredmény frissítése", click -> openResultUpdateWindow());
-        contextMenu.addItem("Vendég hozzádása", click -> openGuestWindow());
-        contextMenu.addItem("Emlékeztető küldése", click -> sendReminders());
+        LocalDateTime matchTime = match.matchData().time();
+        LocalDateTime currentTime = Clock.now();
+        contextMenu.addItem("Eredmény frissítése", click -> openResultUpdateWindow()).setEnabled(currentTime.isAfter(matchTime));
+        contextMenu.addItem("Vendég hozzádása", click -> openGuestWindow()).setEnabled(currentTime.isBefore(matchTime));
+        contextMenu.addItem("Emlékeztető küldése", click -> sendReminders()).setEnabled(currentTime.isBefore(matchTime));
         
         appBar.setPreTabComponent(statusBadge);
         
