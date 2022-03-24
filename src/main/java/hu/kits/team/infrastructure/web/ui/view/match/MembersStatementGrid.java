@@ -52,7 +52,9 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
         
         if(player instanceof Member) {
             Member member = (Member)player;
-            return new ListItem(new Initials(member.getInitials()), member.nickName(), createGoalsComponent(row.goals));
+            Image avatar = new Image(UIUtils.IMG_PATH + member.id + ".png", member.getInitials());
+            avatar.setWidth("50px");
+            return new ListItem(avatar, member.nickName(), createGoalsComponent(row.goals));
         } else {
             return new ListItem(new Initials("V", Color.Primary._50), player.name, createGoalsComponent(row.goals));
         }

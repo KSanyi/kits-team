@@ -1,7 +1,7 @@
 .list-item {
   box-sizing: border-box;
   /* line-height: var(--lumo-line-height-m); */
-  padding: var(--lumo-space-wide-r-l);
+  padding: var(--lumo-space-wide-r-m);
   overflow: hidden;
   position: relative;
 }
@@ -14,9 +14,9 @@
 }
 
 .list-item__prefix img {
-  border-radius: var(--lumo-border-radius);
-  max-height: var(--lumo-icon-size-m);
-  max-width: var(--lumo-icon-size-m);
+  border-radius: 100%;
+  max-height: var(--lumo-icon-size-xl);
+  max-width: var(--lumo-icon-size-xl);
 }
 
 /* Content */
