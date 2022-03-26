@@ -48,16 +48,16 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
     }
 
     private Component createMemberInfo(MemberStatementRow row) {
-        Player player = row.player;
+        Player player = row.player();
         
         if(player instanceof Member) {
             Member member = (Member)player;
             Image avatar = new Image(UIUtils.IMG_PATH + member.id + ".png", member.getInitials());
             avatar.setWidth("50px");
             avatar.setHeight("50px");
-            return new ListItem(avatar, member.nickName(), createGoalsComponent(row.goals));
+            return new ListItem(avatar, member.nickName(), createGoalsComponent(row.goals()));
         } else {
-            return new ListItem(new Initials("V", Color.Primary._50), player.name, createGoalsComponent(row.goals));
+            return new ListItem(new Initials("V", Color.Primary._50), player.name, createGoalsComponent(row.goals()));
         }
     }
     
@@ -77,11 +77,11 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
         
         if(Session.currentMember().isAdmin) {
             ContextMenu contextMenu = new ContextMenu(icon);
-            if(row.player instanceof Member) {
-                contextMenu.addItem(Mark.COMING.label, c -> matchView.coming((Member)row.player));
-                contextMenu.addItem(Mark.NOT_COMING.label, c -> matchView.notComing((Member)row.player));
-            } else if(row.player instanceof Guest) {
-                contextMenu.addItem(Mark.NOT_COMING.label, c -> matchView.notComing((Guest)row.player));
+            if(row.player() instanceof Member) {
+                contextMenu.addItem(Mark.COMING.label, c -> matchView.coming((Member)row.player()));
+                contextMenu.addItem(Mark.NOT_COMING.label, c -> matchView.notComing((Member)row.player()));
+            } else if(row.player() instanceof Guest) {
+                contextMenu.addItem(Mark.NOT_COMING.label, c -> matchView.notComing((Guest)row.player()));
             }
         }
         
@@ -89,8 +89,8 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
     }
     
     private static Icon createIcon(MemberStatementRow row) {
-        if(!row.mark.isEmpty()) {
-            switch(row.mark.get()) {
+        if(!row.mark().isEmpty()) {
+            switch(row.mark().get()) {
                 case COMING: return UIUtils.createSuccessIcon(VaadinIcon.CHECK);
                 case NOT_COMING: return UIUtils.createErrorIcon(VaadinIcon.CLOSE);
             }
@@ -100,7 +100,7 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
 
     void filter(StatementFilter filter) {
         setItems(items.stream()
-                .filter(row -> filter.filter.test(row.mark))
+                .filter(row -> filter.filter.test(row.mark()))
                 .collect(toList()));
     }
 

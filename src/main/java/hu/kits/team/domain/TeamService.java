@@ -73,16 +73,16 @@ public class TeamService {
 
     public void saveStatementForMatch(MatchData matchData, MemberStatement memberStatement) {
         matchRepository.saveStatementForMatch(matchData, memberStatement);
-        if(memberStatement.mark == Mark.COMING) {
-            emailSender.sendEmail(EmailCreator.createCalendarEntryEmail(memberStatement.member, matchData));
+        if(memberStatement.mark() == Mark.COMING) {
+            emailSender.sendEmail(EmailCreator.createCalendarEntryEmail(memberStatement.member(), matchData));
         }
         log.info("Match statement saved: {} {}", matchData, memberStatement);
     }
 
     public void updateStatementForMatch(MatchData matchData, MemberStatement updatedMemberStatement) {
         matchRepository.updateStatementForMatch(matchData, updatedMemberStatement);
-        if(updatedMemberStatement.mark == Mark.COMING) {
-            emailSender.sendEmail(EmailCreator.createCalendarEntryEmail(updatedMemberStatement.member, matchData));
+        if(updatedMemberStatement.mark() == Mark.COMING) {
+            emailSender.sendEmail(EmailCreator.createCalendarEntryEmail(updatedMemberStatement.member(), matchData));
         }
         log.info("Match statement updated: {} {}", matchData, updatedMemberStatement);
     }

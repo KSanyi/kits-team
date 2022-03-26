@@ -72,14 +72,14 @@ class GoalsTable {
     private static Map<String, Object> createValuesMap(MatchMemberStatement matchMemberStatement) {
         Map<String, Object> valuesMap = new HashMap<>();
         valuesMap.put(COLUMN_MATCH_ID, matchMemberStatement.matchId);
-        valuesMap.put(COLUMN_MEMBER_ID, matchMemberStatement.memberStatement.member.id);
-        valuesMap.put(COLUMN_SCORED, matchMemberStatement.memberStatement.time);
+        valuesMap.put(COLUMN_MEMBER_ID, matchMemberStatement.memberStatement.member().id);
+        valuesMap.put(COLUMN_SCORED, matchMemberStatement.memberStatement.time());
         
         return valuesMap;
     }
 
     void update(MatchMemberStatement matchMemberStatement) {
-        delete(matchMemberStatement.matchId, matchMemberStatement.memberStatement.member.id);
+        delete(matchMemberStatement.matchId, matchMemberStatement.memberStatement.member().id);
         saveNew(matchMemberStatement);
     }
     

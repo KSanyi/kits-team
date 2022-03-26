@@ -68,16 +68,16 @@ class MatchMemberStatementTable {
     private static Map<String, Object> createValuesMap(MatchMemberStatement matchMemberStatement) {
         Map<String, Object> valuesMap = new HashMap<>();
         valuesMap.put(COLUMN_MATCH_ID, matchMemberStatement.matchId);
-        valuesMap.put(COLUMN_MEMBER_ID, matchMemberStatement.memberStatement.member.id);
-        valuesMap.put(COLUMN_TIME, matchMemberStatement.memberStatement.time);
-        valuesMap.put(COLUMN_COMMENT, matchMemberStatement.memberStatement.comment);
-        valuesMap.put(COLUMN_MARK, matchMemberStatement.memberStatement.mark);
+        valuesMap.put(COLUMN_MEMBER_ID, matchMemberStatement.memberStatement.member().id);
+        valuesMap.put(COLUMN_TIME, matchMemberStatement.memberStatement.time());
+        valuesMap.put(COLUMN_COMMENT, matchMemberStatement.memberStatement.comment());
+        valuesMap.put(COLUMN_MARK, matchMemberStatement.memberStatement.mark());
         
         return valuesMap;
     }
 
     void update(MatchMemberStatement matchMemberStatement) {
-        delete(matchMemberStatement.matchId, matchMemberStatement.memberStatement.member.id);
+        delete(matchMemberStatement.matchId, matchMemberStatement.memberStatement.member().id);
         saveNew(matchMemberStatement);
     }
     

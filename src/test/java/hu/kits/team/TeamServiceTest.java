@@ -140,13 +140,13 @@ public class TeamServiceTest {
         
         List<MemberStatement> statements = match.memberStatements();
         
-        assertEquals("sanyi", statements.get(0).member.id);
-        assertEquals(Mark.COMING, statements.get(0).mark);
-        assertEquals(LocalDateTime.of(2019,8,5, 8,0), statements.get(0).time);
+        assertEquals("sanyi", statements.get(0).member().id);
+        assertEquals(Mark.COMING, statements.get(0).mark());
+        assertEquals(LocalDateTime.of(2019,8,5, 8,0), statements.get(0).time());
         
-        assertEquals("zolika", statements.get(1).member.id);
-        assertEquals(Mark.NOT_COMING, statements.get(1).mark);
-        assertEquals(LocalDateTime.of(2019,8,5, 9,0), statements.get(1).time);
+        assertEquals("zolika", statements.get(1).member().id);
+        assertEquals(Mark.NOT_COMING, statements.get(1).mark());
+        assertEquals(LocalDateTime.of(2019,8,5, 9,0), statements.get(1).time());
     }
     
     @Test
@@ -163,13 +163,13 @@ public class TeamServiceTest {
         
         Match match = teamService.loadAllMatches().entries().get(0);
         
-        assertEquals(Mark.COMING, match.statementFor(sanyi).get().mark);
+        assertEquals(Mark.COMING, match.statementFor(sanyi).get().mark());
         
         teamService.updateStatementForMatch(matchData, new MemberStatement(sanyi, Mark.NOT_COMING, LocalDateTime.of(2019,8,5, 9,0), ""));
         
         match = teamService.loadAllMatches().entries().get(0);
         
-        assertEquals(Mark.NOT_COMING, match.statementFor(sanyi).get().mark);
+        assertEquals(Mark.NOT_COMING, match.statementFor(sanyi).get().mark());
     }
     
     @Test

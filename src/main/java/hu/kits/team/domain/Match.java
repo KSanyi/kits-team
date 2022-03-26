@@ -16,13 +16,13 @@ public record Match(MatchData matchData,
 
     public List<MemberStatement> memberStatements() {
         return memberStatements.stream()
-                .sorted(comparing(m -> m.time))
+                .sorted(comparing(m -> m.time()))
                 .collect(toList());
     }
 
     public Optional<MemberStatement> statementFor(Member member) {
         return memberStatements().stream()
-                .filter(m -> m.member.id == member.id)
+                .filter(m -> m.member().id == member.id)
                 .findFirst();
     }
     
@@ -40,13 +40,13 @@ public record Match(MatchData matchData,
     
     private List<Member> membersWithMark(Mark mark) {
         return memberStatements().stream()
-                .filter(m -> m.mark == mark)
-                .map(m -> m.member)
+                .filter(m -> m.mark() == mark)
+                .map(m -> m.member())
                 .collect(toList());
     }
     
     private List<Member> withStatement() {
-        return memberStatements.stream().map(m -> m.member).collect(toList());
+        return memberStatements.stream().map(MemberStatement::member).collect(toList());
     }
     
     public List<Member> noStatements(Members members) {

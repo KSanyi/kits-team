@@ -117,7 +117,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         
         List<Optional<Mark>> statements = new ArrayList<>();
         match.noStatements(Main.teamService.members()).stream().forEach(s -> statements.add(Optional.empty()));
-        match.memberStatements().stream().forEach(s -> statements.add(Optional.of(s.mark)));
+        match.memberStatements().stream().forEach(s -> statements.add(Optional.of(s.mark())));
         
         appBar.removeAllTabs();
         for(StatementFilter filter : StatementFilter.values()) {
@@ -239,11 +239,11 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     private void initButtons() {
         if(Clock.now().isBefore(match.matchData().time())) {
             if(myStatement.isPresent()) {
-                if(myStatement.get().mark == Mark.COMING) {
+                if(myStatement.get().mark() == Mark.COMING) {
                     comingButton.setVisible(false);
                     notComingButton.setVisible(true);
                     notComingButton.setText("Mégsem jövök");
-                } else if(myStatement.get().mark == Mark.NOT_COMING) {
+                } else if(myStatement.get().mark() == Mark.NOT_COMING) {
                     notComingButton.setVisible(false);
                     comingButton.setVisible(true);
                     comingButton.setText("Mégis jövök");
