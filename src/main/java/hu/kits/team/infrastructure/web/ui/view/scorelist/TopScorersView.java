@@ -52,6 +52,8 @@ public class TopScorersView extends ViewFrame implements BeforeEnterObserver {
         appBar.setPreTabComponent(new Div());
         appBar.addActionItem(new Div());
         
+        appBar.getSubTitleContainer().removeAll();
+        
         appBar.removeAllTabs();
         
         allGoals = Main.teamService.loadAllGoals();

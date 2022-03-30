@@ -44,6 +44,8 @@ public class MatchesView extends ViewFrame implements BeforeEnterObserver {
         appBar.setPreTabComponent(new Div());
         appBar.addActionItem(new Div());
         
+        appBar.getSubTitleContainer().removeAll();
+        
         appBar.removeAllTabs();
         for(MatchDateFilter filter : MatchDateFilter.values()) {
             appBar.addTab(filter.label, filter);
