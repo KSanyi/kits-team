@@ -6,8 +6,10 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import hu.kits.team.common.CollectionsUtil;
+import hu.kits.team.domain.email.AllGoals.GoalData;
 
 public record Match(MatchData matchData,
         List<MemberStatement> memberStatements, 
@@ -65,6 +67,11 @@ public record Match(MatchData matchData,
     public String statusString() {
         int status = status();
         return (status > 0 ? "+" : "") + status + "/" + withStatement().size();
+    }
+    
+    public Stream<GoalData> goalDatas() {
+        return goals.entrySet().stream()
+                .map(e -> new GoalData(e.getKey(), matchData.time().toLocalDate(), matchData.championship(), e.getValue()));
     }
     
 }

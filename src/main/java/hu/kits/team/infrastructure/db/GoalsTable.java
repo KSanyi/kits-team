@@ -18,7 +18,7 @@ import hu.kits.team.domain.Player;
 
 class GoalsTable {
 
-    private static final String TABLE_GOALS = "GOALS";
+    public static final String TABLE_GOALS = "GOALS";
     private static final String COLUMN_MATCH_ID = "MATCH_ID";
     private static final String COLUMN_MEMBER_ID = "MEMBER_ID";
     private static final String COLUMN_SCORED = "SCORED";

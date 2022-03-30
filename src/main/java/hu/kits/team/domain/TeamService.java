@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import hu.kits.team.common.Clock;
 import hu.kits.team.common.DateInterval;
+import hu.kits.team.domain.email.AllGoals;
+import hu.kits.team.domain.email.AllGoals.GoalData;
 import hu.kits.team.domain.email.EmailCreator;
 import hu.kits.team.domain.email.EmailSender;
 
@@ -26,7 +28,8 @@ public class TeamService {
     private final MatchRepository matchRepository;
     private final EmailSender emailSender;
    
-    public TeamService(Members members, ChampionshipRepository championshipRepository, VenueRepository venueRepository, MatchRepository matchRepository, EmailSender emailSender) {
+    public TeamService(Members members, ChampionshipRepository championshipRepository, VenueRepository venueRepository, MatchRepository matchRepository,
+            EmailSender emailSender) {
         this.members = members;
         this.championshipRepository = championshipRepository;
         this.venueRepository = venueRepository;
@@ -40,6 +43,13 @@ public class TeamService {
     
     public List<Championship> loadChampionships() {
         return championshipRepository.loadAll().stream().sorted(comparing(c -> c.id())).collect(toList());
+    }
+    
+    public List<Championship> loadRealChampionships() {
+        return championshipRepository.loadAll().stream()
+                .filter(champ -> !List.of(0L, 15L).contains(champ.id()))
+                .sorted(comparing(Championship::id).reversed())
+                .collect(toList());
     }
 
     public Championship createChampionship(String name, int numberOfPlayers) {
@@ -119,5 +129,14 @@ public class TeamService {
         }
         return count;
     }
+
+    public AllGoals loadAllGoals() {
+        List<GoalData> goals = matchRepository.loadAllMatches().entries().stream()
+            .flatMap(Match::goalDatas)
+            .collect(toList());
+        return new AllGoals(goals);
+    }
+    
+    
 
 }

@@ -25,6 +25,7 @@ import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.css.Overflow;
 import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
 import hu.kits.team.infrastructure.web.ui.view.matches.MatchesView;
+import hu.kits.team.infrastructure.web.ui.view.scorelist.TopScorersView;
 
 @CssImport(value = "./styles/components/charts.css", themeFor = "vaadin-chart", include = "vaadin-chart-default-theme")
 @CssImport(value = "./styles/components/floating-action-button.css", themeFor = "vaadin-button")
@@ -111,6 +112,7 @@ public class MainLayout extends FlexBoxLayout implements RouterLayout, AfterNavi
         NaviMenu menu = naviDrawer.getMenu();
         menu.addNaviItem(VaadinIcon.USER_CHECK, "Következő meccs", MatchView.class);
         menu.addNaviItem(VaadinIcon.CALENDAR_CLOCK, "Meccsek", MatchesView.class);
+        menu.addNaviItem(VaadinIcon.TROPHY, "Góllövő lista", TopScorersView.class);
         //menu.addNaviItem(VaadinIcon.COG, "Admin", AdminView.class);
     }
 
