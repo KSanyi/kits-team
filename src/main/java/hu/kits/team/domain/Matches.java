@@ -1,13 +1,21 @@
 package hu.kits.team.domain;
 
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
+import hu.kits.team.common.Clock;
 import hu.kits.team.common.DateInterval;
+import hu.kits.team.domain.TopPlayers.PlayerGames;
 
 public class Matches {
 
@@ -69,5 +77,34 @@ public class Matches {
             }
         }
         return Optional.empty();
+    }
+
+    public TopPlayers topPlayersOfChampionship(Championship championship) {
+        
+        Stream<Match> matchStream = entries.stream()
+                .filter(match -> match.matchData().championship().equals(championship));
+        
+        return createTopPlayers(matchStream);
+    }
+
+    public TopPlayers topPlayersSince(LocalDate date) {
+        Stream<Match> matchStream = entries.stream()
+                .filter(match -> !match.matchData().time().toLocalDate().isBefore(date));
+        
+        return createTopPlayers(matchStream);
+    }
+    
+    private static TopPlayers createTopPlayers(Stream<Match> matchStream) {
+        Map<Player, Long> playerMatchCount =  matchStream
+            .filter(match -> match.matchData().time().isBefore(Clock.now()))
+            .flatMap(match -> match.coming().stream())
+            .collect(groupingBy(Function.identity(), counting()));
+        
+        List<PlayerGames> playerGamesList = playerMatchCount.entrySet().stream()
+            .map(e -> new PlayerGames(e.getKey(), e.getValue().intValue()))
+            .sorted(comparing(PlayerGames::games).reversed())
+            .collect(toList());
+        
+        return new TopPlayers(playerGamesList);
     }
 }
