@@ -48,7 +48,7 @@ public class TopPlayersView extends ViewFrame implements BeforeEnterObserver {
     
     private void initAppBar() {
         AppBar appBar = MainLayout.get().getAppBar();
-        appBar.setTitle("Góllövőlisták");
+        appBar.setTitle("Meccs látogatási");
         appBar.setPreTabComponent(new Div());
         appBar.addActionItem(new Div());
         
