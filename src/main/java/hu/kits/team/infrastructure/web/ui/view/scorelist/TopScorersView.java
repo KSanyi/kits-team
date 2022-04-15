@@ -16,6 +16,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import hu.kits.team.Main;
+import hu.kits.team.common.Clock;
 import hu.kits.team.domain.Championship;
 import hu.kits.team.domain.Member;
 import hu.kits.team.domain.email.AllGoals;
@@ -60,7 +61,7 @@ public class TopScorersView extends ViewFrame implements BeforeEnterObserver {
         
         List<TopScorersFilter> filters = new ArrayList<>();
         filters.add(new TopScorersFilter.DateFilter(LocalDate.MIN, "Össz"));
-        //filters.add(new TopScorersFilter.DateFilter(Clock.today().withDayOfYear(1), String.valueOf(Clock.now().getYear())));
+        filters.add(new TopScorersFilter.DateFilter(Clock.today().withDayOfYear(1), String.valueOf(Clock.now().getYear())));
         for(Championship championShip : Main.teamService.loadRealChampionships()) {
             filters.add(new ChampionshipFilter(championShip));
         }
