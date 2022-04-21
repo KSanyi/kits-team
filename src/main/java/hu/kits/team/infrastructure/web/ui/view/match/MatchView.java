@@ -41,6 +41,7 @@ import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.ViewFrame;
+import hu.kits.team.infrastructure.web.ui.component.ConfirmationDialog;
 import hu.kits.team.infrastructure.web.ui.component.Initials;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
@@ -224,7 +225,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         buttonBar.setSizeFull();
         buttonBar.setHeight("60px");
         comingButton.addClickListener(click -> coming(currentMember));
-        notComingButton.addClickListener(click -> notComing(currentMember));
+        notComingButton.addClickListener(click -> new ConfirmationDialog("Biztos nem tudsz jönni?", () -> notComing(currentMember)).open());
         
         return buttonBar;
     }
