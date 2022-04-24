@@ -31,8 +31,6 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
     
     private List<MemberStatementRow> items = new ArrayList<>();
     
-    private Member currentUser;
-    
     MembersStatementGrid(MatchView matchView) {
         
         this.matchView = matchView;
@@ -104,9 +102,8 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
                 .collect(toList()));
     }
 
-    void setRows(List<MemberStatementRow> items, Member currentUser) {
+    void setRows(List<MemberStatementRow> items) {
         this.items = items;
-        this.currentUser = currentUser;
         setItems(items);
     }
 

@@ -283,7 +283,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         match = loadMatch();
         myStatement = match.statementFor(currentMember);
         
-        membersStatementGrid.setRows(MemberStatementRow.createForMatch(Main.teamService.members(), match), currentMember);
+        membersStatementGrid.setRows(MemberStatementRow.createForMatch(Main.teamService.members(), match));
         filter();
         initButtons();
         initAppBar();
