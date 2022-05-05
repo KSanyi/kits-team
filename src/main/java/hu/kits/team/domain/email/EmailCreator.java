@@ -6,7 +6,7 @@ import hu.kits.team.domain.Member;
 
 public class EmailCreator {
 
-    private static final String JONNY = "jonny@luzerfc.hu";
+    private static final String JONNY = "kocso.sanor.gabor@gmail.com";
     
     public static Email createCalendarEntryEmail(Member member, MatchData matchData) {
         
