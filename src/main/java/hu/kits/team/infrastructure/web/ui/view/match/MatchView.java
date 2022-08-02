@@ -57,7 +57,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     
     private Member currentMember;
     private Long matchId;
-    private Match match;
+    Match match;
     
     private final Button comingButton = UIUtils.createSuccessPrimaryButton("Jövök", VaadinIcon.CHECK);
     private final Button notComingButton = UIUtils.createErrorButton("Nem jövök", VaadinIcon.CLOSE);

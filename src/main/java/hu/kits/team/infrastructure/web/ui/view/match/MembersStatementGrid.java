@@ -2,6 +2,7 @@ package hu.kits.team.infrastructure.web.ui.view.match;
 
 import static java.util.stream.Collectors.toList;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
+import hu.kits.team.common.Clock;
 import hu.kits.team.domain.Guest;
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Member;
@@ -81,13 +83,13 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
     }
     
     private void addGoal(ClickEvent<Image> event, Member member) {
-        if(event.getClickCount() > 1 || event.getButton() == 2) {
+        if(isGoalsEditable()) {
             matchView.addGoal(member);
         }
     }
     
     private void removeGoal(ClickEvent<Image> event, Member member) {
-        if(event.getClickCount() > 1 || event.getButton() == 2) {
+        if(isGoalsEditable()) {
             matchView.removeGoal(member);
         }
     }
@@ -127,6 +129,11 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
     void setRows(List<MemberStatementRow> items) {
         this.items = items;
         setItems(items);
+    }
+    
+    private boolean isGoalsEditable() {
+        LocalDateTime matchStartTime = matchView.match.matchData().time();
+        return Clock.now().isAfter(matchStartTime) && Clock.now().isBefore(matchStartTime.plusHours(24));
     }
 
 }
