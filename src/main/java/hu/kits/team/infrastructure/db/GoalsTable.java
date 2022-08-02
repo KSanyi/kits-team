@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toMap;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +12,8 @@ import javax.sql.DataSource;
 
 import org.jdbi.v3.core.Jdbi;
 
+import hu.kits.team.domain.MatchData;
+import hu.kits.team.domain.Member;
 import hu.kits.team.domain.Members;
 import hu.kits.team.domain.Player;
 
@@ -63,24 +64,17 @@ class GoalsTable {
                 matchId));
     }
 
-    void saveNew(MatchMemberStatement matchMemberStatement) {
-        Map<String, Object> values = createValuesMap(matchMemberStatement);
+    private void saveNew(MatchData matchData, Member member, int goals) {
+        Map<String, Object> values = Map.of(COLUMN_MATCH_ID, matchData.id(),
+                COLUMN_MEMBER_ID, member.id,
+                COLUMN_SCORED, goals);
         
         jdbi.withHandle(handle -> JdbiUtil.createInsert(handle, TABLE_GOALS, values).execute());
     }
     
-    private static Map<String, Object> createValuesMap(MatchMemberStatement matchMemberStatement) {
-        Map<String, Object> valuesMap = new HashMap<>();
-        valuesMap.put(COLUMN_MATCH_ID, matchMemberStatement.matchId);
-        valuesMap.put(COLUMN_MEMBER_ID, matchMemberStatement.memberStatement.member().id);
-        valuesMap.put(COLUMN_SCORED, matchMemberStatement.memberStatement.time());
-        
-        return valuesMap;
-    }
-
-    void update(MatchMemberStatement matchMemberStatement) {
-        delete(matchMemberStatement.matchId, matchMemberStatement.memberStatement.member().id);
-        saveNew(matchMemberStatement);
+    public void update(MatchData matchData, Member member, int goals) {
+        delete(matchData.id(), member.id);
+        saveNew(matchData, member, goals);
     }
     
 }

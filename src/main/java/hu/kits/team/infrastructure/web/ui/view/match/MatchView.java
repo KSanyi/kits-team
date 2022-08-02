@@ -322,4 +322,9 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         init();
     }
 
+    public void addGoal(Member member) {
+        Main.teamService.addGoal(match, member);
+        init();
+    }
+
 }

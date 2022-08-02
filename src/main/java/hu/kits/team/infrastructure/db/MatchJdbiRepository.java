@@ -13,6 +13,7 @@ import hu.kits.team.domain.Match;
 import hu.kits.team.domain.MatchData;
 import hu.kits.team.domain.MatchRepository;
 import hu.kits.team.domain.Matches;
+import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
 import hu.kits.team.domain.Members;
 import hu.kits.team.domain.Player;
@@ -54,6 +55,7 @@ public class MatchJdbiRepository implements MatchRepository {
     public void deleteMatchData(long id) {
         matchDataTable.delete(id);
         memberStatementTable.deleteForMatch(id);
+        goalsTable.deleteForMatch(id);
     }
 
     @Override
@@ -97,6 +99,11 @@ public class MatchJdbiRepository implements MatchRepository {
     @Override
     public void removeGuestForMatch(long id, Guest guest) {
         guestForMatchTable.delete(id, guest.name);
+    }
+
+    @Override
+    public void updateGoalsForMatch(MatchData matchData, Member member, int goals) {
+        goalsTable.update(matchData, member, goals);
     }
     
 }

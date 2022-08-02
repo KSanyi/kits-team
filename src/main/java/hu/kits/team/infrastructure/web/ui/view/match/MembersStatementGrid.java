@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -48,17 +49,27 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
     private Component createMemberInfo(MemberStatementRow row) {
         Player player = row.player();
         
-        if(player instanceof Member) {
-            Member member = (Member)player;
+        if(player instanceof Member member) {
             Image avatar = new Image(UIUtils.IMG_PATH + member.id + ".png", member.getInitials());
             avatar.setWidth("50px");
             avatar.setHeight("50px");
+            
+            if(Session.currentMember().isAdmin) {
+                avatar.addClickListener(e -> addGoal(e, member));    
+            }
+            
             return new ListItem(avatar, member.nickName(), createGoalsComponent(row.goals()));
         } else {
             return new ListItem(new Initials("V", Color.Primary._50), player.name, createGoalsComponent(row.goals()));
         }
     }
     
+    private void addGoal(ClickEvent<Image> event, Member member) {
+        if(event.getClickCount() > 2) {
+            matchView.addGoal(member);
+        }
+    }
+
     private static Component createGoalsComponent(int goals) {
         HorizontalLayout layout = new HorizontalLayout();
         

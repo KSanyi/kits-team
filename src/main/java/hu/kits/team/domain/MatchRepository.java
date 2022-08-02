@@ -18,4 +18,6 @@ public interface MatchRepository {
     
     Matches loadAllMatches();
 
+    void updateGoalsForMatch(MatchData matchData, Member member, int goals);
+
 }

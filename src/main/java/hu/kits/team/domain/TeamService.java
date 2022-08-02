@@ -136,7 +136,13 @@ public class TeamService {
             .collect(toList());
         return new AllGoals(goals);
     }
-    
-    
+
+    public void addGoal(Match match, Member member) {
+        
+        int goals = match.goalsBy(member) + 1;
+        matchRepository.updateGoalsForMatch(match.matchData(), member, goals);
+        
+        log.info("{} scored against {}!!!", member.name, match.matchData().opponent());
+    }
 
 }
