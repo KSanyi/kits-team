@@ -74,7 +74,9 @@ class GoalsTable {
     
     public void update(MatchData matchData, Member member, int goals) {
         delete(matchData.id(), member.id);
-        saveNew(matchData, member, goals);
+        if(goals > 0) {
+            saveNew(matchData, member, goals);            
+        }
     }
     
 }

@@ -327,4 +327,9 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         init();
     }
 
+    public void removeGoal(Member member) {
+        Main.teamService.removeGoal(match, member);
+        init();
+    }
+
 }

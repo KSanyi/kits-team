@@ -58,27 +58,38 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
                 avatar.addClickListener(e -> addGoal(e, member));    
             }
             
-            return new ListItem(avatar, member.nickName(), createGoalsComponent(row.goals()));
+            return new ListItem(avatar, member.nickName(), createGoalsComponent(row.goals(), member));
         } else {
-            return new ListItem(new Initials("V", Color.Primary._50), player.name, createGoalsComponent(row.goals()));
+            return new ListItem(new Initials("V", Color.Primary._50), player.name, createGoalsComponent(row.goals(), null));
         }
     }
     
-    private void addGoal(ClickEvent<Image> event, Member member) {
-        if(event.getClickCount() > 2) {
-            matchView.addGoal(member);
-        }
-    }
-
-    private static Component createGoalsComponent(int goals) {
+    private Component createGoalsComponent(int goals, Member member) {
         HorizontalLayout layout = new HorizontalLayout();
         
         for(int i=0;i<goals;i++) {
             Image goalImage = new Image(UIUtils.IMG_PATH + "small-football-icon.jpg", "O");
             goalImage.setWidth("20px");
+            
+            if(Session.currentMember().isAdmin && member != null) {
+                goalImage.addClickListener(e -> removeGoal(e, member));
+            }
+            
             layout.add(goalImage);
         }
         return layout;
+    }
+    
+    private void addGoal(ClickEvent<Image> event, Member member) {
+        if(event.getClickCount() > 1 || event.getButton() == 2) {
+            matchView.addGoal(member);
+        }
+    }
+    
+    private void removeGoal(ClickEvent<Image> event, Member member) {
+        if(event.getClickCount() > 1 || event.getButton() == 2) {
+            matchView.removeGoal(member);
+        }
     }
     
     private Icon createComingIcon(MemberStatementRow row) {
