@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.jdbi.v3.core.Jdbi;
 
 import hu.kits.team.domain.Member;
+import hu.kits.team.domain.Member.Role;
 import hu.kits.team.domain.MemberRepository;
 import hu.kits.team.domain.Members;
 
@@ -18,7 +19,7 @@ public class MemberJdbiRepository implements MemberRepository {
     private static final String COLUMN_NAME = "NAME";
     private static final String COLUMN_EMAIL = "EMAIL";
     private static final String COLUMN_PASSWORD_HASH = "PASSWORD_HASH";
-    private static final String COLUMN_IS_ADMIN = "IS_ADMIN";
+    private static final String COLUMN_ROLE = "ROLE";
     
     private final Jdbi jdbi;
     
@@ -39,7 +40,7 @@ public class MemberJdbiRepository implements MemberRepository {
                 rs.getString(COLUMN_NAME),
                 rs.getString(COLUMN_EMAIL),
                 rs.getString(COLUMN_PASSWORD_HASH),
-                rs.getBoolean(COLUMN_IS_ADMIN));
+                Role.valueOf(rs.getString(COLUMN_ROLE)));
     }
     
 }

@@ -238,7 +238,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     }
     
     private void initButtons() {
-        if(Clock.now().isBefore(match.matchData().time())) {
+        if(Clock.now().isBefore(match.matchData().time()) && isAllowedToMark()) {
             if(myStatement.isPresent()) {
                 if(myStatement.get().mark() == Mark.COMING) {
                     comingButton.setVisible(false);
@@ -259,6 +259,10 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         } else {
             setViewFooter(new Div());
         }
+    }
+
+    private boolean isAllowedToMark() {
+        return !Session.currentMember().isTempMember() || Clock.now().plusDays(3).isAfter(match.matchData().time());
     }
 
     @Override

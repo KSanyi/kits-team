@@ -56,7 +56,7 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
             avatar.setWidth("50px");
             avatar.setHeight("50px");
             
-            if(Session.currentMember().isAdmin) {
+            if(Session.currentMember().isAdmin()) {
                 avatar.addClickListener(e -> addGoal(e, member));    
             }
             
@@ -73,7 +73,7 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
             Image goalImage = new Image(UIUtils.IMG_PATH + "small-football-icon.jpg", "O");
             goalImage.setWidth("20px");
             
-            if(Session.currentMember().isAdmin && member != null) {
+            if(Session.currentMember().isAdmin() && member != null) {
                 goalImage.addClickListener(e -> removeGoal(e, member));
             }
             
@@ -97,7 +97,7 @@ class MembersStatementGrid extends Grid<MemberStatementRow> {
     private Icon createComingIcon(MemberStatementRow row) {
         Icon icon = createIcon(row);
         
-        if(Session.currentMember().isAdmin) {
+        if(Session.currentMember().isAdmin()) {
             ContextMenu contextMenu = new ContextMenu(icon);
             if(row.player() instanceof Member) {
                 contextMenu.addItem(Mark.COMING.label, c -> matchView.coming((Member)row.player()));

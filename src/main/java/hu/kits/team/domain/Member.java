@@ -14,14 +14,14 @@ public class Member extends Player {
     
     public final String passwordHash;
     
-    public boolean isAdmin;
-
-    public Member(String id, String name, String email, String passwordHash, boolean isAdmin) {
+    public Role role;
+    
+    public Member(String id, String name, String email, String passwordHash, Role role) {
         super(name);
         this.id = id;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.isAdmin = isAdmin;
+        this.role = role;
     }
     
     @Override
@@ -43,6 +43,18 @@ public class Member extends Player {
         return Stream.of(name.split(" "))
                 .map(part -> part.substring(0,  1).toUpperCase())
                 .collect(joining(""));
+    }
+    
+    public static enum Role {
+        ADMIN, MEMBER, TEMP_MEMBER, 
+    }
+
+    public boolean isAdmin() {
+        return role == Role.ADMIN;
+    }
+
+    public boolean isTempMember() {
+        return role == Role.TEMP_MEMBER;
     }
 
 }
