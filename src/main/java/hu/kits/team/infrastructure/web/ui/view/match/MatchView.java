@@ -19,6 +19,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -224,7 +225,13 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         buttonBar.setSpacing(false);
         buttonBar.setSizeFull();
         buttonBar.setHeight("60px");
-        comingButton.addClickListener(click -> coming(currentMember));
+        comingButton.addClickListener(click -> {
+            if(Session.currentMember().isTempMember() && Clock.now().isBefore(match.markCutoffTime())) {
+                Notification.show("Lécci " + Formatters.formatDateTime2(match.markCutoffTime()) + " után jelentkezz!");
+            } else {
+                coming(currentMember);
+            }
+        });
         notComingButton.addClickListener(click -> new ConfirmationDialog("Biztos nem tudsz jönni?", () -> notComing(currentMember)).open());
         
         return buttonBar;
@@ -238,7 +245,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     }
     
     private void initButtons() {
-        if(Clock.now().isBefore(match.matchData().time()) && isAllowedToMark()) {
+        if(Clock.now().isBefore(match.matchData().time())) {
             if(myStatement.isPresent()) {
                 if(myStatement.get().mark() == Mark.COMING) {
                     comingButton.setVisible(false);
@@ -259,10 +266,6 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         } else {
             setViewFooter(new Div());
         }
-    }
-
-    private boolean isAllowedToMark() {
-        return !Session.currentMember().isTempMember() || Clock.now().plusDays(3).isAfter(match.matchData().time());
     }
 
     @Override

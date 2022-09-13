@@ -3,6 +3,8 @@ package hu.kits.team.domain;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -72,6 +74,10 @@ public record Match(MatchData matchData,
     public Stream<GoalData> goalDatas() {
         return goals.entrySet().stream()
                 .map(e -> new GoalData(e.getKey(), matchData.time().toLocalDate(), matchData.championship(), e.getValue()));
+    }
+    
+    public LocalDateTime markCutoffTime() {
+        return matchData.time().minusDays(3);
     }
     
 }
