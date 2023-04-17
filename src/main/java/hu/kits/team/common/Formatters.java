@@ -12,7 +12,7 @@ public class Formatters {
     public static final Locale HU_LOCALE = new Locale("HU");
     
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-    private static final DateTimeFormatter DATE_FORMAT_WITHOUT_YEAR = DateTimeFormatter.ofPattern("MMMM d.");
+    private static final DateTimeFormatter DATE_FORMAT_WITHOUT_YEAR = DateTimeFormatter.ofPattern("MMMM d.", HU_LOCALE);
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy. MMMM dd. HH:mm");
     private static final DateTimeFormatter DATE_TIME_FORMAT_WITHOUT_YEAR = DateTimeFormatter.ofPattern("MMMM d. HH:mm");
     private static final DateTimeFormatter DATE_TIME_FORMAT_WITH_WEEKDAY = DateTimeFormatter.ofPattern("EEEE HH:mm", HU_LOCALE);
