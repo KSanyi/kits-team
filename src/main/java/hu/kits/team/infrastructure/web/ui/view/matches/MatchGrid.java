@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -15,8 +16,10 @@ import com.vaadin.flow.data.selection.SelectionEvent;
 import hu.kits.team.common.Formatters;
 import hu.kits.team.domain.Match;
 import hu.kits.team.domain.MatchData;
+import hu.kits.team.domain.MatchResult;
 import hu.kits.team.infrastructure.web.ui.component.Initials;
 import hu.kits.team.infrastructure.web.ui.component.ListItem;
+import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
 import hu.kits.team.infrastructure.web.ui.view.match.MatchView;
 
@@ -39,11 +42,24 @@ public class MatchGrid extends Grid<Match> {
     
     private Component createRow(Match match) {
         MatchData matchData = match.matchData();
-        return new ListItem(matchData.opponent(), 
-                matchData.championship().name(), 
-                new Initials(matchData.formatResult()));
+        
+        Initials result = new Initials(matchData.formatResult(), findMatchResultColor(matchData.matchResult()));
+        
+        return new ListItem(matchData.opponent(), matchData.championship().name(), result);
     }
     
+    private static String findMatchResultColor(Optional<MatchResult> matchResult) {
+        if(matchResult.isPresent()) {
+            MatchResult result = matchResult.get();
+            if(result.isWin()) {
+                return LumoStyles.Color.Success._100;    
+            } else if(result.isLoss()) {
+                return LumoStyles.Color.Error._100;
+            }
+        }
+        return LumoStyles.Color.Contrast._30;
+    }
+
     private Component createTime(Match match) {
         MatchData matchData = match.matchData();
         LocalDate matchDate = matchData.time().toLocalDate();

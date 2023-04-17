@@ -3,7 +3,6 @@ package hu.kits.team.domain;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
