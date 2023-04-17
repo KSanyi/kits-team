@@ -57,7 +57,7 @@ public class MatchGrid extends Grid<Match> {
                 return LumoStyles.Color.Error._100;
             }
         }
-        return LumoStyles.Color.Contrast._30;
+        return null;
     }
 
     private Component createTime(Match match) {
