@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import hu.kits.team.common.CollectionsUtil;
-import hu.kits.team.domain.email.AllGoals.GoalData;
+import hu.kits.team.domain.AllGoals.GoalData;
 
 public record Match(MatchData matchData,
         List<MemberStatement> memberStatements, 

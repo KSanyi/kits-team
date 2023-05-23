@@ -1,1 +1,1 @@
-web: java --enable-preview -jar target/app.jar
+web: unzip target/app-zip.zip && ./run

@@ -1,4 +1,4 @@
-package hu.kits.team.infrastructure.web.ui.vaadin;
+package hu.kits.team.infrastructure.web;
 
 import com.vaadin.flow.server.VaadinSession;
 

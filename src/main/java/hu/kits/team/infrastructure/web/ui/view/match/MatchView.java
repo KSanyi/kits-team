@@ -40,6 +40,7 @@ import hu.kits.team.domain.MatchResult;
 import hu.kits.team.domain.Matches;
 import hu.kits.team.domain.Member;
 import hu.kits.team.domain.MemberStatement;
+import hu.kits.team.infrastructure.web.Session;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.ViewFrame;
 import hu.kits.team.infrastructure.web.ui.component.ConfirmationDialog;
@@ -47,7 +48,6 @@ import hu.kits.team.infrastructure.web.ui.component.Initials;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
-import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.LoginView;
 
 @Route(value = "match", layout = MainLayout.class)

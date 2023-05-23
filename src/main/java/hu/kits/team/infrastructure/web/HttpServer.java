@@ -6,23 +6,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import javax.servlet.ServletException;
-import javax.websocket.server.ServerContainer;
-
-import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.resource.Resource;
-import org.eclipse.jetty.webapp.Configuration;
-import org.eclipse.jetty.webapp.MetaInfConfiguration;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.eclipse.jetty.webapp.WebInfConfiguration;
-import org.eclipse.jetty.webapp.WebXmlConfiguration;
-import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.vaadin.flow.server.startup.ServletContextListeners;
 
 import hu.kits.team.Main;
 
@@ -37,35 +26,14 @@ public class HttpServer extends Server {
     }
     
     private static Handler createHandler() {
-        
         WebAppContext context = new WebAppContext();
         context.setBaseResource(createBaseResource());
-        context.setContextPath("/");
+        context.addServlet(KitsVaadinServlet.class, "/*");
         context.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern", ".*");
         context.setConfigurationDiscovered(true);
-        context.setConfigurations(new Configuration[]{
-          new AnnotationConfiguration(),
-          new WebInfConfiguration(),
-          new WebXmlConfiguration(),
-          new MetaInfConfiguration()
-        });
         context.getServletContext().setExtendedListenerTypes(true);
-        //context.getSessionHandler().setMaxInactiveInterval(60 * 60 * 120);
-        context.addEventListener(new ServletContextListeners());
-        
-        handleStupidJsr356Exception(context);
         
         return context;
-    }
-    
-    @SuppressWarnings("deprecation")
-    private static void handleStupidJsr356Exception(WebAppContext context) {
-        try {
-            // to suppress this: java.lang.IllegalStateException: Unable to configure jsr356 at that stage. ServerContainer is null 
-            context.getServletContext().setAttribute(ServerContainer.class.getName(), WebSocketServerContainerInitializer.configureContext(context));
-        } catch(ServletException ex) {
-            logger.error(ex.getMessage());
-        }
     }
     
     private static Resource createBaseResource() {

@@ -3,14 +3,11 @@ package hu.kits.team;
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
 
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
@@ -26,12 +23,6 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     
     public static final String URL = "https://luzer.herokuapp.com";
-    
-    static {
-        LogManager.getLogManager().reset();
-        SLF4JBridgeHandler.install();
-        java.util.logging.Logger.getLogger("global").setLevel(Level.SEVERE);
-    }
     
     public static final TeamService teamService;
     
@@ -53,12 +44,8 @@ public class Main {
         scheduler.addJob(new MorningJob(teamService));
         
         HttpServer server = new HttpServer(port);
-        try {
-            server.start();
-            server.join();
-        } catch(IllegalStateException ex) {
-            logger.info(ex.getMessage());
-        }
+        server.start();
+        server.join();
         
     }
     
@@ -95,6 +82,7 @@ public class Main {
         dataSource.setURL(jdbcUrl);
         dataSource.setUser(username);
         dataSource.setPassword(password);
+        logger.info("Database: " + dbUri);
         return dataSource;
     }
     

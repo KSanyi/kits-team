@@ -64,7 +64,7 @@ public class NaviItem extends Div {
         setLevel(0);
 
         if (navigationTarget != null) {
-            RouterLink routerLink = new RouterLink(null, navigationTarget);
+            RouterLink routerLink = new RouterLink(navigationTarget);
             routerLink.add(new Label(text));
             routerLink.setHighlightCondition(HighlightConditions.sameLocation());
             routerLink.setClassName(CLASS_NAME + "__link");

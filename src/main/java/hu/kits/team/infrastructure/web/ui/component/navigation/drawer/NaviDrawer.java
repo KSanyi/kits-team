@@ -36,7 +36,7 @@ public class NaviDrawer extends Composite<Div> implements AfterNavigationObserve
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
         UI ui = attachEvent.getUI();
-        ui.getPage().executeJavaScript("window.addSwipeAway($0,$1,$2,$3)", mainContent.getElement(), this, "onSwipeAway", scrim.getElement());
+        ui.getPage().executeJs("window.addSwipeAway($0,$1,$2,$3)", mainContent.getElement(), this, "onSwipeAway", scrim.getElement());
     }
 
     @ClientCallable
@@ -106,7 +106,7 @@ public class NaviDrawer extends Composite<Div> implements AfterNavigationObserve
             railButton.setIcon(new Icon(VaadinIcon.CHEVRON_RIGHT_SMALL));
             railButton.setText("Kinyit");
             railButton.getElement().setAttribute("aria-label", "Expand menu");
-            getUI().get().getPage().executeJavaScript(
+            getUI().get().getPage().executeJs(
                     "var originalStyle = getComputedStyle($0).pointerEvents;" //
                             + "$0.style.pointerEvents='none';" //
                             + "setTimeout(function() {$0.style.pointerEvents=originalStyle;}, 170);",
@@ -135,7 +135,7 @@ public class NaviDrawer extends Composite<Div> implements AfterNavigationObserve
         // iOS 12.2 sometimes fails to animate the menu away.
         // It should be gone after 240ms
         // This will make sure it disappears even when the browser fails.
-        getUI().get().getPage().executeJavaScript(
+        getUI().get().getPage().executeJs(
                 "var originalStyle = getComputedStyle($0).transitionProperty;" //
                         + "setTimeout(function() {$0.style.transitionProperty='padding'; requestAnimationFrame(function() {$0.style.transitionProperty=originalStyle})}, 250);",
                 mainContent.getElement());

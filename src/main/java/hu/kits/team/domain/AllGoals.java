@@ -1,4 +1,4 @@
-package hu.kits.team.domain.email;
+package hu.kits.team.domain;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summingInt;
@@ -9,14 +9,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import hu.kits.team.domain.Championship;
-import hu.kits.team.domain.Player;
-import hu.kits.team.domain.TopScorers;
 import hu.kits.team.domain.TopScorers.PlayerScore;
 
 public record AllGoals(List<GoalData> goals) {
 
-    public static record GoalData(Player player, LocalDate date,  Championship championship, int goals) {}
+    public static record GoalData(Player player, LocalDate date, Championship championship, int goals) {}
     
     public TopScorers topScorersOfChampionship(Championship championship) {
         

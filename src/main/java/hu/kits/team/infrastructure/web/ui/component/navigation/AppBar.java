@@ -32,12 +32,12 @@ import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.shared.Registration;
 
 import hu.kits.team.domain.Member;
+import hu.kits.team.infrastructure.web.CookieUtil;
+import hu.kits.team.infrastructure.web.Session;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.component.FlexBoxLayout;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
-import hu.kits.team.infrastructure.web.ui.vaadin.CookieUtil;
-import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 
 @CssImport("./styles/components/app-bar.css")

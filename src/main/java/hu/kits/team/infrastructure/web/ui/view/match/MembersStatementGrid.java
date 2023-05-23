@@ -22,11 +22,11 @@ import hu.kits.team.domain.Guest;
 import hu.kits.team.domain.Mark;
 import hu.kits.team.domain.Member;
 import hu.kits.team.domain.Player;
+import hu.kits.team.infrastructure.web.Session;
 import hu.kits.team.infrastructure.web.ui.component.Initials;
 import hu.kits.team.infrastructure.web.ui.component.ListItem;
 import hu.kits.team.infrastructure.web.ui.component.util.LumoStyles.Color;
 import hu.kits.team.infrastructure.web.ui.component.util.UIUtils;
-import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 
 class MembersStatementGrid extends Grid<MemberStatementRow> {
 

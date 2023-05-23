@@ -17,13 +17,13 @@ import com.vaadin.flow.router.Route;
 
 import hu.kits.team.Main;
 import hu.kits.team.common.Clock;
+import hu.kits.team.domain.AllGoals;
 import hu.kits.team.domain.Championship;
 import hu.kits.team.domain.Member;
-import hu.kits.team.domain.email.AllGoals;
+import hu.kits.team.infrastructure.web.Session;
 import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.ViewFrame;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
-import hu.kits.team.infrastructure.web.ui.vaadin.Session;
 import hu.kits.team.infrastructure.web.ui.view.LoginView;
 import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 import hu.kits.team.infrastructure.web.ui.view.scorelist.TopScorersFilter.ChampionshipFilter;

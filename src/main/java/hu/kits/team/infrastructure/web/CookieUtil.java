@@ -1,4 +1,4 @@
-package hu.kits.team.infrastructure.web.ui.vaadin;
+package hu.kits.team.infrastructure.web;
 
 import static java.util.stream.Collectors.joining;
 
@@ -6,12 +6,12 @@ import java.lang.invoke.MethodHandles;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.servlet.http.Cookie;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.flow.server.VaadinService;
+
+import jakarta.servlet.http.Cookie;
 
 public class CookieUtil {
 

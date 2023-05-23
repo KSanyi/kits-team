@@ -12,8 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import hu.kits.team.common.Clock;
 import hu.kits.team.common.DateInterval;
-import hu.kits.team.domain.email.AllGoals;
-import hu.kits.team.domain.email.AllGoals.GoalData;
+import hu.kits.team.domain.AllGoals.GoalData;
 import hu.kits.team.domain.email.EmailCreator;
 import hu.kits.team.domain.email.EmailSender;
 

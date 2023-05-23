@@ -2,9 +2,9 @@ package hu.kits.team.infrastructure.web.ui.view.scorelist;
 
 import java.time.LocalDate;
 
+import hu.kits.team.domain.AllGoals;
 import hu.kits.team.domain.Championship;
 import hu.kits.team.domain.TopScorers;
-import hu.kits.team.domain.email.AllGoals;
 
 public interface TopScorersFilter {
 
