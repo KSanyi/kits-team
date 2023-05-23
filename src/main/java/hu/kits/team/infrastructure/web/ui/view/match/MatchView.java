@@ -154,7 +154,6 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         
         Optional<Match> previousMatch = matches.findPrev(match.matchData().id());
         Button prevButton = new Button(VaadinIcon.ARROW_LEFT.create());
-        prevButton.setWidthFull();
         if(previousMatch.isPresent()) {
             prevButton.addClickListener(click -> gotoMatch(previousMatch.get()));
         } else {
@@ -163,7 +162,6 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         
         Optional<Match> nextMatch = matches.findNext(match.matchData().id());
         Button nextButton = new Button(VaadinIcon.ARROW_RIGHT.create());
-        nextButton.setWidthFull();
         if(nextMatch.isPresent()) {
             nextButton.addClickListener(click -> gotoMatch(nextMatch.get()));
         } else {
@@ -171,7 +169,7 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
         }
         
         buttonsContainer.removeAll();
-        buttonsContainer.add(prevButton, nextButton);
+        buttonsContainer.addAndExpand(prevButton, nextButton);
     }
     
     private void gotoMatch(Match match) {
