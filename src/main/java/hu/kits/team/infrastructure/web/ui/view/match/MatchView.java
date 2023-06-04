@@ -217,9 +217,8 @@ public class MatchView extends ViewFrame implements HasUrlParameter<Long>, Befor
     }
     
     private Component createButtonBar() {
-        comingButton.setSizeFull();
-        notComingButton.setSizeFull();
-        HorizontalLayout buttonBar = new HorizontalLayout(comingButton, notComingButton);
+        HorizontalLayout buttonBar = new HorizontalLayout();
+        buttonBar.addAndExpand(comingButton, notComingButton);
         buttonBar.setSpacing(false);
         buttonBar.setSizeFull();
         buttonBar.setHeight("60px");
