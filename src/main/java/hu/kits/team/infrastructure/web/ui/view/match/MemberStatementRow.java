@@ -18,6 +18,7 @@ record MemberStatementRow(Player player, Optional<Mark> mark, Optional<LocalDate
 
     static List<MemberStatementRow> createForMatch(Members members, Match match) {
         Stream<MemberStatementRow> rowsForMembers = members.entries().stream()
+                .filter(member -> !member.isTempMember() || match.statementFor(member).map(s -> s.mark() == Mark.COMING).orElse(false))
                 .map(member -> new MemberStatementRow(member, match.statementFor(member).map(m -> m.mark()), match.statementFor(member).map(m -> m.time()), match.goalsBy(member)));
         
         Stream<MemberStatementRow> rowsGuests = match.guests().stream()
