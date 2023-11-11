@@ -61,7 +61,7 @@ public class TopScorersView extends ViewFrame implements BeforeEnterObserver {
         List<TopScorersFilter> filters = new ArrayList<>();
         filters.add(new TopScorersFilter.EmptyFilter());
         
-        for(int year = Clock.today().getYear();year >= 2019;year++) {
+        for(int year = Clock.today().getYear();year >= 2019;year--) {
             filters.add(new TopScorersFilter.YearFilter(year));            
         }
         
