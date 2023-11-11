@@ -24,13 +24,14 @@ public record AllGoals(List<GoalData> goals) {
         return topScorers(relevantGoals);
     }
     
-    public TopScorers topScorersSince(LocalDate since) {
-        
+    public TopScorers topScorersInYear(int year) {
+        LocalDate start = LocalDate.of(year, 1, 1).minusDays(1);
+        LocalDate end = LocalDate.of(year+1, 1, 1);
         List<GoalData> relevantGoals = goals.stream()
-            .filter(goal -> ! goal.date.isBefore(since))
-            .collect(toList());
-        
-        return topScorers(relevantGoals);
+                .filter(goal -> goal.date.isAfter(start) && goal.date.isBefore(end))
+                .collect(toList());
+            
+            return topScorers(relevantGoals);
     }
 
     private static TopScorers topScorers(List<GoalData> relevantGoals) {
@@ -45,5 +46,9 @@ public record AllGoals(List<GoalData> goals) {
         
         return new TopScorers(playerScores);
     }
-    
+
+    public TopScorers topScorers() {
+        return topScorers(goals);
+    }
+
 }

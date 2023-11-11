@@ -1,7 +1,6 @@
 package hu.kits.team.infrastructure.web.ui.view.scorelist;
 
 import java.lang.invoke.MethodHandles;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +59,12 @@ public class TopScorersView extends ViewFrame implements BeforeEnterObserver {
         allGoals = Main.teamService.loadAllGoals();
         
         List<TopScorersFilter> filters = new ArrayList<>();
-        filters.add(new TopScorersFilter.DateFilter(LocalDate.MIN, "Össz"));
-        filters.add(new TopScorersFilter.DateFilter(Clock.today().withDayOfYear(1), String.valueOf(Clock.now().getYear())));
+        filters.add(new TopScorersFilter.EmptyFilter());
+        
+        for(int year = Clock.today().getYear();year >= 2019;year++) {
+            filters.add(new TopScorersFilter.YearFilter(year));            
+        }
+        
         for(Championship championShip : Main.teamService.loadRealChampionships()) {
             filters.add(new ChampionshipFilter(championShip));
         }

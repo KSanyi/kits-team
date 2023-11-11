@@ -1,7 +1,5 @@
 package hu.kits.team.infrastructure.web.ui.view.scorelist;
 
-import java.time.LocalDate;
-
 import hu.kits.team.domain.AllGoals;
 import hu.kits.team.domain.Championship;
 import hu.kits.team.domain.TopScorers;
@@ -23,16 +21,30 @@ public interface TopScorersFilter {
         public TopScorers apply(AllGoals allGoals) {
             return allGoals.topScorersOfChampionship(championship);
         }
-        
     }
     
-    static record DateFilter(LocalDate date, String label) implements TopScorersFilter {
+    static record YearFilter(int year) implements TopScorersFilter {
+        @Override
+        public String label() {
+            return String.valueOf(year);
+        }
+        
+        @Override
+        public TopScorers apply(AllGoals allGoals) {
+            return allGoals.topScorersInYear(year);
+        }
+    }
+    
+    static class EmptyFilter implements TopScorersFilter {
+        @Override
+        public String label() {
+            return "Össz";
+        }
 
         @Override
         public TopScorers apply(AllGoals allGoals) {
-            return allGoals.topScorersSince(date);
+            return allGoals.topScorers();
         }
-        
     }
     
 }
