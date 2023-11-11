@@ -1,7 +1,6 @@
 package hu.kits.team.infrastructure.web.ui.view.cominglist;
 
 import java.lang.invoke.MethodHandles;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,6 @@ import com.vaadin.flow.router.Route;
 
 import hu.kits.team.Main;
 import hu.kits.team.common.Clock;
-import hu.kits.team.domain.Championship;
 import hu.kits.team.domain.Matches;
 import hu.kits.team.domain.Member;
 import hu.kits.team.infrastructure.web.Session;
@@ -25,7 +23,6 @@ import hu.kits.team.infrastructure.web.ui.MainLayout;
 import hu.kits.team.infrastructure.web.ui.ViewFrame;
 import hu.kits.team.infrastructure.web.ui.component.navigation.AppBar;
 import hu.kits.team.infrastructure.web.ui.view.LoginView;
-import hu.kits.team.infrastructure.web.ui.view.cominglist.TopPlayersFilter.ChampionshipFilter;
 import hu.kits.team.infrastructure.web.ui.view.match.TabWithData;
 
 @Route(value = "top-players", layout = MainLayout.class)
@@ -60,10 +57,10 @@ public class TopPlayersView extends ViewFrame implements BeforeEnterObserver {
         matches = Main.teamService.loadAllMatches();
         
         List<TopPlayersFilter> filters = new ArrayList<>();
-        filters.add(new TopPlayersFilter.DateFilter(LocalDate.MIN, "Össz"));
-        filters.add(new TopPlayersFilter.DateFilter(Clock.today().withDayOfYear(1), String.valueOf(Clock.now().getYear())));
-        for(Championship championShip : Main.teamService.loadRealChampionships()) {
-            filters.add(new ChampionshipFilter(championShip));
+        filters.add(new TopPlayersFilter.EmptyFilter());
+        
+        for(int year = Clock.today().getYear();year >= 2021;year--) {
+            filters.add(new TopPlayersFilter.YearFilter(year));            
         }
         
         for(TopPlayersFilter filter : filters) {

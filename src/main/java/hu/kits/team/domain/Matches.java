@@ -87,10 +87,13 @@ public class Matches {
         return createTopPlayers(matchStream);
     }
 
-    public TopPlayers topPlayersSince(LocalDate date) {
-        Stream<Match> matchStream = entries.stream()
-                .filter(match -> !match.matchData().time().toLocalDate().isBefore(date));
+    public TopPlayers topPlayersInYear(int year) {
         
+        LocalDate start = LocalDate.of(year, 1, 1).minusDays(1);
+        LocalDate end = LocalDate.of(year+1, 1, 1);
+        Stream<Match> matchStream = entries.stream()
+                .filter(m -> m.matchData().time().toLocalDate().isAfter(start) && m.matchData().time().toLocalDate().isBefore(end));
+            
         return createTopPlayers(matchStream);
     }
     
@@ -106,5 +109,9 @@ public class Matches {
             .collect(toList());
         
         return new TopPlayers(playerGamesList);
+    }
+
+    public TopPlayers topPlayers() {
+        return createTopPlayers(entries.stream());
     }
 }
