@@ -14,7 +14,7 @@ import hu.kits.team.domain.Members;
 
 public class MemberJdbiRepository implements MemberRepository {
 
-    private static final String TABLE_MEMBER = "MEMBER";
+    private static final String TABLE_MEMBER = "TEAM_MEMBER";
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_NAME = "NAME";
     private static final String COLUMN_EMAIL = "EMAIL";

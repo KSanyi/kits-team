@@ -13,7 +13,7 @@ import hu.kits.team.domain.VenueRepository;
 
 public class VenueJdbiRepository implements VenueRepository {
 
-    private static final String TABLE_VENUE = "VENUE";
+    private static final String TABLE_VENUE = "TEAM_VENUE";
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_NAME = "NAME";
     private static final String COLUMN_ADDRESS = "ADDRESS";

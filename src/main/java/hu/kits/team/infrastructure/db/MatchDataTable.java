@@ -25,7 +25,7 @@ class MatchDataTable {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     
-    private static final String TABLE_MATCH_DATA = "MATCH_DATA";
+    private static final String TABLE_MATCH_DATA = "TEAM_MATCH_DATA";
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_CHAMP_ID = "CHAMP_ID";
     private static final String COLUMN_TIME = "TIME";

@@ -16,7 +16,7 @@ import hu.kits.team.domain.Members;
 
 class MatchMemberStatementTable {
 
-    private static final String TABLE_MEMBER_STATEMENT = "MEMBER_STATEMENT";
+    private static final String TABLE_MEMBER_STATEMENT = "TEAM_MEMBER_STATEMENT";
     private static final String COLUMN_MATCH_ID = "MATCH_ID";
     private static final String COLUMN_MEMBER_ID = "MEMBER_ID";
     private static final String COLUMN_TIME = "TIME";

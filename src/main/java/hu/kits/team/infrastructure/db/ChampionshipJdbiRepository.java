@@ -20,7 +20,7 @@ public class ChampionshipJdbiRepository implements ChampionshipRepository {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     
-    private static final String TABLE_CHAMPIONSHIP = "CHAMPIONSHIP";
+    private static final String TABLE_CHAMPIONSHIP = "TEAM_CHAMPIONSHIP";
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_NAME = "NAME";
     private static final String COLUMN_NUM_OF_PLAYERS = "NUM_OF_PLAYERS";

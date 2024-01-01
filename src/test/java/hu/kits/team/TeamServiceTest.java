@@ -31,12 +31,12 @@ public class TeamServiceTest {
     private TeamService teamService;
     
     @BeforeEach
-    private void init() throws Exception {
+    void init() throws Exception {
         DataSource dataSource = InMemoryDataSourceFactory.createDataSource(
-                "INSERT INTO MEMBER VALUES('sanyi', 'Kócsó Sándor', 'kocso.sandor.gabor@gmail.com', 'ADMIN', 'abcd')",
-                "INSERT INTO MEMBER VALUES('zolika', 'Wéber Zoltán', 'weberzoli@gmail.com', 'ADMIN', 'abcd')",
-                "INSERT INTO CHAMPIONSHIP VALUES (null, 'Üzleti Liga ÁBL 2019', 6)",
-                "INSERT INTO VENUE VALUES ('sportmax2', 'SportMax2', 'Budapest, Mom Park 1', null)");
+                "INSERT INTO TEAM_MEMBER VALUES('sanyi', 'Kócsó Sándor', 'kocso.sandor.gabor@gmail.com', 'ADMIN', 'abcd')",
+                "INSERT INTO TEAM_MEMBER VALUES('zolika', 'Wéber Zoltán', 'weberzoli@gmail.com', 'ADMIN', 'abcd')",
+                "INSERT INTO TEAM_CHAMPIONSHIP VALUES (null, 'Üzleti Liga ÁBL 2019', 6)",
+                "INSERT INTO TEAM_VENUE VALUES ('sportmax2', 'SportMax2', 'Budapest, Mom Park 1', null)");
         
         teamService = TeamServiceFactory.create(dataSource, spyEmailSender);
     }

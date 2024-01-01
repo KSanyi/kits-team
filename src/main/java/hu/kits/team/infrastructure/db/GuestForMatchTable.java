@@ -14,7 +14,7 @@ import hu.kits.team.domain.Guest;
 
 class GuestForMatchTable {
 
-    private static final String TABLE_GUEST_FOR_MATCH = "GUEST_FOR_MATCH";
+    private static final String TABLE_GUEST_FOR_MATCH = "TEAM_GUEST_FOR_MATCH";
     private static final String COLUMN_MATCH_ID = "MATCH_ID";
     private static final String COLUMN_GUEST_NAME = "GUEST_NAME";
     
