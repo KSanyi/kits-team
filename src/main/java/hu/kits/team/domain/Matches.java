@@ -38,7 +38,7 @@ public class Matches {
     }
 
     public Match findNext(LocalDateTime time) {
-        return entries.stream().filter(e -> e.matchData().time().isAfter(time))
+        return entries.stream().filter(e -> !e.matchData().time().toLocalDate().isBefore(time.toLocalDate()))
             .sorted(comparing(e -> e.matchData().time()))
             .findFirst().orElseGet(() -> findLast(time));
     }
